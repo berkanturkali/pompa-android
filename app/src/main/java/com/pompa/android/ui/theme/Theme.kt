@@ -52,7 +52,7 @@ fun PompaTheme(
 
     MaterialTheme(
         colorScheme = colorScheme,
-        typography = Typography,
+        typography = MontserratTypography,
         content = content
     )
 }
