@@ -1,5 +1,5 @@
 [versions]
-agp = "8.8.0"
+agp = "8.9.1"
 kotlin = "2.0.0"
 coreKtx = "1.17.0"
 junit = "4.13.2"
@@ -10,9 +10,13 @@ activityCompose = "1.11.0"
 composeBom = "2024.04.01"
 navCompose = "2.9.6"
 hilt  = "2.57.1"
-ksp = "2.0.21-1.0.27"
+ksp = "2.0.0-1.0.24"
 retrofit = "2.9.0"
 okhttp = "4.12.0"
+kotlinxSerializationJson = "1.7.1"
+kotlinxSerializationConverter = "1.0.0"
+secrets = "2.0.1"
+hiltNavigationCompose = "1.3.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -35,6 +39,9 @@ hilt-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", v
 retrofit-core = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 okhttp-logging = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp" }
 okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }
+kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
+kotlinx-serialization-converter = { group = "com.jakewharton.retrofit", name = "retrofit2-kotlinx-serialization-converter", version.ref = "kotlinxSerializationConverter" }
+hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -42,4 +49,5 @@ kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
+secrets = { id = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin", version.ref = "secrets" }
 

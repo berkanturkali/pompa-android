@@ -1,6 +1,5 @@
 package com.pompa.android.ui.theme
 
-import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
@@ -9,7 +8,15 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import com.pompa.android.model.BackgroundColors
+import com.pompa.android.model.ButtonColors
+import com.pompa.android.model.CardColors
+import com.pompa.android.model.PompaColors
+import com.pompa.android.model.TextColors
+import com.pompa.android.ui.providers.LocalPompaColors
 
 private val DarkColorScheme = darkColorScheme(
     primary = Purple80,
@@ -33,6 +40,33 @@ private val LightColorScheme = lightColorScheme(
     */
 )
 
+val OpetColors = PompaColors(
+    backgroundColors = BackgroundColors(
+        primary = Color(0xFF134fae),
+        secondary = Color.White,
+        onPrimary = Color(0xffffd300),
+        onSecondary = Color(0xff134fae)
+    ),
+    cardColors = CardColors(
+        primary = Color.White,
+        secondary = Color.White,
+    ),
+    textColors = TextColors(
+        buttonText = Color(0xff134fae),
+        title = Color(0xff162133),
+        description = Color(0xff162133),
+    ),
+    buttonColors = ButtonColors(
+        primary = Color(0xffffd300),
+        secondary = Color.White
+    ),
+    borderColor = Color(0xff2f3336),
+    progressIndicatorColors = com.pompa.android.model.ProgressIndicatorColors(
+        indicator = Color.White,
+        background = Color(0xff134fae)
+    )
+)
+
 @Composable
 fun PompaTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
@@ -50,9 +84,12 @@ fun PompaTheme(
         else -> LightColorScheme
     }
 
-    MaterialTheme(
-        colorScheme = colorScheme,
-        typography = MontserratTypography,
-        content = content
-    )
+
+    CompositionLocalProvider(LocalPompaColors provides OpetColors) {
+        MaterialTheme(
+            colorScheme = colorScheme,
+            typography = MontserratTypography,
+            content = content
+        )
+    }
 }

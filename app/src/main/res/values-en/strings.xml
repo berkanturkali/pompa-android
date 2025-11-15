@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="select_province">Select Province</string>
+    <string name="no_content">No Content</string>
+    <string name="something_went_wrong">Something went wrong</string>
+    <string name="request_timeout">Request timed out</string>
+    <string name="network_connection_error">Check your network connection please.</string>
+    <string name="okay">Okay</string>
+</resources>

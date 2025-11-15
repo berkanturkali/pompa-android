@@ -1,3 +1,9 @@
 <resources>
-    <string name="app_name">Pompa</string>
+    <string name="app_name" translatable="false">Pompa</string>
+    <string name="select_province">İl Seçiniz</string>
+    <string name="no_content">İçerik Yok</string>
+    <string name="something_went_wrong">Bir şeyler ters gitti.</string>
+    <string name="request_timeout">İstek zaman aşımına uğradı.</string>
+    <string name="network_connection_error">Lütfen internet bağlantınızı kontrol edin.</string>
+    <string name="okay">Tamam</string>
 </resources>

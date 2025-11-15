@@ -4,16 +4,17 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.hilt)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.secrets)
 }
 
 android {
     namespace = "com.pompa.android"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.pompa.android"
         minSdk = 24
-        targetSdk = 35
+        targetSdk = 36
         versionCode = 1
         versionName = "1.0"
 
@@ -38,6 +39,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
@@ -67,4 +69,8 @@ dependencies {
     implementation(libs.retrofit.core)
     implementation(libs.okhttp.logging)
     implementation(libs.okhttp)
+    implementation(libs.kotlinx.serialization.converter)
+    implementation(libs.kotlinx.serialization.json)
+
+    implementation(libs.hilt.navigation.compose)
 }
