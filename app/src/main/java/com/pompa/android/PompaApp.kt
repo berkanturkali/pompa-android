@@ -2,6 +2,9 @@ package com.pompa.android
 
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
@@ -16,36 +19,39 @@ fun PompaApp(
     navController: NavHostController,
     modifier: Modifier = Modifier,
 ) {
-    NavHost(
-        modifier = modifier,
-        navController = navController,
-        startDestination = if (provinceAlreadySelected) PompaRoutes.HomeScreen else PompaRoutes.ProvincesScreen
-    ) {
-        composable<PompaRoutes.ProvincesScreen> {
-            ProvincesScreen(
-                navigateToHomePage = {
-                    navController.navigate(PompaRoutes.HomeScreen) {
-                        popUpTo(PompaRoutes.ProvincesScreen) {
-                            inclusive = true
+
+    Scaffold(modifier = modifier.fillMaxSize()) {
+        NavHost(
+            modifier = modifier.padding(it),
+            navController = navController,
+            startDestination = if (provinceAlreadySelected) PompaRoutes.HomeScreen else PompaRoutes.ProvincesScreen
+        ) {
+            composable<PompaRoutes.ProvincesScreen> {
+                ProvincesScreen(
+                    navigateToHomePage = {
+                        navController.navigate(PompaRoutes.HomeScreen) {
+                            popUpTo(PompaRoutes.ProvincesScreen) {
+                                inclusive = true
+                            }
                         }
                     }
-                }
-            )
-        }
-
-        composable<PompaRoutes.HomeScreen>(
-            enterTransition = {
-                slideInHorizontally(
-                    initialOffsetX = { fullWidth -> fullWidth },
-                )
-            },
-            exitTransition = {
-                slideOutHorizontally(
-                    targetOffsetX = { fullWidth -> -fullWidth },
                 )
             }
-        ) {
 
+            composable<PompaRoutes.HomeScreen>(
+                enterTransition = {
+                    slideInHorizontally(
+                        initialOffsetX = { fullWidth -> fullWidth },
+                    )
+                },
+                exitTransition = {
+                    slideOutHorizontally(
+                        targetOffsetX = { fullWidth -> -fullWidth },
+                    )
+                }
+            ) {
+
+            }
         }
     }
 }

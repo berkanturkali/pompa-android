@@ -16,6 +16,7 @@ import com.pompa.android.model.ButtonColors
 import com.pompa.android.model.CardColors
 import com.pompa.android.model.PompaColors
 import com.pompa.android.model.TextColors
+import com.pompa.android.model.TopBarColors
 import com.pompa.android.ui.providers.LocalPompaColors
 
 private val DarkColorScheme = darkColorScheme(
@@ -64,6 +65,10 @@ val OpetColors = PompaColors(
     progressIndicatorColors = com.pompa.android.model.ProgressIndicatorColors(
         indicator = Color.White,
         background = Color(0xff134fae)
+    ),
+    topBarColors = TopBarColors(
+        background = Color(0xff134fae),
+        content = Color.White
     )
 )
 
