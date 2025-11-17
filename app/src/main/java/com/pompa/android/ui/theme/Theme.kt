@@ -58,8 +58,10 @@ val OpetColors = PompaColors(
         description = Color(0xff162133),
     ),
     buttonColors = ButtonColors(
-        primary = Color(0xffffd300),
-        secondary = Color.White
+        background = Color(0xffffd300),
+        content = Color(0xff134fae),
+        secondaryBackground = Color.White,
+        secondaryContent = Color(0xff134fae)
     ),
     borderColor = Color(0xff2f3336),
     progressIndicatorColors = com.pompa.android.model.ProgressIndicatorColors(

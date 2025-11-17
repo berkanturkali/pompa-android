@@ -31,8 +31,10 @@ data class TextColors(
 )
 
 data class ButtonColors(
-    val primary: Color = Color.Unspecified,
-    val secondary: Color = Color.Unspecified,
+    val background: Color = Color.Unspecified,
+    val content: Color = Color.Unspecified,
+    val secondaryBackground: Color = Color.Unspecified,
+    val secondaryContent: Color = Color.Unspecified
 )
 
 data class ProgressIndicatorColors(

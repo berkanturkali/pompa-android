@@ -16,7 +16,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
@@ -50,7 +50,7 @@ import com.pompa.android.ui.theme.PompaTheme
 
 @Composable
 fun ProvincesScreen(
-    navigateToHomePage: () -> Unit,
+    navigateToFuelBrandsScreen: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: ProvincesScreenViewModel = hiltViewModel()
 ) {
@@ -63,7 +63,7 @@ fun ProvincesScreen(
             viewModel.saveSelectedProvince(
                 province = province
             )
-            navigateToHomePage()
+            navigateToFuelBrandsScreen()
         },
         onErrorDialogDismiss = {
             viewModel.errorMessage = null
@@ -106,10 +106,9 @@ fun ProvincesScreenContent(
             )
 
             LazyColumn {
-                itemsIndexed(provinces) { index, province ->
+                items(provinces) { province ->
                     ProvinceItem(
                         modifier = animationModifier,
-                                index = index,
                         province = province
                     ) {
                         onProvinceSelected(province)
@@ -153,7 +152,6 @@ fun ProvincesScreenContent(
 
 @Composable
 fun ProvinceItem(
-    index: Int,
     province: Province,
     modifier: Modifier = Modifier,
     onItemClick: () -> Unit,
@@ -179,20 +177,21 @@ fun ProvinceItem(
             Card(
                 shape = CircleShape,
                 colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.pompaColorPalette.buttonColors.primary,
+                    containerColor = MaterialTheme.pompaColorPalette.buttonColors.background,
                     contentColor = MaterialTheme.pompaColorPalette.textColors.buttonText
                 )
             ) {
                 Text(
                     modifier = Modifier.padding(12.dp),
-                    text = index.toString(),
+                    text = province.code.toString(),
                     style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Bold)
                 )
             }
 
             Text(
                 text = province.name,
-                style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Medium)
+                style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Medium),
+                color = MaterialTheme.pompaColorPalette.textColors.title
             )
         }
     }
@@ -215,7 +214,6 @@ private fun ProvinceItemPrev() {
     CompositionLocalProvider(LocalPompaColors provides OpetColors) {
         PompaTheme {
             ProvinceItem(
-                index = 35,
                 province = Province(id = 1, name = "İstanbul", code = 34)
             ) {}
         }

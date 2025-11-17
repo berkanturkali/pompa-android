@@ -8,4 +8,7 @@ sealed class PompaRoutes {
 
     @Serializable
     object HomeScreen : PompaRoutes()
+
+    @Serializable
+    object FuelBrandsScreen : PompaRoutes()
 }

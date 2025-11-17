@@ -20,8 +20,8 @@ class MainActivity : ComponentActivity() {
             PompaTheme {
                 val navController = rememberNavController()
                 PompaApp(
-                    provinceAlreadySelected = viewModel.checkProvinceAlreadySelected(),
-                    navController = navController
+                    navController = navController,
+                    viewModel = viewModel
                 )
             }
         }

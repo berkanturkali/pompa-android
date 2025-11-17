@@ -1,5 +1,7 @@
 package com.pompa.android.data.repo.di
 
+import com.pompa.android.data.repo.brand.BrandRepository
+import com.pompa.android.data.repo.brand.BrandRepositoryImpl
 import com.pompa.android.data.repo.province.ProvinceRepo
 import com.pompa.android.data.repo.province.ProvinceRepoImpl
 import dagger.Binds
@@ -15,5 +17,10 @@ interface RepositoryModule {
     fun bindProvinceRepo(
         provinceRepoImpl: ProvinceRepoImpl
     ): ProvinceRepo
+
+    @Binds
+    fun bindBrandRepository(
+        brandRepositoryImpl: BrandRepositoryImpl
+    ): BrandRepository
 
 }

@@ -63,7 +63,7 @@ fun PompaAppDialog(
                     modifier = Modifier
                         .fillMaxWidth()
                         .background(
-                            color = MaterialTheme.pompaColorPalette.buttonColors.secondary,
+                            color = MaterialTheme.pompaColorPalette.buttonColors.content,
                             shape = RoundedCornerShape(7.dp)
                         )
                         .padding(horizontal = 32.dp, vertical = 6.dp)

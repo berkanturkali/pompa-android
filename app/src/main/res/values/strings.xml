@@ -6,4 +6,6 @@
     <string name="request_timeout">İstek zaman aşımına uğradı.</string>
     <string name="network_connection_error">Lütfen internet bağlantınızı kontrol edin.</string>
     <string name="okay">Tamam</string>
+    <string name="select_fuel_brand">Favori İstasyonunuzu Seçiniz</string>
+    <string name="confirm">Onayla</string>
 </resources>
