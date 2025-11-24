@@ -3,6 +3,7 @@ package com.pompa.android.ui.components
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,6 +14,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -52,8 +54,8 @@ fun PompaAppDialog(
             ) {
                 Text(
                     text = message ?: stringResource(id = R.string.something_went_wrong),
-                    color = MaterialTheme.pompaColorPalette.backgroundColors.onPrimary,
-                    style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold),
+                    color = MaterialTheme.pompaColorPalette.cardColors.primary,
+                    style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
                     textAlign = TextAlign.Center
                 )
 
@@ -63,13 +65,16 @@ fun PompaAppDialog(
                     modifier = Modifier
                         .fillMaxWidth()
                         .background(
-                            color = MaterialTheme.pompaColorPalette.buttonColors.content,
+                            color = MaterialTheme.pompaColorPalette.buttonColors.background,
                             shape = RoundedCornerShape(7.dp)
                         )
-                        .padding(horizontal = 32.dp, vertical = 6.dp)
-                        .clickable {
+                        .clickable(
+                            indication = null,
+                            interactionSource = remember { MutableInteractionSource() }
+                        ) {
                             onOkayButtonClick()
-                        },
+                        }
+                        .padding(vertical = 8.dp),
                     textAlign = TextAlign.Center,
                     color = MaterialTheme.pompaColorPalette.backgroundColors.onSecondary
                 )

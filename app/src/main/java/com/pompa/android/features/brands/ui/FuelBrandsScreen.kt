@@ -9,8 +9,6 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -30,7 +28,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -38,7 +35,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -84,7 +80,9 @@ fun FuelBrandsScreen(
             viewModel.errorMessage = null
         },
         showLoading = viewModel.isLoading.value,
-        errorMessage = viewModel.errorMessage?.asString(LocalContext.current)
+        errorMessage = viewModel.errorMessage?.asString(LocalContext.current),
+        onBackButtonClick = {
+        }
     )
 
 }
@@ -99,6 +97,7 @@ private fun FuelBrandsScreenContent(
     errorMessage: String? = null,
     onConfirmButtonClick: () -> Unit,
     onErrorDialogDismiss: () -> Unit,
+    onBackButtonClick: () -> Unit,
     onItemClick: (Brand) -> Unit,
 ) {
 
@@ -117,12 +116,6 @@ private fun FuelBrandsScreenContent(
 
     Box(modifier = modifier.fillMaxSize()) {
         Column(modifier = Modifier.fillMaxSize()) {
-            Text(
-                text = stringResource(R.string.select_fuel_brand),
-                style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
-                color = MaterialTheme.pompaColorPalette.textColors.title
-            )
-
             LazyColumn {
                 items(brands) { brand ->
                     BrandItem(
@@ -192,13 +185,8 @@ fun BrandItem(
     )
     Card(
         modifier = modifier
-            .fillMaxWidth()
-            .clickable(
-                indication = null,
-                interactionSource = remember { MutableInteractionSource() }
-            ) {
-                onItemClick()
-            },
+            .fillMaxWidth(),
+
         shape = RoundedCornerShape(16.dp)
     ) {
         Row(

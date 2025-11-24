@@ -9,10 +9,12 @@ import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -32,28 +34,40 @@ fun PompaApp(
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     viewModel.setIsTopBarVisible(navBackStackEntry?.destination)
 
-    Scaffold(modifier = modifier.fillMaxSize(), topBar = {
-        val (code, name) = viewModel.getSelectedProvince()
-        AnimatedVisibility(
-            visible = viewModel.isTopBarVisible,
-            enter = slideInVertically(
-                initialOffsetY = { -it }
-            ) + fadeIn(),
-            exit = slideOutVertically(
-                targetOffsetY = { -it }
-            ) + fadeOut()
-        ) { }
-        PompaAppTopBar(
-            provinceCode = code.toString(),
-            provinceName = name ?: ""
-        )
-    }) {
+    Scaffold(
+        modifier = modifier
+            .fillMaxSize()
+            .systemBarsPadding(), topBar = {
+            val (code, name) = viewModel.getSelectedProvince()
+            AnimatedVisibility(
+                visible = viewModel.isTopBarVisible,
+                enter = slideInVertically(
+                    initialOffsetY = { -it }
+                ) + fadeIn(),
+                exit = slideOutVertically(
+                    targetOffsetY = { -it }
+                ) + fadeOut()
+            ) {
+                PompaAppTopBar(
+                    showBackButton = viewModel.showBackButton,
+                    showSelectedProvince = viewModel.showSelectedProvince,
+                    title = viewModel.topBarTitle,
+                    provinceCode = code.toString(),
+                    provinceName = name ?: "",
+                    onBackButtonClick = {
+                        navController.navigateUp()
+                    }
+                )
+            }
+        }) {
         NavHost(
             modifier = modifier.padding(it),
             navController = navController,
-            startDestination = if (viewModel.checkProvinceAlreadySelected()) PompaRoutes.HomeScreen else PompaRoutes.ProvincesScreen
+            startDestination = /*if (viewModel.checkProvinceAlreadySelected()) PompaRoutes.HomeScreen else */ PompaRoutes.ProvincesScreen
         ) {
             composable<PompaRoutes.ProvincesScreen> {
+                viewModel.topBarTitle = stringResource(R.string.select_province)
+                viewModel.showBackButton = false
                 ProvincesScreen(
                     navigateToFuelBrandsScreen = {
                         navController.navigate(PompaRoutes.FuelBrandsScreen)
@@ -61,7 +75,30 @@ fun PompaApp(
                 )
             }
 
-            composable<PompaRoutes.FuelBrandsScreen> {
+            composable<PompaRoutes.FuelBrandsScreen>(
+                enterTransition = {
+                    slideInHorizontally(
+                        initialOffsetX = { fullWidth -> -fullWidth },
+                    )
+                },
+                exitTransition = {
+                    slideOutHorizontally(
+                        targetOffsetX = { fullWidth -> -fullWidth },
+                    )
+                },
+                popEnterTransition = {
+                    slideInHorizontally(
+                        initialOffsetX = { fullWidth -> fullWidth },
+                    )
+                },
+                popExitTransition = {
+                    slideOutHorizontally(
+                        targetOffsetX = { fullWidth -> -fullWidth },
+                    )
+                }
+            ) {
+                viewModel.showBackButton = true
+                viewModel.showSelectedProvince = true
                 FuelBrandsScreen {
                     navController.navigate(PompaRoutes.HomeScreen) {
                         popUpTo(PompaRoutes.FuelBrandsScreen) {

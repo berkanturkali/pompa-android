@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 data class Province(
     val id: Int,
     val name: String,
-    val code: Int
+    val code: String
 )

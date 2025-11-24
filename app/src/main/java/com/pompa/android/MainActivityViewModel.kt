@@ -17,12 +17,18 @@ class MainActivityViewModel @Inject constructor(
 
     var isTopBarVisible by mutableStateOf(false)
 
+    var topBarTitle by mutableStateOf("")
+
+    var showBackButton by mutableStateOf(false)
+
+    var showSelectedProvince by mutableStateOf(false)
+
     fun checkProvinceAlreadySelected(): Boolean {
         val code = userPreferences.getSelectedProvinceCode()
-        return code != -1
+        return code.isNullOrBlank()
     }
 
-    fun getSelectedProvince(): Pair<Int, String?> {
+    fun getSelectedProvince(): Pair<String?, String?> {
         val code = userPreferences.getSelectedProvinceCode()
         val name = userPreferences.getSelectedProvinceName()
         return Pair(code, name)
@@ -30,6 +36,7 @@ class MainActivityViewModel @Inject constructor(
 
     fun setIsTopBarVisible(currentDestination: NavDestination?) {
         val currentRouteString = currentDestination?.route
-        isTopBarVisible = currentRouteString != PompaRoutes.ProvincesScreen::class.qualifiedName
+        isTopBarVisible =
+            currentRouteString != PompaRoutes.ProvincesScreen::class.qualifiedName || currentRouteString != PompaRoutes.FuelBrandsScreen::class.qualifiedName
     }
 }

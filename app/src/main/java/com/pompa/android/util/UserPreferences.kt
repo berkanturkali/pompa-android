@@ -20,14 +20,14 @@ class UserPreferences @Inject constructor(
 
     private val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
 
-    fun setProvince(code: Int, name: String) {
+    fun setProvince(code: String, name: String) {
         prefs.edit {
-            putInt(SELECTED_PROVINCE_CODE, code).putString(SELECTED_PROVINCE_NAME, name)
+            putString(SELECTED_PROVINCE_CODE, code).putString(SELECTED_PROVINCE_NAME, name)
         }
     }
 
-    fun getSelectedProvinceCode(): Int {
-        return prefs.getInt(SELECTED_PROVINCE_CODE, -1)
+    fun getSelectedProvinceCode(): String? {
+        return prefs.getString(SELECTED_PROVINCE_CODE, "")
     }
 
     fun getSelectedProvinceName(): String? {
@@ -38,7 +38,7 @@ class UserPreferences @Inject constructor(
         prefs.edit { putInt(SELECTED_BRAND_ID, brandId) }
     }
 
-    fun getSelectedProvince(): Pair<Int, String?> {
+    fun getSelectedProvince(): Pair<String?, String?> {
         val code = getSelectedProvinceCode()
         val name = getSelectedProvinceName()
         return Pair(code, name)
