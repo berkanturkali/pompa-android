@@ -9,12 +9,15 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -28,6 +31,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -38,10 +42,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import coil.ImageLoader
 import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
+import coil.decode.SvgDecoder
 import coil.request.ImageRequest
+import com.pompa.android.BuildConfig
 import com.pompa.android.R
 import com.pompa.android.features.brands.viewmodel.FuelBrandsScreenViewModel
 import com.pompa.android.model.brands.Brand
@@ -51,6 +59,7 @@ import com.pompa.android.ui.providers.LocalPompaColors
 import com.pompa.android.ui.providers.pompaColorPalette
 import com.pompa.android.ui.theme.OpetColors
 import com.pompa.android.ui.theme.PompaTheme
+import com.pompa.android.util.DeviceManager
 
 @Composable
 fun FuelBrandsScreen(
@@ -66,6 +75,7 @@ fun FuelBrandsScreen(
         onItemClick = { brand ->
             if (brand == viewModel.selectedBrand) {
                 viewModel.selectedBrand = null
+                viewModel.confirmButtonEnabled = false
                 return@FuelBrandsScreenContent
             }
             viewModel.confirmButtonEnabled = viewModel.selectedBrand != brand
@@ -81,8 +91,6 @@ fun FuelBrandsScreen(
         },
         showLoading = viewModel.isLoading.value,
         errorMessage = viewModel.errorMessage?.asString(LocalContext.current),
-        onBackButtonClick = {
-        }
     )
 
 }
@@ -97,7 +105,6 @@ private fun FuelBrandsScreenContent(
     errorMessage: String? = null,
     onConfirmButtonClick: () -> Unit,
     onErrorDialogDismiss: () -> Unit,
-    onBackButtonClick: () -> Unit,
     onItemClick: (Brand) -> Unit,
 ) {
 
@@ -115,10 +122,21 @@ private fun FuelBrandsScreenContent(
     }
 
     Box(modifier = modifier.fillMaxSize()) {
-        Column(modifier = Modifier.fillMaxSize()) {
-            LazyColumn {
+        ConstraintLayout(modifier = Modifier.fillMaxSize()) {
+
+            val (list, confirmButton) = createRefs()
+
+            LazyColumn(modifier = Modifier.constrainAs(list) {
+                top.linkTo(parent.top)
+                bottom.linkTo(confirmButton.top)
+                start.linkTo(parent.start)
+                end.linkTo(parent.end)
+                height = androidx.constraintlayout.compose.Dimension.fillToConstraints
+            }) {
                 items(brands) { brand ->
                     BrandItem(
+                        isSelected = brand == selectedBrand,
+                        modifier = Modifier.padding(8.dp),
                         brand = brand,
                         selectedBrand = selectedBrand
                     ) {
@@ -127,15 +145,21 @@ private fun FuelBrandsScreenContent(
                 }
             }
 
-
             PompaButton(
-                modifier = Modifier.alpha(alpha = alphaOfConfirmButton),
+                modifier = Modifier
+                    .alpha(alpha = alphaOfConfirmButton)
+                    .constrainAs(confirmButton) {
+                        bottom.linkTo(parent.bottom)
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
+                    },
                 backgroundColor = backgroundColorOfConfirmButton,
                 textId = R.string.confirm
             ) {
                 onConfirmButtonClick()
             }
         }
+
 
         AnimatedVisibility(
             visible = showLoading,
@@ -171,28 +195,54 @@ private fun FuelBrandsScreenContent(
 
 @Composable
 fun BrandItem(
+    isSelected: Boolean,
     brand: Brand,
     selectedBrand: Brand?,
     modifier: Modifier = Modifier,
     onItemClick: () -> Unit
 ) {
 
+    val context = LocalContext.current
+
+    val imageUrl = if (DeviceManager.checkIfTheDeviceIsEmulator()) {
+        brand.logo
+            .replace(BuildConfig.IMAGE_BASE_URL, BuildConfig.EMULATOR_IMAGE_BASE_URL)
+    } else {
+        brand.logo
+    }
+
+    val imageLoader = remember {
+        ImageLoader.Builder(context)
+            .components {
+                add(SvgDecoder.Factory())
+            }
+            .build()
+    }
+
     val painter = rememberAsyncImagePainter(
         model = ImageRequest.Builder(LocalContext.current)
-            .data(brand.logo)
+            .data(imageUrl)
             .crossfade(true)
-            .build()
+            .build(),
+        imageLoader = imageLoader
     )
     Card(
         modifier = modifier
-            .fillMaxWidth(),
-
-        shape = RoundedCornerShape(16.dp)
+            .fillMaxWidth()
+            .height(50.dp)
+            .clickable(
+                indication = null,
+                interactionSource = remember { MutableInteractionSource() }
+            ) {
+                onItemClick()
+            },
+        shape = RoundedCornerShape(12.dp)
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 12.dp, vertical = 8.dp),
+                .fillMaxHeight()
+                .padding(horizontal = 12.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -217,13 +267,13 @@ fun BrandItem(
 
                 Text(
                     text = brand.name,
-                    style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Medium),
+                    style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.SemiBold),
                     color = MaterialTheme.pompaColorPalette.textColors.title
                 )
             }
 
             AnimatedVisibility(
-                visible = selectedBrand != null && brand != selectedBrand,
+                visible = selectedBrand != null && isSelected,
                 enter = scaleIn() + fadeIn(),
                 exit = scaleOut() + fadeOut()
             ) {
@@ -253,6 +303,7 @@ private fun BrandItemPrev() {
                     logo = "https://www.opet.com.tr/Content/Images/Logos/opet-logo.png"
                 ),
                 onItemClick = {},
+                isSelected = true,
                 selectedBrand = Brand(
                     id = 2,
                     name = "Shell",

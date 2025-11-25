@@ -99,6 +99,7 @@ fun PompaApp(
             ) {
                 viewModel.showBackButton = true
                 viewModel.showSelectedProvince = true
+                viewModel.topBarTitle = stringResource(R.string.select_fuel_brand)
                 FuelBrandsScreen {
                     navController.navigate(PompaRoutes.HomeScreen) {
                         popUpTo(PompaRoutes.FuelBrandsScreen) {

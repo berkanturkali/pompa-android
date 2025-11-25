@@ -75,4 +75,6 @@ dependencies {
 
     implementation(libs.hilt.navigation.compose)
     implementation(libs.coil.compose)
+    implementation(libs.constriantlayout.compose)
+    implementation(libs.coil.svg)
 }
