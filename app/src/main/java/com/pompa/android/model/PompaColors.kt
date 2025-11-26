@@ -9,7 +9,8 @@ data class PompaColors(
     val buttonColors: ButtonColors = ButtonColors(),
     val borderColor: Color = Color.Unspecified,
     val progressIndicatorColors: ProgressIndicatorColors = ProgressIndicatorColors(),
-    val topBarColors: TopBarColors = TopBarColors()
+    val topBarColors: TopBarColors = TopBarColors(),
+    val bottomBarColors: BottomBarColors = BottomBarColors()
 )
 
 data class BackgroundColors(
@@ -45,4 +46,12 @@ data class ProgressIndicatorColors(
 data class TopBarColors(
     val background: Color = Color.Unspecified,
     val content: Color = Color.Unspecified
+)
+
+data class BottomBarColors(
+    val background: Color = Color.Unspecified,
+    val content: Color = Color.Unspecified,
+    val selectedItemColor: Color = Color.Unspecified,
+    val unSelectedItemColor: Color = Color.Unspecified,
+    val indicatorColor: Color = Color.Unspecified
 )

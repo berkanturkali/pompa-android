@@ -23,15 +23,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.pompa.android.ui.providers.LocalPompaColors
 import com.pompa.android.ui.providers.pompaColorPalette
-import com.pompa.android.ui.theme.OpetColors
 import com.pompa.android.ui.theme.PompaTheme
 
 @Composable
@@ -139,16 +136,14 @@ fun PompaAppTopBar(
 @Preview
 @Composable
 private fun PompaAppTopBarPrev() {
-    CompositionLocalProvider(LocalPompaColors provides OpetColors) {
-        PompaTheme {
-            PompaAppTopBar(
-                showBackButton = true,
-                showSelectedProvince = true,
-                title = "Pompa",
-                provinceName = "Istanbul",
-                provinceCode = "34",
-                onBackButtonClick = {}
-            )
-        }
+    PompaTheme {
+        PompaAppTopBar(
+            showBackButton = true,
+            showSelectedProvince = true,
+            title = "Pompa",
+            provinceName = "Istanbul",
+            provinceCode = "34",
+            onBackButtonClick = {}
+        )
     }
 }

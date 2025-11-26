@@ -9,7 +9,6 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -17,9 +16,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.pompa.android.R
-import com.pompa.android.ui.providers.LocalPompaColors
 import com.pompa.android.ui.providers.pompaColorPalette
-import com.pompa.android.ui.theme.OpetColors
 import com.pompa.android.ui.theme.PompaTheme
 
 @Composable
@@ -57,11 +54,9 @@ fun PompaButton(
 @Preview
 @Composable
 private fun PompaButtonPrev() {
-    CompositionLocalProvider(LocalPompaColors provides OpetColors) {
-        PompaTheme {
-            PompaButton(
-                textId = R.string.okay,
-                onClick = { })
-        }
+    PompaTheme {
+        PompaButton(
+            textId = R.string.okay,
+            onClick = { })
     }
 }

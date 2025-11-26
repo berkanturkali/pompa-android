@@ -8,4 +8,6 @@
     <string name="okay">Tamam</string>
     <string name="select_fuel_brand">Favori İstasyonunuzu Seçiniz</string>
     <string name="confirm">Onayla</string>
+    <string name="home">Ana Sayfa</string>
+    <string name="settings">Ayarlar</string>
 </resources>

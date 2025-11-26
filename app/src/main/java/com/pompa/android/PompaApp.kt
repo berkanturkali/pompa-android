@@ -22,6 +22,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import com.pompa.android.features.brands.ui.FuelBrandsScreen
 import com.pompa.android.features.provinces.ui.ProvincesScreen
 import com.pompa.android.navigation.PompaRoutes
+import com.pompa.android.ui.components.PompaAppBottomBar
 import com.pompa.android.ui.components.PompaAppTopBar
 
 @Composable
@@ -32,7 +33,9 @@ fun PompaApp(
 ) {
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
+
     viewModel.setIsTopBarVisible(navBackStackEntry?.destination)
+    viewModel.setShowBottomBar(navBackStackEntry?.destination)
 
     Scaffold(
         modifier = modifier
@@ -59,7 +62,24 @@ fun PompaApp(
                     }
                 )
             }
-        }) {
+        },
+        bottomBar = {
+            AnimatedVisibility(
+                visible = viewModel.showBottomBar,
+                enter = slideInVertically(
+                    initialOffsetY = { it }
+                ) + fadeIn(),
+                exit = slideOutVertically(
+                    targetOffsetY = { it }
+                ) + fadeOut()
+            ) {
+                PompaAppBottomBar(
+                    navController = navController,
+                    destinations = viewModel.topLevelDestinations
+                )
+            }
+        }
+    ) {
         NavHost(
             modifier = modifier.padding(it),
             navController = navController,
@@ -101,7 +121,7 @@ fun PompaApp(
                 viewModel.showSelectedProvince = true
                 viewModel.topBarTitle = stringResource(R.string.select_fuel_brand)
                 FuelBrandsScreen {
-                    navController.navigate(PompaRoutes.HomeScreen) {
+                    navController.navigate(PompaRoutes.BottomNavRoutes.Home) {
                         popUpTo(PompaRoutes.FuelBrandsScreen) {
                             inclusive = true
                         }
@@ -109,7 +129,7 @@ fun PompaApp(
                 }
             }
 
-            composable<PompaRoutes.HomeScreen>(
+            composable<PompaRoutes.BottomNavRoutes.Home>(
                 enterTransition = {
                     slideInHorizontally(
                         initialOffsetX = { fullWidth -> fullWidth },
@@ -121,6 +141,9 @@ fun PompaApp(
                     )
                 }
             ) {
+                viewModel.topBarTitle = ""
+                viewModel.showBackButton = false
+
 
             }
         }

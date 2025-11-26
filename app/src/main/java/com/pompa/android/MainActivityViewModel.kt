@@ -23,6 +23,17 @@ class MainActivityViewModel @Inject constructor(
 
     var showSelectedProvince by mutableStateOf(false)
 
+    var showBottomBar by mutableStateOf(false)
+
+    val topLevelDestinations = listOf(
+        PompaRoutes.BottomNavRoutes.Home,
+        PompaRoutes.BottomNavRoutes.Settings,
+    )
+
+    val topLevelDestinationsAsRoutes = topLevelDestinations.map {
+        it::class.qualifiedName
+    }
+
     fun checkProvinceAlreadySelected(): Boolean {
         val code = userPreferences.getSelectedProvinceCode()
         return code.isNullOrBlank()
@@ -38,5 +49,10 @@ class MainActivityViewModel @Inject constructor(
         val currentRouteString = currentDestination?.route
         isTopBarVisible =
             currentRouteString != PompaRoutes.ProvincesScreen::class.qualifiedName || currentRouteString != PompaRoutes.FuelBrandsScreen::class.qualifiedName
+    }
+
+    fun setShowBottomBar(currentDestination: NavDestination?) {
+        val currentRouteString = currentDestination?.route
+        showBottomBar = currentRouteString in topLevelDestinationsAsRoutes
     }
 }

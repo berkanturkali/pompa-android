@@ -12,6 +12,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import com.pompa.android.model.BackgroundColors
+import com.pompa.android.model.BottomBarColors
 import com.pompa.android.model.ButtonColors
 import com.pompa.android.model.CardColors
 import com.pompa.android.model.PompaColors
@@ -71,6 +72,13 @@ val OpetColors = PompaColors(
     topBarColors = TopBarColors(
         background = Color(0xff134fae),
         content = Color.White
+    ),
+    bottomBarColors = BottomBarColors(
+        background = Color(0xff134fae),
+        content = Color.White,
+        selectedItemColor = Color.White,
+        unSelectedItemColor = Color.White.copy(alpha = 0.5f),
+        indicatorColor = Color(0xffffd300)
     )
 )
 
