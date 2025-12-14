@@ -12,5 +12,6 @@
     <string name="settings">Settings</string>
     <string name="average">Avg:</string>
     <string name="see_all">See all</string>
+    <string name="fuel_search_bar_hint">Search provider or city...</string>
 
 </resources>

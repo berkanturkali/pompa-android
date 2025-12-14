@@ -17,6 +17,7 @@ import com.pompa.android.model.ButtonColors
 import com.pompa.android.model.CardColors
 import com.pompa.android.model.ChipColors
 import com.pompa.android.model.PompaColors
+import com.pompa.android.model.SearchBarColors
 import com.pompa.android.model.TextColors
 import com.pompa.android.model.TopBarColors
 import com.pompa.android.ui.providers.LocalPompaColors
@@ -89,6 +90,13 @@ val OpetColors = PompaColors(
         selectedTextColor = Color.White,
         selectedBorderColor = Color.White,
         unselectedBorderColor = Color(0xff134fae),
+    ),
+    searchBarColors = SearchBarColors(
+        cursorColor = Color(0xff134fae),
+        textColor = Color(0xff134fae),
+        startIconColor = Color.LightGray.copy(0.8f),
+        closeIconColor = Color(0xff134fae),
+        hintColor = Color.LightGray.copy(0.8f)
     )
 )
 

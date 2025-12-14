@@ -12,4 +12,5 @@
     <string name="settings">Ayarlar</string>
     <string name="average">Ort:</string>
     <string name="see_all">Tümünü gör</string>
+    <string name="fuel_search_bar_hint">Marka ya da şehir ara...</string>
 </resources>

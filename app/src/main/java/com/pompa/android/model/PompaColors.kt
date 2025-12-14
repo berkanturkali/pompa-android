@@ -11,7 +11,8 @@ data class PompaColors(
     val progressIndicatorColors: ProgressIndicatorColors = ProgressIndicatorColors(),
     val topBarColors: TopBarColors = TopBarColors(),
     val bottomBarColors: BottomBarColors = BottomBarColors(),
-    val chipColors: ChipColors = ChipColors()
+    val chipColors: ChipColors = ChipColors(),
+    val searchBarColors: SearchBarColors = SearchBarColors()
 )
 
 data class BackgroundColors(
@@ -65,4 +66,12 @@ data class ChipColors(
     val selectedTextColor: Color = Color.Unspecified,
     val selectedBorderColor: Color = Color.Unspecified,
     val unselectedBorderColor: Color = Color.Unspecified
+)
+
+data class SearchBarColors(
+    val cursorColor: Color = Color.Unspecified,
+    val textColor: Color = Color.Unspecified,
+    val startIconColor: Color = Color.Unspecified,
+    val closeIconColor: Color = Color.Unspecified,
+    val hintColor: Color = Color.Unspecified
 )
