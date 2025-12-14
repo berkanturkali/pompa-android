@@ -143,8 +143,6 @@ fun PompaApp(
             ) {
                 viewModel.topBarTitle = ""
                 viewModel.showBackButton = false
-
-
             }
         }
     }
