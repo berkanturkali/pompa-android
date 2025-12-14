@@ -30,32 +30,30 @@ fun FuelPriceItem(
     Card(
         modifier = modifier,
         shape = CircleShape,
-        border = BorderStroke(0.5.dp, color = MaterialTheme.pompaColorPalette.borderColor),
+        border = BorderStroke(0.5.dp, color = MaterialTheme.pompaColorPalette.borderColor.copy(0.5f)),
         elevation = CardDefaults.elevatedCardElevation(
-            0.dp
+            2.dp
         ),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.pompaColorPalette.cardColors.primary
         )
     ) {
         Column(
-            verticalArrangement = Arrangement.spacedBy(8.dp),
+            verticalArrangement = Arrangement.spacedBy(4.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.padding(vertical = 8.dp)
+            modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)
         ) {
             Text(
                 title,
-                style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.SemiBold),
-                color = MaterialTheme.pompaColorPalette.textColors.title.copy(alpha = 0.7f),
-                modifier = Modifier.fillMaxWidth(),
+                style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold),
+                color = MaterialTheme.pompaColorPalette.textColors.title.copy(alpha = 0.6f),
                 textAlign = TextAlign.Center
             )
 
             Text(
                 price,
-                style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
+                style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Bold),
                 color = MaterialTheme.pompaColorPalette.textColors.title,
-                modifier = Modifier.fillMaxWidth(),
                 textAlign = TextAlign.Center
             )
         }
