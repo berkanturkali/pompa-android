@@ -15,6 +15,7 @@ import com.pompa.android.model.BackgroundColors
 import com.pompa.android.model.BottomBarColors
 import com.pompa.android.model.ButtonColors
 import com.pompa.android.model.CardColors
+import com.pompa.android.model.ChipColors
 import com.pompa.android.model.PompaColors
 import com.pompa.android.model.TextColors
 import com.pompa.android.model.TopBarColors
@@ -80,6 +81,14 @@ val OpetColors = PompaColors(
         selectedItemColor = Color.White,
         unSelectedItemColor = Color.White.copy(alpha = 0.5f),
         indicatorColor = Color(0xffffd300)
+    ),
+    chipColors = ChipColors(
+        unselectedBackground = Color.White.copy(0.5f),
+        selectedBackground = Color(0xff134fae),
+        unselectedTextColor = Color(0xff134fae),
+        selectedTextColor = Color.White,
+        selectedBorderColor = Color.White,
+        unselectedBorderColor = Color(0xff134fae),
     )
 )
 
