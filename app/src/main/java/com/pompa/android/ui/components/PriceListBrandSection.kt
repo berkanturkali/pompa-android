@@ -159,7 +159,7 @@ fun PriceListBrandSection(
 
                     Text(
                         text = averagePrice,
-                        style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.SemiBold),
+                        style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.SemiBold),
                         color = MaterialTheme.pompaColorPalette.textColors.title
                     )
 
