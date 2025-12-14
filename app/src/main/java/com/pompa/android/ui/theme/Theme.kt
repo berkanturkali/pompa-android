@@ -57,6 +57,7 @@ val OpetColors = PompaColors(
         buttonText = Color(0xff134fae),
         title = Color(0xff162133),
         description = Color(0xff162133),
+        link = Color(0xFF1A73E8)
     ),
     buttonColors = ButtonColors(
         background = Color(0xffffd300),

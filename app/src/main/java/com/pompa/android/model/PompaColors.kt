@@ -29,6 +29,7 @@ data class TextColors(
     val buttonText: Color = Color.Unspecified,
     val title: Color = Color.Unspecified,
     val description: Color = Color.Unspecified,
+    val link: Color = Color.Unspecified
 )
 
 data class ButtonColors(

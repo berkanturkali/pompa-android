@@ -259,7 +259,7 @@ fun BrandItem(
                     )
                 } else {
                     Icon(
-                        painter = painterResource(id = R.drawable.ic_image),
+                        painter = painterResource(id = R.drawable.ic_water),
                         contentDescription = null,
                         modifier = Modifier.size(20.dp),
                     )

@@ -10,4 +10,6 @@
     <string name="confirm">Onayla</string>
     <string name="home">Ana Sayfa</string>
     <string name="settings">Ayarlar</string>
+    <string name="average">Ort:</string>
+    <string name="see_all">Tümünü gör</string>
 </resources>
