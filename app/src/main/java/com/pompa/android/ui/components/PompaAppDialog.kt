@@ -76,7 +76,7 @@ fun PompaAppDialog(
                         }
                         .padding(vertical = 8.dp),
                     textAlign = TextAlign.Center,
-                    color = MaterialTheme.pompaColorPalette.backgroundColors.onSecondary
+                    color = MaterialTheme.pompaColorPalette.textColors.onBackgroundSecondary
                 )
             }
         }

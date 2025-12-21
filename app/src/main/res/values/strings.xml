@@ -13,4 +13,20 @@
     <string name="average">Ort:</string>
     <string name="see_all">Tümünü gör</string>
     <string name="fuel_search_bar_hint">Marka ya da şehir ara...</string>
+    <string-array name="fuel_filters">
+        <item>Tümü</item>
+        <item>Benzin</item>
+        <item>Dizel</item>
+        <item>LPG</item>
+    </string-array>
+
+    <string name="gasoline95">Kurşunsuz Benzin 95</string>
+    <string name="gasoline95Premium">Kurşunsuz Benzin 95 (Premium)</string>
+    <string name="diesel">Motorin</string>
+    <string name="dieselPremium">Motorin (Premium)</string>
+    <string name="kerosene">Gazyağı</string>
+    <string name="heatingOil">Kalorifer Yakıtı</string>
+    <string name="fuelOil">Fuel Yağı</string>
+    <string name="fuelOilHighSulfur">Yüksek Kükürtlü Fuel Yağı</string>
+    <string name="autogas">Otogaz (LPG)</string>
 </resources>

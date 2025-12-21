@@ -28,8 +28,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.pompa.android.ui.providers.pompaColorPalette
 import com.pompa.android.ui.theme.PompaTheme
+import com.pompa.android.util.titleCase
 
 @Composable
 fun PompaAppTopBar(
@@ -48,14 +50,16 @@ fun PompaAppTopBar(
         Surface(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(60.dp),
+                .height(56.dp)
+                .padding(vertical = 8.dp, horizontal = 6.dp),
             color = MaterialTheme.pompaColorPalette.topBarColors.background,
-            contentColor = MaterialTheme.pompaColorPalette.topBarColors.content
+            contentColor = MaterialTheme.pompaColorPalette.topBarColors.content,
+            shape = CircleShape
         ) {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 12.dp)
+                    .padding(horizontal = 16.dp)
                     .animateContentSize()
             ) {
                 Row(
@@ -82,7 +86,7 @@ fun PompaAppTopBar(
                 Text(
                     modifier = Modifier.align(Alignment.Center),
                     text = title,
-                    style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold)
+                    style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold)
                 )
 
                 AnimatedVisibility(
@@ -93,7 +97,7 @@ fun PompaAppTopBar(
                 ) {
 
                     Column(
-                        verticalArrangement = Arrangement.spacedBy(4.dp),
+                        verticalArrangement = Arrangement.spacedBy(2.dp),
                         horizontalAlignment = Alignment.CenterHorizontally,
                     ) {
                         Card(
@@ -102,7 +106,7 @@ fun PompaAppTopBar(
                                 containerColor = MaterialTheme.pompaColorPalette.buttonColors.background,
                                 contentColor = MaterialTheme.pompaColorPalette.textColors.buttonText
                             ),
-                            modifier = Modifier.size(20.dp)
+                            modifier = Modifier.size(16.dp)
                         ) {
                             Box(
                                 modifier = Modifier
@@ -111,25 +115,32 @@ fun PompaAppTopBar(
                             ) {
                                 Text(
                                     text = provinceCode,
-                                    style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold)
+                                    style = MaterialTheme.typography.labelSmall.copy(
+                                        fontWeight = FontWeight.Bold,
+                                        fontSize = 8.sp
+                                    ),
                                 )
                             }
                         }
 
                         Text(
-                            text = provinceName,
-                            style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Medium),
+                            text = provinceName.titleCase(),
+                            style = MaterialTheme.typography.labelSmall.copy(
+                                fontWeight = FontWeight.SemiBold,
+                                fontSize = 8.sp
+                            ),
                             modifier = Modifier.animateContentSize(),
                         )
                     }
                 }
             }
-            HorizontalDivider(
-                color = MaterialTheme.pompaColorPalette.borderColor,
-                thickness = 0.5.dp,
-                modifier = Modifier.align(Alignment.BottomCenter)
-            )
         }
+
+        HorizontalDivider(
+            thickness = 1.dp,
+            color = MaterialTheme.pompaColorPalette.borderColor,
+            modifier = Modifier.align(Alignment.BottomCenter)
+        )
     }
 }
 

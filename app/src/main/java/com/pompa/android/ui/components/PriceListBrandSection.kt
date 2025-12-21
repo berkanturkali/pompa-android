@@ -1,11 +1,11 @@
 package com.pompa.android.ui.components
 
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -19,16 +19,20 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -48,8 +52,29 @@ fun PriceListBrandSection(
     name: String,
     logo: String,
     averagePrice: String,
-    modifier: Modifier = Modifier
+    isHeaderPinned: Boolean,
+    modifier: Modifier = Modifier,
 ) {
+    val headerHorizontalPadding by animateDpAsState(
+        targetValue = if (isHeaderPinned) 0.dp else 8.dp,
+        label = "headerHorizontalPadding"
+    )
+
+    val headerChildRowHorizontalPadding by animateDpAsState(
+        targetValue = if (isHeaderPinned) 10.dp else 8.dp,
+        label = "headerHorizontalPadding"
+    )
+
+
+    val headerChildRowVerticalPadding by animateDpAsState(
+        targetValue = if (isHeaderPinned) 8.dp else 0.dp,
+        label = "headerHorizontalPadding"
+    )
+
+    val headerParentVerticalPadding by animateDpAsState(
+        targetValue = if (isHeaderPinned) 0.dp else 8.dp,
+        label = "headerHorizontalPadding"
+    )
 
     val context = LocalContext.current
 
@@ -76,108 +101,135 @@ fun PriceListBrandSection(
         imageLoader = imageLoader
     )
 
-    Row(
+    val borderColor = MaterialTheme.pompaColorPalette.borderColor
+
+    Box(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 12.dp),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            modifier = Modifier.padding(horizontal = 4.dp, vertical = 14.dp)
-        ) {
-            Card(
-                shape = CircleShape,
-                colors = CardDefaults.cardColors(
-                    containerColor = Color.Transparent
-                ),
-                border = BorderStroke(
-                    0.5.dp,
-                    color = MaterialTheme.pompaColorPalette.borderColor.copy(0.2f)
-                ),
-                modifier = Modifier.size(32.dp)
-            ) {
-                if (painter.state !is AsyncImagePainter.State.Error) {
-                    Image(
-                        painter = painter,
-                        contentDescription = null,
-                        modifier = Modifier.size(28.dp),
-                        contentScale = ContentScale.Fit
-                    )
-                } else {
+            .padding(horizontal = headerHorizontalPadding, vertical = headerParentVerticalPadding)
+            .background(MaterialTheme.colorScheme.background)
+            .then(
+                if (isHeaderPinned) {
+                    Modifier.drawBehind {
+                        val strokeWidth = 1.dp.toPx()
+                        val y = size.height - strokeWidth / 2
 
+                        drawLine(
+                            color = borderColor,
+                            start = Offset(0f, y),
+                            end = Offset(size.width, y),
+                            strokeWidth = strokeWidth
+                        )
+                    }
+                } else {
+                    Modifier
+                }
+            )
+    ) {
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(
+                    horizontal = headerChildRowHorizontalPadding,
+                    vertical = headerChildRowVerticalPadding
+                ),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
+                Card(
+                    shape = CircleShape,
+                    colors = CardDefaults.cardColors(
+                        containerColor = Color.White
+                    ),
+                    border = BorderStroke(
+                        0.5.dp,
+                        color = MaterialTheme.pompaColorPalette.borderColor
+                    ),
+                    modifier = Modifier.size(42.dp)
+                ) {
                     Box(
                         modifier = Modifier.fillMaxSize(),
                         contentAlignment = Alignment.Center
                     ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_water),
-                            contentDescription = null,
-                            modifier = Modifier
-                                .size(20.dp)
-                        )
+                        if (painter.state !is AsyncImagePainter.State.Error) {
+                            Image(
+                                painter = painter,
+                                contentDescription = null,
+                                contentScale = ContentScale.Fit,
+                                modifier = Modifier.padding(4.dp),
+                            )
+                        } else {
+                            Icon(
+                                painter = painterResource(id = R.drawable.ic_water),
+                                contentDescription = null,
+                                modifier = Modifier
+                                    .size(20.dp),
+                                tint = MaterialTheme.pompaColorPalette.textColors.onBackgroundPrimary
+                            )
+                        }
                     }
                 }
+
+                Text(
+                    text = name,
+                    style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Bold),
+                    color = MaterialTheme.pompaColorPalette.textColors.onBackgroundSecondary
+                )
             }
-
-            Text(
-                text = name,
-                style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
-                color = MaterialTheme.pompaColorPalette.textColors.title.copy(0.8f)
-            )
-        }
-
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-
             Card(
                 colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.pompaColorPalette.cardColors.primary.copy(0.5f)
+                    containerColor = MaterialTheme.pompaColorPalette.cardColors.primary.copy(0.8f)
                 ),
-                shape = RoundedCornerShape(4.dp),
+                shape = RoundedCornerShape(6.dp),
                 border = BorderStroke(
                     0.5.dp,
-                    color = MaterialTheme.pompaColorPalette.borderColor.copy(0.2f)
+                    color = MaterialTheme.pompaColorPalette.borderColor.copy(0.8f)
                 )
             ) {
                 Row(
                     modifier = Modifier
-                        .background(Color.Transparent)
-                        .padding(4.dp),
+                        .background(MaterialTheme.pompaColorPalette.backgroundColors.primary)
+                        .padding(horizontal = 8.dp, vertical = 6.dp),
                     horizontalArrangement = Arrangement.spacedBy(4.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
                         text = stringResource(R.string.average),
                         style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Medium),
-                        color = MaterialTheme.pompaColorPalette.textColors.title.copy(alpha = 0.7f)
+                        color = MaterialTheme.pompaColorPalette.textColors.onBackgroundPrimary.copy(
+                            alpha = 0.7f
+                        )
                     )
 
                     Text(
-                        text = averagePrice,
-                        style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.SemiBold),
-                        color = MaterialTheme.pompaColorPalette.textColors.title
+                        text = buildAnnotatedString {
+                            withStyle(
+                                MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold)
+                                    .toSpanStyle()
+                            ) {
+                                append(averagePrice)
+                            }
+                            withStyle(
+                                MaterialTheme.typography.labelSmall
+                                    .toSpanStyle()
+                            ) {
+                                append("₺")
+                            }
+                        },
+                        color = MaterialTheme.pompaColorPalette.textColors.onBackgroundPrimary
                     )
 
                 }
+
             }
 
-            Text(
-                text = stringResource(R.string.see_all),
-                style = MaterialTheme.typography.labelSmall.copy(
-                    fontWeight = FontWeight.Light,
-                    fontSize = 7.5.sp
-                ),
-                color = MaterialTheme.pompaColorPalette.textColors.link,
-                textDecoration = TextDecoration.Underline
-            )
-
         }
-
     }
 
 }
@@ -189,7 +241,8 @@ private fun PriceListBrandSectionPrev() {
         PriceListBrandSection(
             name = "Shell",
             logo = "",
-            averagePrice = "42.15"
+            averagePrice = "42.15",
+            isHeaderPinned = true
         )
     }
 }

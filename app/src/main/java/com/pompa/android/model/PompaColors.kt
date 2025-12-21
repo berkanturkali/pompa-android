@@ -18,8 +18,6 @@ data class PompaColors(
 data class BackgroundColors(
     val primary: Color = Color.Unspecified,
     val secondary: Color = Color.Unspecified,
-    val onPrimary: Color = Color.Unspecified,
-    val onSecondary: Color = Color.Unspecified
 )
 
 data class CardColors(
@@ -31,7 +29,9 @@ data class TextColors(
     val buttonText: Color = Color.Unspecified,
     val title: Color = Color.Unspecified,
     val description: Color = Color.Unspecified,
-    val link: Color = Color.Unspecified
+    val link: Color = Color.Unspecified,
+    val onBackgroundPrimary: Color = Color.Unspecified,
+    val onBackgroundSecondary: Color = Color.Unspecified
 )
 
 data class ButtonColors(
@@ -73,5 +73,5 @@ data class SearchBarColors(
     val textColor: Color = Color.Unspecified,
     val startIconColor: Color = Color.Unspecified,
     val closeIconColor: Color = Color.Unspecified,
-    val hintColor: Color = Color.Unspecified
+    val hintColor: Color = Color.Unspecified,
 )

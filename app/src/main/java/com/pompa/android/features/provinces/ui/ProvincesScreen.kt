@@ -196,7 +196,10 @@ fun ProvinceItem(
             ) {
                 onItemClick()
             },
-        shape = RoundedCornerShape(16.dp)
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.pompaColorPalette.cardColors.primary.copy(0.95f)
+        )
     ) {
         Row(
             modifier = Modifier

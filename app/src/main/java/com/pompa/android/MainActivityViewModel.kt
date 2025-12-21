@@ -1,5 +1,6 @@
 package com.pompa.android
 
+import android.content.Context
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -8,20 +9,22 @@ import androidx.navigation.NavDestination
 import com.pompa.android.navigation.PompaRoutes
 import com.pompa.android.util.UserPreferences
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
 @HiltViewModel
 class MainActivityViewModel @Inject constructor(
-    private val userPreferences: UserPreferences
+    private val userPreferences: UserPreferences,
+    @ApplicationContext context: Context
 ) : ViewModel() {
 
     var isTopBarVisible by mutableStateOf(false)
 
-    var topBarTitle by mutableStateOf("")
+    var topBarTitle by mutableStateOf(context.getString(R.string.app_name))
 
     var showBackButton by mutableStateOf(false)
 
-    var showSelectedProvince by mutableStateOf(false)
+    var showSelectedProvince by mutableStateOf(userPreferences.getSelectedProvinceCode() != null)
 
     var showBottomBar by mutableStateOf(false)
 
@@ -36,7 +39,7 @@ class MainActivityViewModel @Inject constructor(
 
     fun checkProvinceAlreadySelected(): Boolean {
         val code = userPreferences.getSelectedProvinceCode()
-        return code.isNullOrBlank()
+        return !code.isNullOrBlank()
     }
 
     fun getSelectedProvince(): Pair<String?, String?> {

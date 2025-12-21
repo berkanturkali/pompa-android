@@ -6,17 +6,23 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.pompa.android.R
 import com.pompa.android.ui.providers.pompaColorPalette
 import com.pompa.android.ui.theme.PompaTheme
 import com.pompa.android.util.ClickIndication
@@ -25,6 +31,7 @@ import com.pompa.android.util.safeClickable
 @Composable
 fun FuelFilterChip(
     filter: String,
+    icon: Int,
     selected: Boolean,
     modifier: Modifier = Modifier,
     onItemClick: () -> Unit,
@@ -65,19 +72,27 @@ fun FuelFilterChip(
             0.5.dp,
             color = borderColor
         ),
-        elevation = CardDefaults.cardElevation(
-            2.dp
-        ),
         colors = CardDefaults.cardColors(
             containerColor = animatedBackground
         )
     ) {
-        Text(
-            text = filter,
-            style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.SemiBold),
-            color = textColor,
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
-        )
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(2.dp),
+            modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                painter = painterResource(icon),
+                contentDescription = null,
+                tint = textColor,
+                modifier = Modifier.size(14.dp)
+            )
+            Text(
+                text = filter,
+                style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.SemiBold),
+                color = textColor,
+            )
+        }
     }
 }
 
@@ -91,11 +106,13 @@ private fun FuelFilterChipPrev() {
         ) {
             FuelFilterChip(
                 filter = "All",
-                selected = true
+                selected = true,
+                icon = R.drawable.ic_apps
             ) { }
             FuelFilterChip(
                 filter = "Gasoline",
-                selected = false
+                selected = false,
+                icon = R.drawable.ic_apps
             ) { }
         }
     }

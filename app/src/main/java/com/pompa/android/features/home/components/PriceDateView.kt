@@ -1,9 +1,8 @@
-package com.pompa.android.ui.components
+package com.pompa.android.features.home.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -20,37 +19,44 @@ import com.pompa.android.ui.providers.pompaColorPalette
 import com.pompa.android.ui.theme.PompaTheme
 
 @Composable
-fun ProvinceView(
-    province: String,
+fun PriceDateView(
+    date: String,
     modifier: Modifier = Modifier
 ) {
 
     Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(vertical = 8.dp, horizontal = 12.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
+        modifier = modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(
+            2.dp,
+            Alignment.End
+        ),
+        verticalAlignment = Alignment.CenterVertically
     ) {
+
         Icon(
-            painter = painterResource(R.drawable.ic_location),
+            painter = painterResource(R.drawable.ic_calendar),
             contentDescription = null,
-            modifier = Modifier.size(20.dp),
+            tint = MaterialTheme.pompaColorPalette.textColors.onBackgroundSecondary.copy(0.8f),
+            modifier = Modifier.size(14.dp)
         )
 
         Text(
-            text = province,
-            style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.SemiBold),
-            color = MaterialTheme.pompaColorPalette.textColors.title,
+            date,
+            style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.SemiBold),
+            color = MaterialTheme.pompaColorPalette.textColors.onBackgroundSecondary.copy(0.8f),
         )
+
+
     }
 
 }
 
 @Preview(showBackground = true)
 @Composable
-private fun ProvinceViewPrev() {
+private fun PriceDateViewPrev() {
     PompaTheme {
-        ProvinceView(province = "Izmir")
+        PriceDateView(
+            date = "21/12/2025"
+        )
     }
 }

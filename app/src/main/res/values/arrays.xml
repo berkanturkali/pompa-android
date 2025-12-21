@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="fuel_filter_icons">
+        <item>@drawable/ic_apps</item>
+        <item>@drawable/ic_gas_station</item>
+        <item>@drawable/ic_water</item>
+        <item>@drawable/ic_propane</item>
+    </array>
+</resources>

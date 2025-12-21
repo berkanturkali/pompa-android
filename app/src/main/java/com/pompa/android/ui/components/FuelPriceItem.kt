@@ -1,22 +1,22 @@
 package com.pompa.android.ui.components
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.pompa.android.ui.providers.pompaColorPalette
 import com.pompa.android.ui.theme.PompaTheme
 
@@ -24,40 +24,59 @@ import com.pompa.android.ui.theme.PompaTheme
 fun FuelPriceItem(
     title: String,
     price: String,
+    unit: String,
     modifier: Modifier = Modifier
 ) {
 
-    Card(
-        modifier = modifier,
-        shape = CircleShape,
-        border = BorderStroke(0.5.dp, color = MaterialTheme.pompaColorPalette.borderColor.copy(0.5f)),
-        elevation = CardDefaults.elevatedCardElevation(
-            2.dp
-        ),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.pompaColorPalette.cardColors.primary
-        )
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 8.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
     ) {
+        Text(
+            title,
+            style = MaterialTheme.typography.labelSmall.copy(
+                fontWeight = FontWeight.Bold,
+            ),
+            color = MaterialTheme.pompaColorPalette.textColors.onBackgroundSecondary,
+            textAlign = TextAlign.Start,
+        )
+
         Column(
-            verticalArrangement = Arrangement.spacedBy(4.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)
+            verticalArrangement = Arrangement.spacedBy(2.dp),
+            horizontalAlignment = Alignment.End
         ) {
             Text(
-                title,
-                style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold),
-                color = MaterialTheme.pompaColorPalette.textColors.title.copy(alpha = 0.6f),
+                text = buildAnnotatedString {
+                    withStyle(
+                        MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold)
+                            .toSpanStyle()
+                    ) {
+                        append(price)
+                    }
+                    withStyle(
+                        MaterialTheme.typography.labelSmall.copy(fontSize = 8.sp)
+                            .toSpanStyle()
+                    ) {
+                        append("₺")
+                    }
+                },
+                color = MaterialTheme.pompaColorPalette.textColors.onBackgroundSecondary,
                 textAlign = TextAlign.Center
             )
 
             Text(
-                price,
-                style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Bold),
-                color = MaterialTheme.pompaColorPalette.textColors.title,
-                textAlign = TextAlign.Center
+                unit,
+                style = MaterialTheme.typography.labelSmall.copy(
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 8.sp
+                ),
+                color = MaterialTheme.pompaColorPalette.textColors.onBackgroundSecondary.copy(0.8f),
+                textAlign = TextAlign.End
             )
         }
-
     }
 }
 
@@ -67,7 +86,8 @@ private fun FuelPriceItemPrev() {
     PompaTheme {
         FuelPriceItem(
             title = "GASOLINE 95",
-            price = "42.10₺"
+            price = "42.10",
+            unit = "TL/LT"
         )
     }
 }

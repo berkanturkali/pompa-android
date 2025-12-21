@@ -40,6 +40,7 @@ object ApiUtils {
                     } ?: emit(Resource.Error(UIText.StringResource(R.string.no_content)))
                 }
             } catch (exception: Exception) {
+                exception.printStackTrace()
                 handleException(exception = exception)
             }
         }

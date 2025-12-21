@@ -48,18 +48,18 @@ val OpetColors = PompaColors(
     backgroundColors = BackgroundColors(
         primary = Color(0xFF134fae),
         secondary = Color.White,
-        onPrimary = Color(0xffffd300),
-        onSecondary = Color(0xff134fae)
     ),
     cardColors = CardColors(
         primary = Color.White,
-        secondary = Color.White,
+        secondary = Color(0xffffd300),
     ),
     textColors = TextColors(
         buttonText = Color(0xff134fae),
         title = Color(0xff162133),
         description = Color(0xff162133),
-        link = Color(0xFF1A73E8)
+        link = Color(0xFF1A73E8),
+        onBackgroundPrimary = Color.White,
+        onBackgroundSecondary = Color(0xff134fae)
     ),
     buttonColors = ButtonColors(
         background = Color(0xffffd300),
@@ -67,7 +67,7 @@ val OpetColors = PompaColors(
         secondaryBackground = Color.White,
         secondaryContent = Color(0xff134fae)
     ),
-    borderColor = Color(0xff2f3336),
+    borderColor = Color(0xffdfe4ec),
     progressIndicatorColors = com.pompa.android.model.ProgressIndicatorColors(
         indicator = Color.White,
         background = Color(0xff134fae)

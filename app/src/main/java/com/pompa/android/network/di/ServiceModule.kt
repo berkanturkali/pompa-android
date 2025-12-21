@@ -1,6 +1,7 @@
 package com.pompa.android.network.di
 
 import com.pompa.android.network.service.brand.BrandService
+import com.pompa.android.network.service.fuel.FuelService
 import com.pompa.android.network.service.province.ProvinceService
 import dagger.Module
 import dagger.Provides
@@ -25,6 +26,13 @@ object ServiceModule {
     fun provideBrandService(
         retrofit: Retrofit
     ): BrandService {
+        return retrofit.create()
+    }
+
+    @[Provides Singleton]
+    fun provideFuelService(
+        retrofit: Retrofit
+    ): FuelService {
         return retrofit.create()
     }
 }

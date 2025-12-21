@@ -7,12 +7,15 @@ import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
@@ -20,6 +23,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.pompa.android.features.brands.ui.FuelBrandsScreen
+import com.pompa.android.features.home.ui.HomeScreen
 import com.pompa.android.features.provinces.ui.ProvincesScreen
 import com.pompa.android.navigation.PompaRoutes
 import com.pompa.android.ui.components.PompaAppBottomBar
@@ -54,7 +58,7 @@ fun PompaApp(
                 PompaAppTopBar(
                     showBackButton = viewModel.showBackButton,
                     showSelectedProvince = viewModel.showSelectedProvince,
-                    title = viewModel.topBarTitle,
+                    title = stringResource(R.string.app_name),
                     provinceCode = code.toString(),
                     provinceName = name ?: "",
                     onBackButtonClick = {
@@ -62,9 +66,78 @@ fun PompaApp(
                     }
                 )
             }
-        },
-        bottomBar = {
+        }
+    ) {
+        Box(modifier = Modifier.fillMaxSize().padding(it)) {
+            NavHost(
+                navController = navController,
+                startDestination = if (viewModel.checkProvinceAlreadySelected()) PompaRoutes.BottomNavRoutes.Home else PompaRoutes.ProvincesScreen
+            ) {
+                composable<PompaRoutes.ProvincesScreen> {
+                    viewModel.topBarTitle = stringResource(R.string.select_province)
+                    viewModel.showBackButton = false
+                    ProvincesScreen(
+                        navigateToFuelBrandsScreen = {
+                            navController.navigate(PompaRoutes.FuelBrandsScreen)
+                        }
+                    )
+                }
+
+                composable<PompaRoutes.FuelBrandsScreen>(
+                    enterTransition = {
+                        slideInHorizontally(
+                            initialOffsetX = { fullWidth -> -fullWidth },
+                        )
+                    },
+                    exitTransition = {
+                        slideOutHorizontally(
+                            targetOffsetX = { fullWidth -> -fullWidth },
+                        )
+                    },
+                    popEnterTransition = {
+                        slideInHorizontally(
+                            initialOffsetX = { fullWidth -> fullWidth },
+                        )
+                    },
+                    popExitTransition = {
+                        slideOutHorizontally(
+                            targetOffsetX = { fullWidth -> -fullWidth },
+                        )
+                    }
+                ) {
+                    viewModel.showBackButton = true
+                    viewModel.showSelectedProvince = true
+                    viewModel.topBarTitle = stringResource(R.string.select_fuel_brand)
+                    FuelBrandsScreen {
+                        navController.navigate(PompaRoutes.BottomNavRoutes.Home) {
+                            popUpTo(PompaRoutes.FuelBrandsScreen) {
+                                inclusive = true
+                            }
+                        }
+                    }
+                }
+
+                composable<PompaRoutes.BottomNavRoutes.Home>(
+                    enterTransition = {
+                        slideInHorizontally(
+                            initialOffsetX = { fullWidth -> fullWidth },
+                        )
+                    },
+                    exitTransition = {
+                        slideOutHorizontally(
+                            targetOffsetX = { fullWidth -> -fullWidth },
+                        )
+                    }
+                ) {
+                    viewModel.topBarTitle = ""
+                    viewModel.showBackButton = false
+
+                    HomeScreen()
+                }
+            }
+
             AnimatedVisibility(
+                modifier = Modifier.align(Alignment.BottomCenter).navigationBarsPadding(),
                 visible = viewModel.showBottomBar,
                 enter = slideInVertically(
                     initialOffsetY = { it }
@@ -77,72 +150,6 @@ fun PompaApp(
                     navController = navController,
                     destinations = viewModel.topLevelDestinations
                 )
-            }
-        }
-    ) {
-        NavHost(
-            modifier = modifier.padding(it),
-            navController = navController,
-            startDestination = /*if (viewModel.checkProvinceAlreadySelected()) PompaRoutes.HomeScreen else */ PompaRoutes.ProvincesScreen
-        ) {
-            composable<PompaRoutes.ProvincesScreen> {
-                viewModel.topBarTitle = stringResource(R.string.select_province)
-                viewModel.showBackButton = false
-                ProvincesScreen(
-                    navigateToFuelBrandsScreen = {
-                        navController.navigate(PompaRoutes.FuelBrandsScreen)
-                    }
-                )
-            }
-
-            composable<PompaRoutes.FuelBrandsScreen>(
-                enterTransition = {
-                    slideInHorizontally(
-                        initialOffsetX = { fullWidth -> -fullWidth },
-                    )
-                },
-                exitTransition = {
-                    slideOutHorizontally(
-                        targetOffsetX = { fullWidth -> -fullWidth },
-                    )
-                },
-                popEnterTransition = {
-                    slideInHorizontally(
-                        initialOffsetX = { fullWidth -> fullWidth },
-                    )
-                },
-                popExitTransition = {
-                    slideOutHorizontally(
-                        targetOffsetX = { fullWidth -> -fullWidth },
-                    )
-                }
-            ) {
-                viewModel.showBackButton = true
-                viewModel.showSelectedProvince = true
-                viewModel.topBarTitle = stringResource(R.string.select_fuel_brand)
-                FuelBrandsScreen {
-                    navController.navigate(PompaRoutes.BottomNavRoutes.Home) {
-                        popUpTo(PompaRoutes.FuelBrandsScreen) {
-                            inclusive = true
-                        }
-                    }
-                }
-            }
-
-            composable<PompaRoutes.BottomNavRoutes.Home>(
-                enterTransition = {
-                    slideInHorizontally(
-                        initialOffsetX = { fullWidth -> fullWidth },
-                    )
-                },
-                exitTransition = {
-                    slideOutHorizontally(
-                        targetOffsetX = { fullWidth -> -fullWidth },
-                    )
-                }
-            ) {
-                viewModel.topBarTitle = ""
-                viewModel.showBackButton = false
             }
         }
     }

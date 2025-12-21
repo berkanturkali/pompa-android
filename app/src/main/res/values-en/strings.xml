@@ -13,5 +13,19 @@
     <string name="average">Avg:</string>
     <string name="see_all">See all</string>
     <string name="fuel_search_bar_hint">Search provider or city...</string>
-
+    <string-array name="fuel_filters">
+        <item>All</item>
+        <item>Gasoline</item>
+        <item>Diesel</item>
+        <item>LPG</item>
+    </string-array>
+    <string name="gasoline95">Gasoline 95</string>
+    <string name="gasoline95Premium">Gasoline 95 (Premium)</string>
+    <string name="diesel">Diesel</string>
+    <string name="dieselPremium">Diesel (Premium)</string>
+    <string name="kerosene">Kerosene</string>
+    <string name="heatingOil">Heating Oil</string>
+    <string name="fuelOil">Fuel Oil</string>
+    <string name="fuelOilHighSulfur">Fuel Oil High Sulfur</string>
+    <string name="autogas">Autogas (LPG)</string>
 </resources>

@@ -3,6 +3,7 @@ package com.pompa.android.features.home.components
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -49,11 +50,11 @@ fun FuelSearchBar(
     var isFocused by remember { androidx.compose.runtime.mutableStateOf(false) }
 
     Surface(
-        modifier = modifier
-            .fillMaxWidth(),
-        shadowElevation = 2.dp,
+        modifier = modifier,
         shape = RoundedCornerShape(20.dp),
-        color = Color.Transparent
+        shadowElevation = 0.5.dp,
+        color = Color.White,
+        border = BorderStroke(0.5.dp, MaterialTheme.pompaColorPalette.borderColor)
     ) {
         BasicTextField(
             value = value,
@@ -77,8 +78,7 @@ fun FuelSearchBar(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(20.dp)
-                        .focusRequester(focusRequester)
-                        .padding(horizontal = 8.dp),
+                        .focusRequester(focusRequester),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
 
