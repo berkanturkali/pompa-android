@@ -39,30 +39,30 @@ fun FuelItem(
     actualFuelPriceListCount: Int,
     fuelPrices: List<FuelPriceUiModel>,
     modifier: Modifier = Modifier,
-    showArrow: Boolean = true,
+    showDistrict: Boolean = true,
     onItemClick: () -> Unit = {},
 ) {
 
     Column {
+        if (showDistrict) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp, horizontal = 12.dp)
+                    .safeClickable(indication = ClickIndication.None) {
+                        onItemClick()
+                    },
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    districtName,
+                    style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Black),
+                    color = MaterialTheme.pompaColorPalette.textColors.onBackgroundSecondary,
+                    modifier = Modifier.padding(start = 4.dp)
+                )
 
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 8.dp, horizontal = 12.dp)
-                .safeClickable(indication = ClickIndication.None) {
-                    onItemClick()
-                },
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                districtName,
-                style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Black),
-                color = MaterialTheme.pompaColorPalette.textColors.onBackgroundSecondary,
-                modifier = Modifier.padding(start = 4.dp)
-            )
 
-            if (showArrow) {
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(4.dp),
                     verticalAlignment = Alignment.CenterVertically
