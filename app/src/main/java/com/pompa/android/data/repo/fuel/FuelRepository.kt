@@ -9,7 +9,8 @@ interface FuelRepository {
 
     fun fetchAllFuelPricesByCity(
         cityName: String,
-        cityCode: String
+        cityCode: String,
+        provider: String,
     ): Flow<Resource<BaseApiResponse<List<FuelPriceProvider>>>>
 
 }

@@ -5,10 +5,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -23,18 +22,25 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.pompa.android.R
 import com.pompa.android.features.home.model.FuelPriceUiModel
 import com.pompa.android.ui.providers.pompaColorPalette
 import com.pompa.android.ui.theme.PompaTheme
+import com.pompa.android.util.ClickIndication
+import com.pompa.android.util.safeClickable
 
 @Composable
 fun FuelItem(
     districtName: String,
+    actualFuelPriceListCount: Int,
     fuelPrices: List<FuelPriceUiModel>,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    showArrow: Boolean = true,
+    onItemClick: () -> Unit = {},
 ) {
 
     Column {
@@ -42,7 +48,10 @@ fun FuelItem(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 8.dp, horizontal = 16.dp),
+                .padding(vertical = 8.dp, horizontal = 12.dp)
+                .safeClickable(indication = ClickIndication.None) {
+                    onItemClick()
+                },
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -50,21 +59,40 @@ fun FuelItem(
                 districtName,
                 style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Black),
                 color = MaterialTheme.pompaColorPalette.textColors.onBackgroundSecondary,
+                modifier = Modifier.padding(start = 4.dp)
             )
 
-            Icon(
-                painter = painterResource(R.drawable.ic_next),
-                contentDescription = null,
-                tint = Color.LightGray
-            )
+            if (showArrow) {
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(4.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
 
-
+                    Text(
+                        text = String.format(
+                            stringResource(R.string.see_all),
+                            actualFuelPriceListCount
+                        ),
+                        style = MaterialTheme.typography.labelSmall.copy(
+                            fontWeight = FontWeight.Medium,
+                            fontSize = 10.sp
+                        ),
+                        color = MaterialTheme.pompaColorPalette.textColors.link,
+                        textDecoration = TextDecoration.Underline
+                    )
+                    Icon(
+                        painter = painterResource(R.drawable.ic_next),
+                        contentDescription = null,
+                        tint = Color.LightGray
+                    )
+                }
+            }
         }
 
         Card(
             modifier = modifier
                 .fillMaxWidth()
-                .height(180.dp),
+                .wrapContentHeight(),
             shape = RoundedCornerShape(12.dp),
             elevation = CardDefaults.cardElevation(
                 1.dp
@@ -75,11 +103,9 @@ fun FuelItem(
             border = BorderStroke(0.5.dp, MaterialTheme.pompaColorPalette.borderColor)
         ) {
 
-
             Column(
                 horizontalAlignment = Alignment.Start,
                 modifier = Modifier
-                    .fillMaxHeight()
                     .background(
                         MaterialTheme.pompaColorPalette.cardColors.primary.copy(0.95f)
                     )
@@ -95,7 +121,9 @@ fun FuelItem(
                             title = stringResource(priceItem.title),
                             price = priceItem.price,
                             unit = priceItem.unit,
-                            modifier = Modifier.weight(1f)
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 6.dp)
                         )
                         if (index != fuelPrices.lastIndex) {
                             HorizontalDivider(
@@ -117,6 +145,7 @@ fun FuelItem(
 private fun FuelItemPrev() {
     PompaTheme {
         FuelItem(
+            actualFuelPriceListCount = 3,
             districtName = "IZMIR",
             fuelPrices = listOf(
                 FuelPriceUiModel(
@@ -135,6 +164,6 @@ private fun FuelItemPrev() {
                     unit = "tl/lt"
                 ),
             )
-        )
+        ) {}
     }
 }

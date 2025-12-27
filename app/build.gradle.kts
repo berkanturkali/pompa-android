@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.ksp)
     alias(libs.plugins.secrets)
     alias(libs.plugins.serialization)
+    id("kotlin-parcelize")
 }
 
 android {
@@ -78,4 +79,6 @@ dependencies {
     implementation(libs.coil.compose)
     implementation(libs.constriantlayout.compose)
     implementation(libs.coil.svg)
+    implementation(libs.androidx.compose.material.navigation)
+    implementation("org.jetbrains.kotlin:kotlin-reflect")
 }

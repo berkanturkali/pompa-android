@@ -27,25 +27,33 @@ import com.pompa.android.features.home.components.FuelSearchBar
 import com.pompa.android.features.home.components.PriceDateView
 import com.pompa.android.features.home.viewmodel.HomeScreenViewModel
 import com.pompa.android.model.fuel.FuelPriceProvider
+import com.pompa.android.model.fuel.FuelPriceRecord
 import com.pompa.android.ui.components.FuelItem
 import com.pompa.android.ui.components.PriceListBrandSection
 import com.pompa.android.ui.components.SortButton
 import com.pompa.android.ui.providers.pompaColorPalette
 
 @Composable
-fun HomeScreen(modifier: Modifier = Modifier, viewModel: HomeScreenViewModel = hiltViewModel()) {
+fun HomeScreen(
+    modifier: Modifier = Modifier,
+    viewModel: HomeScreenViewModel = hiltViewModel(),
+    onFuelItemClick: (FuelPriceProvider, FuelPriceRecord, Boolean) -> Unit,
+) {
 
     HomeScreenContent(
         providers = viewModel.providers,
         modifier = modifier,
+        selectedProvider = viewModel.getSelectedProvider() ?: "",
+        onFuelItemClick = onFuelItemClick,
     )
-
 }
 
 @Composable
 fun HomeScreenContent(
+    selectedProvider: String,
     providers: List<FuelPriceProvider>,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onFuelItemClick: (FuelPriceProvider, FuelPriceRecord, Boolean) -> Unit,
 ) {
 
     val containerPadding = 8.dp
@@ -90,7 +98,6 @@ fun HomeScreenContent(
 
             }
 
-
             FuelFilters(
                 modifier = Modifier.padding(horizontal = containerPadding, vertical = 2.dp),
             )
@@ -104,30 +111,46 @@ fun HomeScreenContent(
                 "21/12/2025",
                 modifier = Modifier.padding(end = containerPadding, top = containerPadding)
             )
+
+            HorizontalDivider(
+                thickness = 0.5.dp,
+                color = MaterialTheme.pompaColorPalette.borderColor
+            )
+
             LazyColumn(
                 state = listState,
                 verticalArrangement = Arrangement.spacedBy(6.dp)
             ) {
 
                 providers.forEach { provider ->
+
+                    val isFavoriteProvider = provider.provider.equals(
+                        selectedProvider,
+                        ignoreCase = true
+                    )
                     stickyHeader {
                         PriceListBrandSection(
                             isHeaderPinned = isHeaderPinned,
                             name = provider.provider,
                             logo = provider.providerLogo,
-                            averagePrice = provider.averagePrice.toString()
+                            averagePrice = provider.averagePrice.toString(),
+                            isFavorite = isFavoriteProvider
                         )
                     }
 
                     items(provider.data) { record ->
                         FuelItem(
                             districtName = record.districtName,
+                            actualFuelPriceListCount = record.prices.notNullCount(),
                             fuelPrices = record.prices.mapToUiItems(
                                 unit = record.unit,
                                 weightUnit = record.weightUnit
                             )
-                                .take(4),
-                            modifier = Modifier.padding(containerPadding)
+                                .take(3),
+                            modifier = Modifier.padding(containerPadding),
+                            onItemClick = {
+                                onFuelItemClick(provider, record, isFavoriteProvider)
+                            }
                         )
                     }
                 }

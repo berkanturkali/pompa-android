@@ -1,9 +1,12 @@
 package com.pompa.android.model.fuel
 
+import android.os.Parcelable
 import com.pompa.android.features.home.model.FuelPriceUiModel
 import kotlinx.serialization.Serializable
+import kotlin.reflect.full.memberProperties
 
 @Serializable
+@kotlinx.parcelize.Parcelize
 data class FuelPriceProvider(
     val provider: String,
     val providerLogo: String,
@@ -11,9 +14,10 @@ data class FuelPriceProvider(
     val ok: Boolean,
     val data: List<FuelPriceRecord>,
     val error: String?,
-)
+) : Parcelable
 
 @Serializable
+@kotlinx.parcelize.Parcelize
 data class FuelPriceRecord(
     val brand: String,
     val cityCode: String?,
@@ -24,9 +28,10 @@ data class FuelPriceRecord(
     val weightUnit: String,
     val source: String,
     val fetchedAt: String
-)
+) : Parcelable
 
 @Serializable
+@kotlinx.parcelize.Parcelize
 data class FuelPrices(
     val gasoline95: Double?,
     val gasoline95Premium: Double?,
@@ -37,7 +42,7 @@ data class FuelPrices(
     val fuelOil: Double?,
     val fuelOilHighSulfur: Double?,
     val autogas: Double?
-) {
+) : Parcelable {
     fun mapToUiItems(
         unit: String,
         weightUnit: String,
@@ -135,6 +140,12 @@ data class FuelPrices(
             }
 
         return items
+    }
+
+    fun notNullCount(): Int {
+        return FuelPrices::class.memberProperties.count { prop ->
+            prop.get(this) != null
+        }
     }
 
     fun Double?.toText(): String? =

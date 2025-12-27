@@ -11,7 +11,8 @@ interface FuelService {
     @GET(Endpoints.FETCH_ALL_PRICES_BY_CITY_ENDPOINT)
     suspend fun fetchAllFuelPricesByCity(
         @Query("cityName") cityName: String,
-        @Query("cityCode") cityCode: String
+        @Query("cityCode") cityCode: String,
+        @Query("provider") provider: String,
     ): Response<BaseApiResponse<List<FuelPriceProvider>>>
 
 }

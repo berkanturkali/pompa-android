@@ -15,7 +15,8 @@ class UserPreferences @Inject constructor(
         private const val PREFS_NAME = "com.pompa.android.USER_PREFERENCES"
         private const val SELECTED_PROVINCE_CODE = "selected_province_code"
         private const val SELECTED_PROVINCE_NAME = "selected_province_name"
-        private const val SELECTED_BRAND_ID = "selected_brand_id"
+        private const val FAVORITE_PROVIDER_ID = "favorite_provider_id"
+        private const val FAVORITE_PROVIDER_NAME = "favorite_provider_name"
     }
 
     private val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
@@ -34,14 +35,25 @@ class UserPreferences @Inject constructor(
         return prefs.getString(SELECTED_PROVINCE_NAME, null)
     }
 
-    fun setSelectedBrandId(brandId: Int) {
-        prefs.edit { putInt(SELECTED_BRAND_ID, brandId) }
+    fun setFavoriteProviderId(providerId: Int) {
+        prefs.edit { putInt(FAVORITE_PROVIDER_ID, providerId) }
+    }
+
+    fun setFavoriteProviderName(providerName: String) {
+        prefs.edit { putString(FAVORITE_PROVIDER_NAME, providerName) }
     }
 
     fun getSelectedProvince(): Pair<String?, String?> {
         val code = getSelectedProvinceCode()
         val name = getSelectedProvinceName()
         return Pair(code, name)
+    }
+
+    fun getFavoriteProviderName(): String? {
+        return prefs.getString(
+            FAVORITE_PROVIDER_NAME,
+            ""
+        )
     }
 
     fun clear() {

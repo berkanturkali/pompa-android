@@ -5,6 +5,8 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.compose.material.navigation.ModalBottomSheetLayout
+import androidx.compose.material.navigation.rememberBottomSheetNavigator
 import androidx.navigation.compose.rememberNavController
 import com.pompa.android.ui.theme.PompaTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -18,11 +20,14 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             PompaTheme {
-                val navController = rememberNavController()
-                PompaApp(
-                    navController = navController,
-                    viewModel = viewModel
-                )
+                val bottomSheetNavigator = rememberBottomSheetNavigator()
+                val navController = rememberNavController(bottomSheetNavigator)
+                ModalBottomSheetLayout(bottomSheetNavigator = bottomSheetNavigator) {
+                    PompaApp(
+                        navController = navController,
+                        viewModel = viewModel
+                    )
+                }
             }
         }
     }

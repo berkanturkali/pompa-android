@@ -15,16 +15,18 @@ import javax.inject.Inject
 @HiltViewModel
 class MainActivityViewModel @Inject constructor(
     private val userPreferences: UserPreferences,
-    @ApplicationContext context: Context
+    @ApplicationContext private val context: Context
 ) : ViewModel() {
 
     var isTopBarVisible by mutableStateOf(false)
 
-    var topBarTitle by mutableStateOf(context.getString(R.string.app_name))
+    var topBarTitle by mutableStateOf("")
 
     var showBackButton by mutableStateOf(false)
 
-    var showSelectedProvince by mutableStateOf(userPreferences.getSelectedProvinceCode() != null)
+    var showSelectedProvince by mutableStateOf(
+        !userPreferences.getSelectedProvinceCode().isNullOrBlank()
+    )
 
     var showBottomBar by mutableStateOf(false)
 
@@ -37,9 +39,11 @@ class MainActivityViewModel @Inject constructor(
         it::class.qualifiedName
     }
 
-    fun checkProvinceAlreadySelected(): Boolean {
+    fun checkProvinceAndFavoriteProviderAlreadySelected(): Boolean {
         val code = userPreferences.getSelectedProvinceCode()
-        return !code.isNullOrBlank()
+        val provider = userPreferences.getFavoriteProviderName()
+
+        return !code.isNullOrBlank() && !provider.isNullOrBlank()
     }
 
     fun getSelectedProvince(): Pair<String?, String?> {
@@ -57,5 +61,11 @@ class MainActivityViewModel @Inject constructor(
     fun setShowBottomBar(currentDestination: NavDestination?) {
         val currentRouteString = currentDestination?.route
         showBottomBar = currentRouteString in topLevelDestinationsAsRoutes
+    }
+
+    fun setAppTopBarTitle(title: String?) {
+        topBarTitle = title
+            ?.takeIf { it.isNotBlank() }
+            ?: context.getString(R.string.app_name)
     }
 }

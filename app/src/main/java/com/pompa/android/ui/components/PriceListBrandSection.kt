@@ -35,7 +35,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import coil.ImageLoader
 import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
@@ -53,6 +52,7 @@ fun PriceListBrandSection(
     logo: String,
     averagePrice: String,
     isHeaderPinned: Boolean,
+    isFavorite: Boolean,
     modifier: Modifier = Modifier,
 ) {
     val headerHorizontalPadding by animateDpAsState(
@@ -140,7 +140,6 @@ fun PriceListBrandSection(
 
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
             ) {
                 Card(
                     shape = CircleShape,
@@ -179,8 +178,18 @@ fun PriceListBrandSection(
                 Text(
                     text = name,
                     style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Bold),
-                    color = MaterialTheme.pompaColorPalette.textColors.onBackgroundSecondary
+                    color = MaterialTheme.pompaColorPalette.textColors.onBackgroundSecondary,
+                    modifier = Modifier.padding(start = 8.dp)
                 )
+
+                if (isFavorite) {
+                    Icon(
+                        painter = painterResource(R.drawable.ic_star),
+                        contentDescription = null,
+                        tint = Color(0xffFFD700),
+                        modifier = Modifier.size(16.dp).padding(start = 4.dp)
+                    )
+                }
             }
             Card(
                 colors = CardDefaults.cardColors(
@@ -242,7 +251,8 @@ private fun PriceListBrandSectionPrev() {
             name = "Shell",
             logo = "",
             averagePrice = "42.15",
-            isHeaderPinned = true
+            isHeaderPinned = true,
+            isFavorite = true
         )
     }
 }

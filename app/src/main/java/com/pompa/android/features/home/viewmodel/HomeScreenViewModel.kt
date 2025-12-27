@@ -34,7 +34,8 @@ class HomeScreenViewModel @Inject constructor(
         viewModelScope.launch {
             fuelRepo.fetchAllFuelPricesByCity(
                 cityCode = userPreferences.getSelectedProvinceCode()!!,
-                cityName = userPreferences.getSelectedProvinceName()!!
+                cityName = userPreferences.getSelectedProvinceName()!!,
+                provider = userPreferences.getFavoriteProviderName()!!,
             ).collectResource(
                 onError = {
 
@@ -47,5 +48,7 @@ class HomeScreenViewModel @Inject constructor(
     }
 
     fun getSelectedProvince() = userPreferences.getSelectedProvinceName()
+
+    fun getSelectedProvider() = userPreferences.getFavoriteProviderName()
 
 }

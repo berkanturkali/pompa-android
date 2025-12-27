@@ -49,7 +49,8 @@ class FuelBrandsScreenViewModel @Inject constructor(
 
     fun saveSelectedBrand() {
         selectedBrand?.let {
-            userPreferences.setSelectedBrandId(it.id)
+            userPreferences.setFavoriteProviderId(it.id)
+            userPreferences.setFavoriteProviderName(it.name)
         }
     }
 }
