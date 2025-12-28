@@ -27,6 +27,7 @@ import com.pompa.android.features.brands.ui.FuelBrandsScreen
 import com.pompa.android.features.district_fuel_price_details.ui.DistrictFuelPriceDetailsScreen
 import com.pompa.android.features.home.ui.HomeScreen
 import com.pompa.android.features.provinces.ui.ProvincesScreen
+import com.pompa.android.features.sort.ui.SortScreen
 import com.pompa.android.navigation.PompaRoutes
 import com.pompa.android.navigation.args.DistrictFuelDetailsArgs
 import com.pompa.android.navigation.utils.decodeNavArg
@@ -141,26 +142,30 @@ fun PompaApp(
                     viewModel.setAppTopBarTitle("")
                     viewModel.showBackButton = false
 
-                    HomeScreen(onFuelItemClick = { provider, record, isFavoriteProvider ->
-                        val args = encodeNavArg(
-                            DistrictFuelDetailsArgs(
-                                isFavoriteProvider = isFavoriteProvider,
-                                providerName = provider.provider,
-                                providerLogo = provider.providerLogo,
-                                fuelPrices = record.prices.mapToUiItems(
-                                    record.unit,
-                                    record.weightUnit
-                                ),
-                                districtName = record.districtName
+                    HomeScreen(
+                        onFuelItemClick = { provider, record, isFavoriteProvider ->
+                            val args = encodeNavArg(
+                                DistrictFuelDetailsArgs(
+                                    isFavoriteProvider = isFavoriteProvider,
+                                    providerName = provider.provider,
+                                    providerLogo = provider.providerLogo,
+                                    fuelPrices = record.prices.mapToUiItems(
+                                        record.unit,
+                                        record.weightUnit
+                                    ),
+                                    districtName = record.districtName
+                                )
                             )
-                        )
 
-                        navController.navigate(
-                            PompaRoutes.DistrictFuelPriceDetailsScreen.createRouteWithArgs(
-                                args = args
+                            navController.navigate(
+                                PompaRoutes.DistrictFuelPriceDetailsScreen.createRouteWithArgs(
+                                    args = args
+                                )
                             )
-                        )
-                    })
+                        },
+                        onSortButtonClick = {
+                            navController.navigate(PompaRoutes.SortScreen.toString())
+                        })
                 }
 
 
@@ -175,6 +180,16 @@ fun PompaApp(
                     DistrictFuelPriceDetailsScreen(
                         args = args
                     )
+                }
+
+
+                bottomSheet(
+                    route = PompaRoutes.SortScreen.toString(),
+                ) {
+                    SortScreen { option ->
+
+                        navController.navigateUp()
+                    }
                 }
             }
 

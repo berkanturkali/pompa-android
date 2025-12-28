@@ -18,27 +18,27 @@ data class PompaColors(
 data class BackgroundColors(
     val primary: Color = Color.Unspecified,
     val secondary: Color = Color.Unspecified,
+    val tertiary: Color = Color.Unspecified
 )
 
 data class CardColors(
-    val primary: Color = Color.Unspecified,
-    val secondary: Color = Color.Unspecified
+    val primaryBackground: Color = Color.Unspecified,
+    val secondaryBackground: Color = Color.Unspecified,
 )
 
 data class TextColors(
-    val buttonText: Color = Color.Unspecified,
-    val title: Color = Color.Unspecified,
-    val description: Color = Color.Unspecified,
+    val primary: Color = Color.Unspecified,   // main text on card/page (black-ish)
+    val secondary: Color = Color.Unspecified,   // muted on card/page (gray-ish)
+    val onHighlight: Color = Color.Unspecified, // text on yellow (Opet blue)
+    val onBrand: Color = Color.Unspecified,  // text on blue (white)
     val link: Color = Color.Unspecified,
-    val onBackgroundPrimary: Color = Color.Unspecified,
-    val onBackgroundSecondary: Color = Color.Unspecified
 )
 
 data class ButtonColors(
-    val background: Color = Color.Unspecified,
-    val content: Color = Color.Unspecified,
-    val secondaryBackground: Color = Color.Unspecified,
-    val secondaryContent: Color = Color.Unspecified
+    val filledPrimaryBackground: Color = Color.Unspecified,
+    val filledPrimaryContent: Color = Color.Unspecified,
+    val filledSecondaryBackground: Color = Color.Unspecified,
+    val filledSecondaryContent: Color = Color.Unspecified,
 )
 
 data class ProgressIndicatorColors(

@@ -29,4 +29,11 @@
     <string name="fuelOil">Fuel Yağı</string>
     <string name="fuelOilHighSulfur">Yüksek Kükürtlü Fuel Yağı</string>
     <string name="autogas">Otogaz (LPG)</string>
+
+    <string-array name="sort_options">
+        <item>En düşük fiyat</item>
+        <item>En yüksek fiyat</item>
+    </string-array>
+
+    <string name="sort">Sırala</string>
 </resources>

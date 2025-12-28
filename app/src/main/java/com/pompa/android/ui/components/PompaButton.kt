@@ -23,8 +23,8 @@ import com.pompa.android.ui.theme.PompaTheme
 fun PompaButton(
     @StringRes textId: Int,
     modifier: Modifier = Modifier,
-    backgroundColor: Color = MaterialTheme.pompaColorPalette.buttonColors.background,
-    contentColor: Color = MaterialTheme.pompaColorPalette.buttonColors.content,
+    backgroundColor: Color = MaterialTheme.pompaColorPalette.buttonColors.filledPrimaryBackground,
+    contentColor: Color = MaterialTheme.pompaColorPalette.buttonColors.filledPrimaryContent,
     shape: RoundedCornerShape = RoundedCornerShape(12.dp),
     onClick: () -> Unit,
 ) {

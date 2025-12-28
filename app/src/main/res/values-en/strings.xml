@@ -28,4 +28,10 @@
     <string name="fuelOil">Fuel Oil</string>
     <string name="fuelOilHighSulfur">Fuel Oil High Sulfur</string>
     <string name="autogas">Autogas (LPG)</string>
+
+    <string-array name="sort_options">
+        <item>Lowest price</item>
+        <item>Highest price</item>
+    </string-array>
+    <string name="sort">Sort</string>
 </resources>

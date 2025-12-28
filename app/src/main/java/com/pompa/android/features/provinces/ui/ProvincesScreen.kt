@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -33,7 +32,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -198,7 +196,7 @@ fun ProvinceItem(
             },
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.pompaColorPalette.cardColors.primary.copy(0.95f)
+            containerColor = MaterialTheme.pompaColorPalette.cardColors.primaryBackground.copy(0.95f)
         )
     ) {
         Row(
@@ -211,8 +209,8 @@ fun ProvinceItem(
             Card(
                 shape = CircleShape,
                 colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.pompaColorPalette.buttonColors.background,
-                    contentColor = MaterialTheme.pompaColorPalette.textColors.buttonText
+                    containerColor = MaterialTheme.pompaColorPalette.buttonColors.filledPrimaryBackground,
+                    contentColor = MaterialTheme.pompaColorPalette.buttonColors.filledPrimaryContent
                 ),
             ) {
                 Box(
@@ -229,7 +227,7 @@ fun ProvinceItem(
             Text(
                 text = province.name,
                 style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.SemiBold),
-                color = MaterialTheme.pompaColorPalette.textColors.title
+                color = MaterialTheme.pompaColorPalette.textColors.primary
             )
         }
     }

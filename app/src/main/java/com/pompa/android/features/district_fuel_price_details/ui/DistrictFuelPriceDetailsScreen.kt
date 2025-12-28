@@ -58,7 +58,7 @@ fun DistrictFuelPriceDetailsScreenContent(
         Text(
             districtName,
             style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Black),
-            color = MaterialTheme.pompaColorPalette.textColors.onBackgroundSecondary,
+            color = MaterialTheme.pompaColorPalette.textColors.onHighlight,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 12.dp),

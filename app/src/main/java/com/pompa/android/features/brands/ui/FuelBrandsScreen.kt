@@ -38,7 +38,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -116,7 +115,7 @@ private fun FuelBrandsScreenContent(
         updateTransition(targetState = confirmButtonEnabled, label = "ButtonTransition")
 
     val backgroundColorOfConfirmButton by buttonTransition.animateColor(label = "bgColor") {
-        if (it) MaterialTheme.pompaColorPalette.buttonColors.background else MaterialTheme.pompaColorPalette.buttonColors.background.copy(
+        if (it) MaterialTheme.pompaColorPalette.buttonColors.filledPrimaryBackground else MaterialTheme.pompaColorPalette.buttonColors.filledPrimaryBackground.copy(
             alpha = 0.5f
         )
     }
@@ -242,7 +241,7 @@ fun BrandItem(
             },
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.pompaColorPalette.cardColors.primary.copy(0.95f)
+            containerColor = MaterialTheme.pompaColorPalette.cardColors.primaryBackground.copy(0.95f)
         )
     ) {
         Row(
@@ -260,7 +259,7 @@ fun BrandItem(
                 Card(
                     shape = CircleShape,
                     colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.pompaColorPalette.cardColors.primary
+                        containerColor = MaterialTheme.pompaColorPalette.cardColors.primaryBackground
                     ),
                     border = BorderStroke(
                         0.5.dp,
@@ -288,7 +287,7 @@ fun BrandItem(
                 Text(
                     text = brand.name,
                     style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.SemiBold),
-                    color = MaterialTheme.pompaColorPalette.textColors.title
+                    color = MaterialTheme.pompaColorPalette.textColors.primary
                 )
             }
 

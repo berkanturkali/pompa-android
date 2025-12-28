@@ -169,7 +169,7 @@ fun PriceListBrandSection(
                                 contentDescription = null,
                                 modifier = Modifier
                                     .size(20.dp),
-                                tint = MaterialTheme.pompaColorPalette.textColors.onBackgroundPrimary
+                                tint = MaterialTheme.pompaColorPalette.textColors.onHighlight
                             )
                         }
                     }
@@ -178,7 +178,7 @@ fun PriceListBrandSection(
                 Text(
                     text = name,
                     style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Bold),
-                    color = MaterialTheme.pompaColorPalette.textColors.onBackgroundSecondary,
+                    color = MaterialTheme.pompaColorPalette.textColors.onHighlight,
                     modifier = Modifier.padding(start = 8.dp)
                 )
 
@@ -193,7 +193,7 @@ fun PriceListBrandSection(
             }
             Card(
                 colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.pompaColorPalette.cardColors.primary.copy(0.8f)
+                    containerColor = MaterialTheme.pompaColorPalette.cardColors.primaryBackground.copy(0.8f)
                 ),
                 shape = RoundedCornerShape(6.dp),
                 border = BorderStroke(
@@ -211,7 +211,7 @@ fun PriceListBrandSection(
                     Text(
                         text = stringResource(R.string.average),
                         style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Medium),
-                        color = MaterialTheme.pompaColorPalette.textColors.onBackgroundPrimary.copy(
+                        color = MaterialTheme.pompaColorPalette.textColors.onBrand.copy(
                             alpha = 0.7f
                         )
                     )
@@ -231,7 +231,7 @@ fun PriceListBrandSection(
                                 append("₺")
                             }
                         },
-                        color = MaterialTheme.pompaColorPalette.textColors.onBackgroundPrimary
+                        color = MaterialTheme.pompaColorPalette.textColors.onBrand
                     )
 
                 }

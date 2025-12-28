@@ -37,14 +37,15 @@ import com.pompa.android.ui.providers.pompaColorPalette
 fun HomeScreen(
     modifier: Modifier = Modifier,
     viewModel: HomeScreenViewModel = hiltViewModel(),
+    onSortButtonClick: () -> Unit,
     onFuelItemClick: (FuelPriceProvider, FuelPriceRecord, Boolean) -> Unit,
 ) {
-
     HomeScreenContent(
         providers = viewModel.providers,
         modifier = modifier,
         selectedProvider = viewModel.getSelectedProvider() ?: "",
         onFuelItemClick = onFuelItemClick,
+        onSortButtonClick = onSortButtonClick
     )
 }
 
@@ -53,6 +54,7 @@ fun HomeScreenContent(
     selectedProvider: String,
     providers: List<FuelPriceProvider>,
     modifier: Modifier = Modifier,
+    onSortButtonClick: () -> Unit,
     onFuelItemClick: (FuelPriceProvider, FuelPriceRecord, Boolean) -> Unit,
 ) {
 
@@ -94,8 +96,9 @@ fun HomeScreenContent(
                     query = it
                 }
 
-                SortButton(modifier = Modifier.padding(start = 4.dp)) { }
-
+                SortButton(modifier = Modifier.padding(start = 4.dp)) {
+                    onSortButtonClick()
+                }
             }
 
             FuelFilters(

@@ -41,7 +41,7 @@ fun ProvinceView(
         Text(
             text = province,
             style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.SemiBold),
-            color = MaterialTheme.pompaColorPalette.textColors.title,
+            color = MaterialTheme.pompaColorPalette.textColors.primary,
         )
     }
 

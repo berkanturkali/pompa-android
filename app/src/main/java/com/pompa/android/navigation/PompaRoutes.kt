@@ -3,7 +3,6 @@ package com.pompa.android.navigation
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import com.pompa.android.R
-import com.pompa.android.navigation.args.DistrictFuelDetailsArgs
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -22,6 +21,9 @@ sealed class PompaRoutes {
             return "${this}?args=$args"
         }
     }
+
+    @Serializable
+    object SortScreen : PompaRoutes()
 
     @Serializable
     sealed class BottomNavRoutes(

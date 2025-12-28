@@ -36,7 +36,7 @@ fun SortButton(
         shape = CircleShape,
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.pompaColorPalette.backgroundColors.primary,
-            contentColor = MaterialTheme.pompaColorPalette.textColors.onBackgroundPrimary
+            contentColor = MaterialTheme.pompaColorPalette.textColors.onBrand
         )
     ) {
         Box(

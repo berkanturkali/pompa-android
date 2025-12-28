@@ -103,8 +103,8 @@ fun PompaAppTopBar(
                         Card(
                             shape = CircleShape,
                             colors = CardDefaults.cardColors(
-                                containerColor = MaterialTheme.pompaColorPalette.buttonColors.background,
-                                contentColor = MaterialTheme.pompaColorPalette.textColors.buttonText
+                                containerColor = MaterialTheme.pompaColorPalette.buttonColors.filledPrimaryBackground,
+                                contentColor = MaterialTheme.pompaColorPalette.buttonColors.filledPrimaryContent
                             ),
                             modifier = Modifier.size(16.dp)
                         ) {

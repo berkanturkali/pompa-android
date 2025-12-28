@@ -32,8 +32,8 @@ fun PompaAppBackButton(
     Card(
         shape = CircleShape,
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.pompaColorPalette.buttonColors.secondaryBackground,
-            contentColor = MaterialTheme.pompaColorPalette.buttonColors.content
+            containerColor = MaterialTheme.pompaColorPalette.buttonColors.filledSecondaryBackground,
+            contentColor = MaterialTheme.pompaColorPalette.buttonColors.filledPrimaryContent
         ),
      modifier = modifier.clickable(
             indication = null,
@@ -45,7 +45,7 @@ fun PompaAppBackButton(
         Icon(
             painter = painterResource(R.drawable.ic_back),
             contentDescription = null,
-            tint = MaterialTheme.pompaColorPalette.buttonColors.content,
+            tint = MaterialTheme.pompaColorPalette.buttonColors.filledPrimaryContent,
             modifier = Modifier.size(size).padding(4.dp),
         )
     }

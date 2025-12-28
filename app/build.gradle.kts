@@ -81,4 +81,5 @@ dependencies {
     implementation(libs.coil.svg)
     implementation(libs.androidx.compose.material.navigation)
     implementation("org.jetbrains.kotlin:kotlin-reflect")
+    implementation(libs.androidx.datastore.preferences)
 }

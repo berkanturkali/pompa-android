@@ -13,6 +13,7 @@ interface FuelService {
         @Query("cityName") cityName: String,
         @Query("cityCode") cityCode: String,
         @Query("provider") provider: String,
+        @Query("sortDirection") sortDirection: Int,
     ): Response<BaseApiResponse<List<FuelPriceProvider>>>
 
 }

@@ -46,56 +46,55 @@ private val LightColorScheme = lightColorScheme(
 
 val OpetColors = PompaColors(
     backgroundColors = BackgroundColors(
-        primary = Color(0xFF134fae),
+        primary = OpetBrandBlue,
         secondary = Color.White,
     ),
     cardColors = CardColors(
-        primary = Color.White,
-        secondary = Color(0xffffd300),
+        primaryBackground = Color.White,
+        secondaryBackground = OpetBrandYellow,
     ),
     textColors = TextColors(
-        buttonText = Color(0xff134fae),
-        title = Color(0xff162133),
-        description = Color(0xff162133),
+        primary = Color(0xff162133),
+        secondary = Color(0xff162133),
         link = Color(0xFF1A73E8),
-        onBackgroundPrimary = Color.White,
-        onBackgroundSecondary = Color(0xff134fae)
+        onBrand = Color.White,
+        onHighlight = OpetBrandBlue
     ),
     buttonColors = ButtonColors(
-        background = Color(0xffffd300),
-        content = Color(0xff134fae),
-        secondaryBackground = Color.White,
-        secondaryContent = Color(0xff134fae)
+        filledPrimaryBackground = OpetBrandYellow,
+        filledPrimaryContent = OpetBrandBlue,
+        filledSecondaryBackground = Color.White,
+        filledSecondaryContent = OpetBrandBlue
     ),
     borderColor = Color(0xffdfe4ec),
     progressIndicatorColors = com.pompa.android.model.ProgressIndicatorColors(
         indicator = Color.White,
-        background = Color(0xff134fae)
+        background = OpetBrandBlue
     ),
     topBarColors = TopBarColors(
-        background = Color(0xff134fae),
+        background = OpetBrandBlue,
         content = Color.White
     ),
     bottomBarColors = BottomBarColors(
-        background = Color(0xff134fae),
+        background = OpetBrandBlue,
         content = Color.White,
         selectedItemColor = Color.White,
         unSelectedItemColor = Color.White.copy(alpha = 0.5f),
-        indicatorColor = Color(0xffffd300)
+        indicatorColor = OpetBrandYellow
     ),
     chipColors = ChipColors(
         unselectedBackground = Color.White.copy(0.5f),
-        selectedBackground = Color(0xff134fae),
-        unselectedTextColor = Color(0xff134fae),
+        selectedBackground = OpetBrandBlue,
+        unselectedTextColor = OpetBrandBlue,
         selectedTextColor = Color.White,
         selectedBorderColor = Color.White,
-        unselectedBorderColor = Color(0xff134fae),
+        unselectedBorderColor = OpetBrandBlue
     ),
     searchBarColors = SearchBarColors(
-        cursorColor = Color(0xff134fae),
-        textColor = Color(0xff134fae),
+        cursorColor = OpetBrandBlue,
+        textColor = OpetBrandBlue,
         startIconColor = Color.LightGray.copy(0.8f),
-        closeIconColor = Color(0xff134fae),
+        closeIconColor = OpetBrandBlue,
         hintColor = Color.LightGray.copy(0.8f)
     )
 )

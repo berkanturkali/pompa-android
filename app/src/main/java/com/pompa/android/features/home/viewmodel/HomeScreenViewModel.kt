@@ -5,8 +5,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.pompa.android.data.datastore.PompaFilterPrefs
 import com.pompa.android.data.repo.fuel.FuelRepository
 import com.pompa.android.data.util.collectResource
+import com.pompa.android.features.sort.model.SortDirection
 import com.pompa.android.model.fuel.FuelPriceProvider
 import com.pompa.android.model.util.UIText
 import com.pompa.android.util.UserPreferences
@@ -18,6 +20,7 @@ import javax.inject.Inject
 class HomeScreenViewModel @Inject constructor(
     private val fuelRepo: FuelRepository,
     private val userPreferences: UserPreferences,
+    private val pompaFilterPrefs: PompaFilterPrefs,
 ) : ViewModel() {
 
     var isLoading = mutableStateOf(false)
@@ -27,15 +30,23 @@ class HomeScreenViewModel @Inject constructor(
     var providers by mutableStateOf(emptyList<FuelPriceProvider>())
 
     init {
-        fetchPrices()
+        viewModelScope.launch {
+            pompaFilterPrefs.filterPreferences.collect { filterPreferences ->
+                providers = emptyList()
+                fetchPrices(filterPreferences.sortDirection ?: SortDirection.ASCENDING.value)
+            }
+        }
+
     }
 
-    fun fetchPrices() {
+    fun fetchPrices(sortDirection: Int) {
+        isLoading.value = true
         viewModelScope.launch {
             fuelRepo.fetchAllFuelPricesByCity(
                 cityCode = userPreferences.getSelectedProvinceCode()!!,
                 cityName = userPreferences.getSelectedProvinceName()!!,
                 provider = userPreferences.getFavoriteProviderName()!!,
+                sortDirection = sortDirection
             ).collectResource(
                 onError = {
 

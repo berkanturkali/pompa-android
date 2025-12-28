@@ -36,14 +36,14 @@ fun PriceDateView(
         Icon(
             painter = painterResource(R.drawable.ic_calendar),
             contentDescription = null,
-            tint = MaterialTheme.pompaColorPalette.textColors.onBackgroundSecondary.copy(0.8f),
+            tint = MaterialTheme.pompaColorPalette.textColors.onHighlight.copy(0.8f),
             modifier = Modifier.size(14.dp)
         )
 
         Text(
             date,
             style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.SemiBold),
-            color = MaterialTheme.pompaColorPalette.textColors.onBackgroundSecondary.copy(0.8f),
+            color = MaterialTheme.pompaColorPalette.textColors.onHighlight.copy(0.8f),
         )
 
 

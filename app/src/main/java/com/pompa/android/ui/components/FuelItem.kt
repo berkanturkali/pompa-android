@@ -58,7 +58,7 @@ fun FuelItem(
                 Text(
                     districtName,
                     style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Black),
-                    color = MaterialTheme.pompaColorPalette.textColors.onBackgroundSecondary,
+                    color = MaterialTheme.pompaColorPalette.textColors.onHighlight,
                     modifier = Modifier.padding(start = 4.dp)
                 )
 
@@ -98,7 +98,7 @@ fun FuelItem(
                 1.dp
             ),
             colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.pompaColorPalette.cardColors.primary.copy(0.95f)
+                containerColor = MaterialTheme.pompaColorPalette.cardColors.primaryBackground.copy(0.95f)
             ),
             border = BorderStroke(0.5.dp, MaterialTheme.pompaColorPalette.borderColor)
         ) {
@@ -107,7 +107,7 @@ fun FuelItem(
                 horizontalAlignment = Alignment.Start,
                 modifier = Modifier
                     .background(
-                        MaterialTheme.pompaColorPalette.cardColors.primary.copy(0.95f)
+                        MaterialTheme.pompaColorPalette.cardColors.primaryBackground.copy(0.95f)
                     )
                     .padding(horizontal = 12.dp, vertical = 8.dp)
             ) {

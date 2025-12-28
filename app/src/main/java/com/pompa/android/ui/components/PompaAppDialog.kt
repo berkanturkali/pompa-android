@@ -54,7 +54,7 @@ fun PompaAppDialog(
             ) {
                 Text(
                     text = message ?: stringResource(id = R.string.something_went_wrong),
-                    color = MaterialTheme.pompaColorPalette.cardColors.primary,
+                    color = MaterialTheme.pompaColorPalette.textColors.primary,
                     style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
                     textAlign = TextAlign.Center
                 )
@@ -65,7 +65,7 @@ fun PompaAppDialog(
                     modifier = Modifier
                         .fillMaxWidth()
                         .background(
-                            color = MaterialTheme.pompaColorPalette.buttonColors.background,
+                            color = MaterialTheme.pompaColorPalette.buttonColors.filledPrimaryBackground,
                             shape = RoundedCornerShape(7.dp)
                         )
                         .clickable(
@@ -76,7 +76,7 @@ fun PompaAppDialog(
                         }
                         .padding(vertical = 8.dp),
                     textAlign = TextAlign.Center,
-                    color = MaterialTheme.pompaColorPalette.textColors.onBackgroundSecondary
+                    color = MaterialTheme.pompaColorPalette.textColors.onHighlight
                 )
             }
         }
