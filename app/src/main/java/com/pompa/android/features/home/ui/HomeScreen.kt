@@ -28,6 +28,7 @@ import com.pompa.android.features.home.viewmodel.HomeScreenViewModel
 import com.pompa.android.model.fuel.FuelPriceProvider
 import com.pompa.android.model.fuel.FuelPriceRecord
 import com.pompa.android.ui.components.FuelItem
+import com.pompa.android.ui.components.PompaLoadingView
 import com.pompa.android.ui.components.PriceListBrandSection
 import com.pompa.android.ui.components.SortButton
 import com.pompa.android.ui.providers.pompaColorPalette
@@ -39,13 +40,19 @@ fun HomeScreen(
     onSortButtonClick: () -> Unit,
     onFuelItemClick: (FuelPriceProvider, FuelPriceRecord, Boolean) -> Unit,
 ) {
-    HomeScreenContent(
-        providers = viewModel.providers,
-        modifier = modifier,
-        selectedProvider = viewModel.getSelectedProvider() ?: "",
-        onFuelItemClick = onFuelItemClick,
-        onSortButtonClick = onSortButtonClick
-    )
+
+    Box(modifier = modifier.fillMaxSize()) {
+        HomeScreenContent(
+            providers = viewModel.providers,
+            selectedProvider = viewModel.getSelectedProvider() ?: "",
+            onFuelItemClick = onFuelItemClick,
+            onSortButtonClick = onSortButtonClick
+        )
+
+        if (viewModel.isLoading.value) {
+            PompaLoadingView()
+        }
+    }
 }
 
 @Composable

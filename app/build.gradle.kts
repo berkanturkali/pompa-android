@@ -82,4 +82,6 @@ dependencies {
     implementation(libs.androidx.compose.material.navigation)
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation(libs.androidx.datastore.preferences)
+
+    implementation(libs.airbnb.android.lottie)
 }
