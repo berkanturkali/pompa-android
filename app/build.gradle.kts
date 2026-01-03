@@ -84,4 +84,9 @@ dependencies {
     implementation(libs.androidx.datastore.preferences)
 
     implementation(libs.airbnb.android.lottie)
+
+    implementation(libs.squareup.moshi)
+    implementation(libs.squareup.retrofit.moshi.converter)
+    ksp(libs.squareup.moshi.codegen)
+
 }

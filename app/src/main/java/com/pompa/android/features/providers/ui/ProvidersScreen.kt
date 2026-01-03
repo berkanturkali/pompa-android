@@ -178,19 +178,8 @@ private fun ProvidersScreenContent(
                 )
         }
 
-        AnimatedVisibility(
-            visible = errorMessage != null,
-            enter = scaleIn(),
-            exit = scaleOut(),
-            modifier = Modifier.align(
-                Alignment.Center
-            )
-        ) {
-            errorMessage?.let {
-                PompaAppDialog(message = it) {
-                    onErrorDialogDismiss()
-                }
-            }
+        PompaAppDialog(message = errorMessage) {
+            onErrorDialogDismiss()
         }
     }
 

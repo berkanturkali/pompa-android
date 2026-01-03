@@ -36,4 +36,5 @@
     </string-array>
 
     <string name="sort">Sırala</string>
+    <string name="connection_exception_error_message">%1$s adresine bağlanılamadı. Lütfen daha sonra tekrar deneyin.</string>
 </resources>

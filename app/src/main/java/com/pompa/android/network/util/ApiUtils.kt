@@ -24,7 +24,7 @@ object ApiUtils {
     fun <T> fetchData(
         dispatcher: CoroutineDispatcher = Dispatchers.IO,
         apiCall: suspend () -> Response<BaseApiResponse<T>>
-    ): Flow<Resource<BaseApiResponse<T>>> {
+    ): Flow<Resource<T>> {
         return flow {
             emit(Resource.Loading())
             try {
@@ -33,7 +33,7 @@ object ApiUtils {
                     val body = response.body()
                     body?.let {
                         if (it.success) {
-                            emit(Resource.Success(it))
+                            emit(Resource.Success(it.data))
                         } else {
                             emit(Resource.Error(uiText = UIText.DynamicString(it.message)))
                         }
@@ -49,7 +49,15 @@ object ApiUtils {
     private suspend fun <T> FlowCollector<Resource<T>>.handleException(exception: Exception) {
         when (exception) {
             is ConnectException -> {
-                emit(Resource.Error(uiText = UIText.DynamicString(exception.message)))
+                val host = exception.extractHost()
+                emit(
+                    Resource.Error(
+                        UIText.StringResource(
+                            R.string.connection_exception_error_message,
+                            host
+                        )
+                    )
+                )
             }
 
             is SocketTimeoutException -> {
@@ -77,7 +85,8 @@ object ApiUtils {
             }
 
             is IllegalArgumentException -> {
-                return
+                // TODO: will be handled
+                emit(Resource.Error(uiText = UIText.StringResource(R.string.something_went_wrong)))
             }
 
             else -> {
@@ -93,5 +102,21 @@ object ApiUtils {
             e.printStackTrace()
             null
         }
+    }
+
+    fun ConnectException.extractHost(): String {
+        val connectHostRegex =
+            Regex("""Failed to connect to\s+(\S+)""", RegexOption.IGNORE_CASE)
+        var t: Throwable? = this
+        while (t != null) {
+            val msg = t.message ?: ""
+            connectHostRegex.find(msg)?.groupValues?.get(1)?.let { raw ->
+                return raw
+                    .removePrefix("/")
+                    .substringBefore("/")
+            }
+            t = t.cause
+        }
+        return ""
     }
 }

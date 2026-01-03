@@ -12,6 +12,6 @@ interface FuelRepository {
         cityCode: String,
         provider: String,
         sortDirection: Int,
-    ): Flow<Resource<BaseApiResponse<List<FuelPriceProvider>>>>
+    ): Flow<Resource<List<FuelPriceProvider?>>>
 
 }

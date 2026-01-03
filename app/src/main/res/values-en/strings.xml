@@ -34,4 +34,6 @@
         <item>Highest price</item>
     </string-array>
     <string name="sort">Sort</string>
+
+    <string name="connection_exception_error_message">Could not connect to %1$s. Please try again later.</string>
 </resources>

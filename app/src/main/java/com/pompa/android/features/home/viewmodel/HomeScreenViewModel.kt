@@ -1,6 +1,5 @@
 package com.pompa.android.features.home.viewmodel
 
-import android.content.Context
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -14,7 +13,6 @@ import com.pompa.android.model.fuel.FuelPriceProvider
 import com.pompa.android.model.util.UIText
 import com.pompa.android.util.UserPreferences
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -25,7 +23,6 @@ class HomeScreenViewModel @Inject constructor(
     private val fuelRepo: FuelRepository,
     private val userPreferences: UserPreferences,
     val pompaFilterPrefs: PompaFilterPrefs,
-    @param:ApplicationContext private val context: Context,
 ) : ViewModel() {
 
     var isLoading = mutableStateOf(false)
@@ -40,14 +37,12 @@ class HomeScreenViewModel @Inject constructor(
         viewModelScope.launch {
             pompaFilterPrefs.filterPreferences.collect { filterPreferences ->
                 sortDirection = filterPreferences.sortDirection
-                fetchPrices(
-                    filterPreferences.sortDirection ?: SortDirection.ASCENDING.value,
-                )
+                fetchPrices()
             }
         }
     }
 
-    fun fetchPrices(sortDirection: Int) {
+    fun fetchPrices() {
         isLoading.value = true
         providers = emptyList()
         viewModelScope.launch {
@@ -55,14 +50,14 @@ class HomeScreenViewModel @Inject constructor(
                 cityCode = userPreferences.getSelectedProvinceCode()!!,
                 cityName = userPreferences.getSelectedProvinceName()!!,
                 provider = userPreferences.getFavoriteProviderName()!!,
-                sortDirection = sortDirection
+                sortDirection = sortDirection ?: SortDirection.ASCENDING.value,
             ).collectResource(
                 onError = {
                     errorMessage = it
                 },
                 loadingState = isLoading
             ) {
-                providers = it ?: emptyList()
+                providers = it?.filterNotNull() ?: emptyList()
             }
         }
     }

@@ -56,7 +56,7 @@ fun HomeScreen(
             onSortButtonClick = onSortButtonClick,
             isLoading = viewModel.isLoading.value,
             onRefresh = {
-                viewModel.fetchPrices(viewModel.sortDirection!!)
+                viewModel.fetchPrices()
             }
         )
 
@@ -68,7 +68,6 @@ fun HomeScreen(
             message = viewModel.errorMessage?.asString(context),
             onOkayButtonClick = { viewModel.errorMessage = null }
         )
-
     }
 }
 
@@ -98,7 +97,6 @@ fun HomeScreenContent(
             listState.firstVisibleItemIndex > 0 || listState.firstVisibleItemScrollOffset > 0
         }
     }
-
 
     Box(
         modifier = modifier
@@ -186,15 +184,14 @@ fun HomeScreenContent(
                             )
                         }
 
-                        items(provider.data) { record ->
+                        items(provider.data.filterNotNull()) { record ->
                             FuelItem(
-                                districtName = record.districtName,
-                                actualFuelPriceListCount = record.prices.notNullCount(),
-                                fuelPrices = record.prices.mapToUiItems(
-                                    unit = record.unit,
-                                    weightUnit = record.weightUnit
-                                )
-                                    .take(3),
+                                districtName = record.districtName ?: "",
+                                actualFuelPriceListCount = record.prices?.notNullCount() ?: 0,
+                                fuelPrices = record.prices?.mapToUiItems(
+                                    unit = record.unit ?: "",
+                                    weightUnit = record.weightUnit ?: ""
+                                )?.take(3) ?: emptyList(),
                                 modifier = Modifier.padding(containerPadding),
                                 onItemClick = {
                                     onFuelItemClick(provider, record, isFavoriteProvider)

@@ -11,7 +11,7 @@ import javax.inject.Inject
 class ProviderRepositoryImpl @Inject constructor(
     private val providerService: ProviderService
 ) : ProviderRepository {
-    override fun fetchProviders(): Flow<Resource<BaseApiResponse<List<Provider>>>> {
+    override fun fetchProviders(): Flow<Resource<List<Provider>>> {
         return ApiUtils.fetchData {
             providerService.fetchProviders()
         }

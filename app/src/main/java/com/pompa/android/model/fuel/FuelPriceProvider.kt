@@ -2,35 +2,31 @@ package com.pompa.android.model.fuel
 
 import android.os.Parcelable
 import com.pompa.android.features.home.model.FuelPriceUiModel
-import kotlinx.serialization.Serializable
 import kotlin.reflect.full.memberProperties
 
-@Serializable
 @kotlinx.parcelize.Parcelize
 data class FuelPriceProvider(
     val provider: String,
     val providerLogo: String,
     val averagePrice: Double,
     val ok: Boolean,
-    val data: List<FuelPriceRecord>,
+    val data: List<FuelPriceRecord?>,
     val error: String?,
 ) : Parcelable
 
-@Serializable
 @kotlinx.parcelize.Parcelize
 data class FuelPriceRecord(
-    val brand: String,
+    val brand: String?,
     val cityCode: String?,
-    val cityName: String,
-    val districtName: String,
-    val prices: FuelPrices,
-    val unit: String,
-    val weightUnit: String,
-    val source: String,
-    val fetchedAt: String
+    val cityName: String?,
+    val districtName: String?,
+    val prices: FuelPrices?,
+    val unit: String?,
+    val weightUnit: String?,
+    val source: String?,
+    val fetchedAt: String?
 ) : Parcelable
 
-@Serializable
 @kotlinx.parcelize.Parcelize
 data class FuelPrices(
     val gasoline95: Double?,

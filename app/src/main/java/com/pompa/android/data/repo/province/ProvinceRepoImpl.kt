@@ -11,7 +11,7 @@ import javax.inject.Inject
 class ProvinceRepoImpl @Inject constructor(
     private val provinceService: ProvinceService
 ) : ProvinceRepo {
-    override fun getProvinces(): Flow<Resource<BaseApiResponse<List<Province>>>> {
+    override fun getProvinces(): Flow<Resource<List<Province>>> {
         return ApiUtils.fetchData {
             provinceService.getProvinces()
         }

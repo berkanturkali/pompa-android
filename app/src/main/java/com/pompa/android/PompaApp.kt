@@ -1,6 +1,5 @@
 package com.pompa.android
 
-import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -165,9 +164,7 @@ fun PompaApp(
 
                     LaunchedEffect(navBackStackEntry) {
                         navBackStackEntry?.savedStateHandle?.get<Boolean>(REFRESH_LIST_KEY)?.let {
-                            val selectedSortDirection =
-                                homeScreenViewModel.pompaFilterPrefs.getSelectedSortDirection()
-                            homeScreenViewModel.fetchPrices(selectedSortDirection)
+                            homeScreenViewModel.fetchPrices()
                             navBackStackEntry?.savedStateHandle[REFRESH_LIST_KEY] = null
                         }
                     }
@@ -180,11 +177,11 @@ fun PompaApp(
                                     isFavoriteProvider = isFavoriteProvider,
                                     providerName = provider.provider,
                                     providerLogo = provider.providerLogo,
-                                    fuelPrices = record.prices.mapToUiItems(
-                                        record.unit,
-                                        record.weightUnit
-                                    ),
-                                    districtName = record.districtName
+                                    fuelPrices = record.prices?.mapToUiItems(
+                                        record.unit ?: "",
+                                        record.weightUnit ?: ""
+                                    ) ?: emptyList(),
+                                    districtName = record.districtName ?: ""
                                 )
                             )
 

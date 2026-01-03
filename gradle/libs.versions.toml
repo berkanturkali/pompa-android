@@ -23,7 +23,8 @@ material3 = "1.4.0"
 material3Version = "1.4.0"
 materialNavigation = "1.10.0"
 datastorePrefs = "1.2.0"
-lottie = "6.6.6"
+lottie = "6.7.1"
+moshi = "1.15.2"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -56,6 +57,9 @@ androidx-compose-material3 = { group = "androidx.compose.material3", name = "mat
 androidx-compose-material-navigation = { group = "androidx.compose.material", name = "material-navigation", version.ref = "materialNavigation" }
 androidx-datastore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastorePrefs" }
 airbnb-android-lottie = { group = "com.airbnb.android", name = "lottie-compose", version.ref = "lottie" }
+squareup-moshi = { group = "com.squareup.moshi", name = "moshi-kotlin", version.ref = "moshi" }
+squareup-moshi-codegen = { group = "com.squareup.moshi", name = "moshi-kotlin-codegen", version.ref = "moshi" }
+squareup-retrofit-moshi-converter = { group = "com.squareup.retrofit2", name = "converter-moshi", version.ref = "retrofit" }
 
 
 [plugins]

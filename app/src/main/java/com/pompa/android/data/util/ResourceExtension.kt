@@ -6,7 +6,7 @@ import com.pompa.android.model.util.Resource
 import com.pompa.android.model.util.UIText
 import kotlinx.coroutines.flow.Flow
 
-suspend fun<T> Flow<Resource<BaseApiResponse<T>>>.collectResource(
+suspend fun<T> Flow<Resource<T>>.collectResource(
     onError: (uiText: UIText?) -> Unit = {},
     loadingState: MutableState<Boolean>,
     onSuccess: (data: T?) -> Unit = {},
@@ -22,7 +22,7 @@ suspend fun<T> Flow<Resource<BaseApiResponse<T>>>.collectResource(
              }
              is Resource.Success -> {
                 loadingState.value = false
-                 onSuccess(responseResource.data?.data)
+                 onSuccess(responseResource.data)
              }
          }
      }
