@@ -20,7 +20,7 @@ import javax.inject.Inject
 class HomeScreenViewModel @Inject constructor(
     private val fuelRepo: FuelRepository,
     private val userPreferences: UserPreferences,
-    private val pompaFilterPrefs: PompaFilterPrefs,
+    val pompaFilterPrefs: PompaFilterPrefs,
 ) : ViewModel() {
 
     var isLoading = mutableStateOf(false)
@@ -32,15 +32,16 @@ class HomeScreenViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             pompaFilterPrefs.filterPreferences.collect { filterPreferences ->
-                providers = emptyList()
-                fetchPrices(filterPreferences.sortDirection ?: SortDirection.ASCENDING.value)
+                fetchPrices(
+                    filterPreferences.sortDirection ?: SortDirection.ASCENDING.value,
+                )
             }
         }
-
     }
 
     fun fetchPrices(sortDirection: Int) {
         isLoading.value = true
+        providers = emptyList()
         viewModelScope.launch {
             fuelRepo.fetchAllFuelPricesByCity(
                 cityCode = userPreferences.getSelectedProvinceCode()!!,

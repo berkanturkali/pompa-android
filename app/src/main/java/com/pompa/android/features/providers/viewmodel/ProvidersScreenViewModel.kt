@@ -1,13 +1,13 @@
-package com.pompa.android.features.brands.viewmodel
+package com.pompa.android.features.providers.viewmodel
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.pompa.android.data.repo.brand.BrandRepository
+import com.pompa.android.data.repo.provider.ProviderRepository
 import com.pompa.android.data.util.collectResource
-import com.pompa.android.model.brands.Brand
+import com.pompa.android.model.brands.Provider
 import com.pompa.android.model.util.UIText
 import com.pompa.android.util.UserPreferences
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,8 +15,8 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class FuelBrandsScreenViewModel @Inject constructor(
-    private val repo: BrandRepository,
+class ProvidersScreenViewModel @Inject constructor(
+    private val repo: ProviderRepository,
     private val userPreferences: UserPreferences,
 ) : ViewModel() {
 
@@ -24,9 +24,9 @@ class FuelBrandsScreenViewModel @Inject constructor(
 
     var errorMessage by mutableStateOf<UIText?>(null)
 
-    var brands by mutableStateOf(emptyList<Brand>())
+    var providers by mutableStateOf(emptyList<Provider>())
 
-    var selectedBrand by mutableStateOf<Brand?>(null)
+    var selectedProvider by mutableStateOf<Provider?>(null)
 
     var confirmButtonEnabled by mutableStateOf(false)
 
@@ -36,19 +36,19 @@ class FuelBrandsScreenViewModel @Inject constructor(
 
     fun fetchFuelBrands() {
         viewModelScope.launch {
-            repo.fetchFuelBrands().collectResource(
+            repo.fetchProviders().collectResource(
                 loadingState = isLoading,
                 onError = {
                     errorMessage = it
                 }
             ) {
-                brands = it ?: emptyList()
+                providers = it ?: emptyList()
             }
         }
     }
 
     fun saveSelectedBrand() {
-        selectedBrand?.let {
+        selectedProvider?.let {
             userPreferences.setFavoriteProviderId(it.id)
             userPreferences.setFavoriteProviderName(it.name)
         }

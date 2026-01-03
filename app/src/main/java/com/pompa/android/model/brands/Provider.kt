@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Brand(
+data class Provider(
     val id: Int,
     val name: String,
     @SerialName("logo_url")

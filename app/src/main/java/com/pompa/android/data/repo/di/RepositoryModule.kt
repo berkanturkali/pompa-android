@@ -1,7 +1,7 @@
 package com.pompa.android.data.repo.di
 
-import com.pompa.android.data.repo.brand.BrandRepository
-import com.pompa.android.data.repo.brand.BrandRepositoryImpl
+import com.pompa.android.data.repo.provider.ProviderRepository
+import com.pompa.android.data.repo.provider.ProviderRepositoryImpl
 import com.pompa.android.data.repo.fuel.FuelRepository
 import com.pompa.android.data.repo.fuel.FuelRepositoryImpl
 import com.pompa.android.data.repo.province.ProvinceRepo
@@ -22,8 +22,8 @@ interface RepositoryModule {
 
     @Binds
     fun bindBrandRepository(
-        brandRepositoryImpl: BrandRepositoryImpl
-    ): BrandRepository
+        brandRepositoryImpl: ProviderRepositoryImpl
+    ): ProviderRepository
 
 
     @Binds

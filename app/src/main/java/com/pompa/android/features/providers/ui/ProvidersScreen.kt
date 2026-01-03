@@ -1,4 +1,4 @@
-package com.pompa.android.features.brands.ui
+package com.pompa.android.features.providers.ui
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColor
@@ -54,8 +54,8 @@ import coil.decode.SvgDecoder
 import coil.request.ImageRequest
 import com.pompa.android.BuildConfig
 import com.pompa.android.R
-import com.pompa.android.features.brands.viewmodel.FuelBrandsScreenViewModel
-import com.pompa.android.model.brands.Brand
+import com.pompa.android.features.providers.viewmodel.ProvidersScreenViewModel
+import com.pompa.android.model.brands.Provider
 import com.pompa.android.ui.components.PompaAppDialog
 import com.pompa.android.ui.components.PompaButton
 import com.pompa.android.ui.providers.LocalPompaColors
@@ -65,24 +65,24 @@ import com.pompa.android.ui.theme.PompaTheme
 import com.pompa.android.util.DeviceManager
 
 @Composable
-fun FuelBrandsScreen(
+fun ProvidersScreen(
     modifier: Modifier = Modifier,
-    viewModel: FuelBrandsScreenViewModel = hiltViewModel(),
+    viewModel: ProvidersScreenViewModel = hiltViewModel(),
     navigateToHomeScreen: () -> Unit,
 ) {
 
-    FuelBrandsScreenContent(
+    ProvidersScreenContent(
         modifier = modifier,
-        brands = viewModel.brands,
-        selectedBrand = viewModel.selectedBrand,
-        onItemClick = { brand ->
-            if (brand == viewModel.selectedBrand) {
-                viewModel.selectedBrand = null
+        providers = viewModel.providers,
+        selectedProvider = viewModel.selectedProvider,
+        onItemClick = { provider ->
+            if (provider == viewModel.selectedProvider) {
+                viewModel.selectedProvider = null
                 viewModel.confirmButtonEnabled = false
-                return@FuelBrandsScreenContent
+                return@ProvidersScreenContent
             }
-            viewModel.confirmButtonEnabled = viewModel.selectedBrand != brand
-            viewModel.selectedBrand = brand
+            viewModel.confirmButtonEnabled = viewModel.selectedProvider != provider
+            viewModel.selectedProvider = provider
         },
         confirmButtonEnabled = viewModel.confirmButtonEnabled,
         onConfirmButtonClick = {
@@ -99,16 +99,16 @@ fun FuelBrandsScreen(
 }
 
 @Composable
-private fun FuelBrandsScreenContent(
+private fun ProvidersScreenContent(
     showLoading: Boolean,
     confirmButtonEnabled: Boolean,
-    brands: List<Brand>,
-    selectedBrand: Brand?,
+    providers: List<Provider>,
+    selectedProvider: Provider?,
     modifier: Modifier = Modifier,
     errorMessage: String? = null,
     onConfirmButtonClick: () -> Unit,
     onErrorDialogDismiss: () -> Unit,
-    onItemClick: (Brand) -> Unit,
+    onItemClick: (Provider) -> Unit,
 ) {
 
     val buttonTransition =
@@ -136,12 +136,12 @@ private fun FuelBrandsScreenContent(
                 end.linkTo(parent.end)
                 height = androidx.constraintlayout.compose.Dimension.fillToConstraints
             }) {
-                items(brands) { brand ->
-                    BrandItem(
-                        isSelected = brand == selectedBrand,
+                items(providers) { brand ->
+                    ProviderItem(
+                        isSelected = brand == selectedProvider,
                         modifier = Modifier.padding(8.dp),
-                        brand = brand,
-                        selectedBrand = selectedBrand
+                        provider = brand,
+                        selectedProvider = selectedProvider
                     ) {
                         onItemClick(brand)
                     }
@@ -197,10 +197,10 @@ private fun FuelBrandsScreenContent(
 }
 
 @Composable
-fun BrandItem(
+fun ProviderItem(
     isSelected: Boolean,
-    brand: Brand,
-    selectedBrand: Brand?,
+    provider: Provider,
+    selectedProvider: Provider?,
     modifier: Modifier = Modifier,
     onItemClick: () -> Unit
 ) {
@@ -208,10 +208,10 @@ fun BrandItem(
     val context = LocalContext.current
 
     val imageUrl = if (DeviceManager.checkIfTheDeviceIsEmulator()) {
-        brand.logo
+        provider.logo
             .replace(BuildConfig.IMAGE_BASE_URL, BuildConfig.EMULATOR_IMAGE_BASE_URL)
     } else {
-        brand.logo
+        provider.logo
     }
 
     val imageLoader = remember {
@@ -285,14 +285,14 @@ fun BrandItem(
                 }
 
                 Text(
-                    text = brand.name,
+                    text = provider.name,
                     style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.SemiBold),
                     color = MaterialTheme.pompaColorPalette.textColors.primary
                 )
             }
 
             AnimatedVisibility(
-                visible = selectedBrand != null && isSelected,
+                visible = selectedProvider != null && isSelected,
                 enter = scaleIn() + fadeIn(),
                 exit = scaleOut() + fadeOut()
             ) {
@@ -312,18 +312,18 @@ fun BrandItem(
 
 @Preview
 @Composable
-private fun BrandItemPrev() {
+private fun ProviderItemPrev() {
     CompositionLocalProvider(LocalPompaColors provides OpetColors) {
         PompaTheme {
-            BrandItem(
-                brand = Brand(
+            ProviderItem(
+                provider = Provider(
                     id = 1,
                     name = "Opet",
                     logo = "https://www.opet.com.tr/Content/Images/Logos/opet-logo.png"
                 ),
                 onItemClick = {},
                 isSelected = true,
-                selectedBrand = Brand(
+                selectedProvider = Provider(
                     id = 2,
                     name = "Shell",
                     logo = "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Shell_logo.svg/2560px-Shell_logo.svg.png"

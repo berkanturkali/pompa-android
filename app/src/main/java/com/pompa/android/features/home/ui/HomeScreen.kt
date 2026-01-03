@@ -21,7 +21,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.pompa.android.features.home.components.FuelFilters
 import com.pompa.android.features.home.components.FuelSearchBar
 import com.pompa.android.features.home.components.PriceDateView
@@ -36,7 +35,7 @@ import com.pompa.android.ui.providers.pompaColorPalette
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
-    viewModel: HomeScreenViewModel = hiltViewModel(),
+    viewModel: HomeScreenViewModel,
     onSortButtonClick: () -> Unit,
     onFuelItemClick: (FuelPriceProvider, FuelPriceRecord, Boolean) -> Unit,
 ) {

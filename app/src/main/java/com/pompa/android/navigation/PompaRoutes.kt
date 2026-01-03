@@ -11,7 +11,7 @@ sealed class PompaRoutes {
     object ProvincesScreen : PompaRoutes()
 
     @Serializable
-    object FuelBrandsScreen : PompaRoutes()
+    object ProvidersScreen : PompaRoutes()
 
     @Serializable
     object DistrictFuelPriceDetailsScreen : PompaRoutes() {

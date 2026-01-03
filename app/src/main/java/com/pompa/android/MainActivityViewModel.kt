@@ -55,7 +55,7 @@ class MainActivityViewModel @Inject constructor(
     fun setIsTopBarVisible(currentDestination: NavDestination?) {
         val currentRouteString = currentDestination?.route
         isTopBarVisible =
-            currentRouteString != PompaRoutes.ProvincesScreen::class.qualifiedName || currentRouteString != PompaRoutes.FuelBrandsScreen::class.qualifiedName
+            currentRouteString != PompaRoutes.ProvincesScreen::class.qualifiedName || currentRouteString != PompaRoutes.ProvidersScreen::class.qualifiedName
     }
 
     fun setShowBottomBar(currentDestination: NavDestination?) {

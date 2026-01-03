@@ -1,4 +1,4 @@
-package com.pompa.android.network.service.brand
+package com.pompa.android.network.service.provider
 
 object Endpoints {
 

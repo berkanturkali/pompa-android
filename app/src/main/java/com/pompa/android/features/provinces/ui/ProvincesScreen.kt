@@ -54,6 +54,8 @@ import com.pompa.android.ui.theme.PompaTheme
 
 @Composable
 fun ProvincesScreen(
+    navigatedFromDestination: Boolean,
+    navigateUp: () -> Unit,
     navigateToFuelBrandsScreen: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: ProvincesScreenViewModel = hiltViewModel()
@@ -67,7 +69,11 @@ fun ProvincesScreen(
             viewModel.saveSelectedProvince(
                 province = province
             )
-            navigateToFuelBrandsScreen()
+            if(navigatedFromDestination) {
+                navigateUp()
+            } else {
+                navigateToFuelBrandsScreen()
+            }
         },
         onErrorDialogDismiss = {
             viewModel.errorMessage = null

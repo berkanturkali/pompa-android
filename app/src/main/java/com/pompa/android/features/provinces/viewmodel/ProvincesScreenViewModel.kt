@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.pompa.android.data.datastore.PompaFilterPrefs
 import com.pompa.android.data.repo.province.ProvinceRepo
 import com.pompa.android.data.util.collectResource
 import com.pompa.android.model.provinces.Province
@@ -18,6 +19,7 @@ import javax.inject.Inject
 class ProvincesScreenViewModel @Inject constructor(
     private val provinceRepo: ProvinceRepo,
     private val userPreferences: UserPreferences,
+    private val pompaFilterPrefs: PompaFilterPrefs,
 ) : ViewModel() {
 
     val showLoading = mutableStateOf(false)

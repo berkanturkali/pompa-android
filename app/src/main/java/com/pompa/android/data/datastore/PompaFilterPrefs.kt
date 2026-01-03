@@ -8,12 +8,13 @@ import androidx.datastore.preferences.preferencesDataStore
 import com.pompa.android.data.datastore.PompaFilterPrefs.FilterPreferencesKeys.SORT_DIRECTION
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 import javax.inject.Singleton
 
 data class HomeScreenFilterPreferences(
-    val sortDirection: Int?
+    val sortDirection: Int?,
 )
 
 @Singleton
@@ -35,7 +36,7 @@ class PompaFilterPrefs @Inject constructor(@ApplicationContext context: Context)
         .map { preferences ->
             val direction = preferences[SORT_DIRECTION]
             HomeScreenFilterPreferences(
-                sortDirection = direction
+                sortDirection = direction,
             )
         }
 
@@ -43,6 +44,11 @@ class PompaFilterPrefs @Inject constructor(@ApplicationContext context: Context)
         dataStore.edit { preferences ->
             preferences[SORT_DIRECTION] = direction ?: 0
         }
+    }
+
+    suspend fun getSelectedSortDirection(): Int {
+        val prefs = dataStore.data.first()
+        return prefs[SORT_DIRECTION] ?: 0
     }
 
     private object FilterPreferencesKeys {

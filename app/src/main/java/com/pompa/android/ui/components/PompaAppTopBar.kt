@@ -31,6 +31,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.pompa.android.ui.providers.pompaColorPalette
 import com.pompa.android.ui.theme.PompaTheme
+import com.pompa.android.util.ClickIndication
+import com.pompa.android.util.safeClickable
 import com.pompa.android.util.titleCase
 
 @Composable
@@ -42,6 +44,7 @@ fun PompaAppTopBar(
     provinceCode: String,
     modifier: Modifier = Modifier,
     onBackButtonClick: () -> Unit,
+    onSelectedProvinceClick: () -> Unit,
 ) {
     val backButtonSize = 24.dp
     val spaceBetween = 8.dp
@@ -99,6 +102,9 @@ fun PompaAppTopBar(
                     Column(
                         verticalArrangement = Arrangement.spacedBy(2.dp),
                         horizontalAlignment = Alignment.CenterHorizontally,
+                        modifier = Modifier.safeClickable(indication = ClickIndication.None) {
+                            onSelectedProvinceClick()
+                        }
                     ) {
                         Card(
                             shape = CircleShape,
@@ -154,7 +160,8 @@ private fun PompaAppTopBarPrev() {
             title = "Pompa",
             provinceName = "Istanbul",
             provinceCode = "34",
-            onBackButtonClick = {}
+            onBackButtonClick = {},
+            onSelectedProvinceClick = {}
         )
     }
 }

@@ -6,7 +6,7 @@
     <string name="request_timeout">Request timed out</string>
     <string name="network_connection_error">Check your network connection please.</string>
     <string name="okay">Okay</string>
-    <string name="select_fuel_brand">Select Your Favorite Brand</string>
+    <string name="select_fuel_provider">Select Your Favorite Brand</string>
     <string name="confirm">Confirm</string>
     <string name="home">Home</string>
     <string name="settings">Settings</string>
