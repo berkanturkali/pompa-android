@@ -17,6 +17,7 @@ import com.pompa.android.model.ButtonColors
 import com.pompa.android.model.CardColors
 import com.pompa.android.model.ChipColors
 import com.pompa.android.model.PompaColors
+import com.pompa.android.model.PullToRefreshColors
 import com.pompa.android.model.SearchBarColors
 import com.pompa.android.model.TextColors
 import com.pompa.android.model.TopBarColors
@@ -96,6 +97,10 @@ val OpetColors = PompaColors(
         startIconColor = Color.LightGray.copy(0.8f),
         closeIconColor = OpetBrandBlue,
         hintColor = Color.LightGray.copy(0.8f)
+    ),
+    pullToRefreshColor = PullToRefreshColors(
+        container = OpetBrandBlue,
+        content = OpetBrandYellow
     )
 )
 

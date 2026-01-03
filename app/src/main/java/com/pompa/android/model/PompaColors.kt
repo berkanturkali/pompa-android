@@ -12,7 +12,8 @@ data class PompaColors(
     val topBarColors: TopBarColors = TopBarColors(),
     val bottomBarColors: BottomBarColors = BottomBarColors(),
     val chipColors: ChipColors = ChipColors(),
-    val searchBarColors: SearchBarColors = SearchBarColors()
+    val searchBarColors: SearchBarColors = SearchBarColors(),
+    val pullToRefreshColor: PullToRefreshColors = PullToRefreshColors()
 )
 
 data class BackgroundColors(
@@ -74,4 +75,9 @@ data class SearchBarColors(
     val startIconColor: Color = Color.Unspecified,
     val closeIconColor: Color = Color.Unspecified,
     val hintColor: Color = Color.Unspecified,
+)
+
+data class PullToRefreshColors(
+    val container: Color = Color.Unspecified,
+    val content: Color = Color.Unspecified
 )

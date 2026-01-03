@@ -12,6 +12,9 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
+import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -20,6 +23,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.pompa.android.features.home.components.FuelFilters
 import com.pompa.android.features.home.components.FuelSearchBar
@@ -28,6 +32,7 @@ import com.pompa.android.features.home.viewmodel.HomeScreenViewModel
 import com.pompa.android.model.fuel.FuelPriceProvider
 import com.pompa.android.model.fuel.FuelPriceRecord
 import com.pompa.android.ui.components.FuelItem
+import com.pompa.android.ui.components.PompaAppDialog
 import com.pompa.android.ui.components.PompaLoadingView
 import com.pompa.android.ui.components.PriceListBrandSection
 import com.pompa.android.ui.components.SortButton
@@ -41,25 +46,39 @@ fun HomeScreen(
     onFuelItemClick: (FuelPriceProvider, FuelPriceRecord, Boolean) -> Unit,
 ) {
 
+    val context = LocalContext.current
+
     Box(modifier = modifier.fillMaxSize()) {
         HomeScreenContent(
             providers = viewModel.providers,
             selectedProvider = viewModel.getSelectedProvider() ?: "",
             onFuelItemClick = onFuelItemClick,
-            onSortButtonClick = onSortButtonClick
+            onSortButtonClick = onSortButtonClick,
+            isLoading = viewModel.isLoading.value,
+            onRefresh = {
+                viewModel.fetchPrices(viewModel.sortDirection!!)
+            }
         )
 
         if (viewModel.isLoading.value) {
             PompaLoadingView()
         }
+
+        PompaAppDialog(
+            message = viewModel.errorMessage?.asString(context),
+            onOkayButtonClick = { viewModel.errorMessage = null }
+        )
+
     }
 }
 
 @Composable
 fun HomeScreenContent(
+    isLoading: Boolean,
     selectedProvider: String,
     providers: List<FuelPriceProvider>,
     modifier: Modifier = Modifier,
+    onRefresh: () -> Unit,
     onSortButtonClick: () -> Unit,
     onFuelItemClick: (FuelPriceProvider, FuelPriceRecord, Boolean) -> Unit,
 ) {
@@ -72,6 +91,8 @@ fun HomeScreenContent(
 
     val listState = rememberLazyListState()
 
+    val pullState = rememberPullToRefreshState()
+
     val isHeaderPinned by remember {
         derivedStateOf {
             listState.firstVisibleItemIndex > 0 || listState.firstVisibleItemScrollOffset > 0
@@ -82,7 +103,7 @@ fun HomeScreenContent(
     Box(
         modifier = modifier
             .fillMaxSize()
-            .padding(vertical = containerPadding)
+            .padding(containerPadding)
     ) {
         Column(
             modifier = Modifier.fillMaxWidth(),
@@ -126,41 +147,60 @@ fun HomeScreenContent(
                 color = MaterialTheme.pompaColorPalette.borderColor
             )
 
-            LazyColumn(
-                state = listState,
-                verticalArrangement = Arrangement.spacedBy(6.dp)
-            ) {
-
-                providers.forEach { provider ->
-
-                    val isFavoriteProvider = provider.provider.equals(
-                        selectedProvider,
-                        ignoreCase = true
+            PullToRefreshBox(
+                modifier = Modifier
+                    .fillMaxSize(),
+                isRefreshing = isLoading,
+                state = pullState,
+                indicator = {
+                    PullToRefreshDefaults.Indicator(
+                        modifier = Modifier.align(Alignment.TopCenter),
+                        state = pullState,
+                        isRefreshing = isLoading,
+                        containerColor = MaterialTheme.pompaColorPalette.pullToRefreshColor.container,
+                        color = MaterialTheme.pompaColorPalette.pullToRefreshColor.content
                     )
-                    stickyHeader {
-                        PriceListBrandSection(
-                            isHeaderPinned = isHeaderPinned,
-                            name = provider.provider,
-                            logo = provider.providerLogo,
-                            averagePrice = provider.averagePrice.toString(),
-                            isFavorite = isFavoriteProvider
-                        )
-                    }
+                },
+                onRefresh = {
+                    onRefresh()
+                }) {
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    state = listState,
+                    verticalArrangement = Arrangement.spacedBy(6.dp)
+                ) {
 
-                    items(provider.data) { record ->
-                        FuelItem(
-                            districtName = record.districtName,
-                            actualFuelPriceListCount = record.prices.notNullCount(),
-                            fuelPrices = record.prices.mapToUiItems(
-                                unit = record.unit,
-                                weightUnit = record.weightUnit
-                            )
-                                .take(3),
-                            modifier = Modifier.padding(containerPadding),
-                            onItemClick = {
-                                onFuelItemClick(provider, record, isFavoriteProvider)
-                            }
+                    providers.forEach { provider ->
+
+                        val isFavoriteProvider = provider.provider.equals(
+                            selectedProvider,
+                            ignoreCase = true
                         )
+                        stickyHeader {
+                            PriceListBrandSection(
+                                isHeaderPinned = isHeaderPinned,
+                                name = provider.provider,
+                                logo = provider.providerLogo,
+                                averagePrice = provider.averagePrice.toString(),
+                                isFavorite = isFavoriteProvider
+                            )
+                        }
+
+                        items(provider.data) { record ->
+                            FuelItem(
+                                districtName = record.districtName,
+                                actualFuelPriceListCount = record.prices.notNullCount(),
+                                fuelPrices = record.prices.mapToUiItems(
+                                    unit = record.unit,
+                                    weightUnit = record.weightUnit
+                                )
+                                    .take(3),
+                                modifier = Modifier.padding(containerPadding),
+                                onItemClick = {
+                                    onFuelItemClick(provider, record, isFavoriteProvider)
+                                }
+                            )
+                        }
                     }
                 }
             }

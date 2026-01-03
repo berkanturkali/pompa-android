@@ -1,5 +1,6 @@
 package com.pompa.android.features.home.viewmodel
 
+import android.content.Context
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -13,14 +14,18 @@ import com.pompa.android.model.fuel.FuelPriceProvider
 import com.pompa.android.model.util.UIText
 import com.pompa.android.util.UserPreferences
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+
+private const val TAG = "HomeScreenViewModel"
 
 @HiltViewModel
 class HomeScreenViewModel @Inject constructor(
     private val fuelRepo: FuelRepository,
     private val userPreferences: UserPreferences,
     val pompaFilterPrefs: PompaFilterPrefs,
+    @param:ApplicationContext private val context: Context,
 ) : ViewModel() {
 
     var isLoading = mutableStateOf(false)
@@ -29,9 +34,12 @@ class HomeScreenViewModel @Inject constructor(
 
     var providers by mutableStateOf(emptyList<FuelPriceProvider>())
 
+    var sortDirection: Int? = 0
+
     init {
         viewModelScope.launch {
             pompaFilterPrefs.filterPreferences.collect { filterPreferences ->
+                sortDirection = filterPreferences.sortDirection
                 fetchPrices(
                     filterPreferences.sortDirection ?: SortDirection.ASCENDING.value,
                 )
@@ -50,7 +58,7 @@ class HomeScreenViewModel @Inject constructor(
                 sortDirection = sortDirection
             ).collectResource(
                 onError = {
-
+                    errorMessage = it
                 },
                 loadingState = isLoading
             ) {
@@ -58,8 +66,6 @@ class HomeScreenViewModel @Inject constructor(
             }
         }
     }
-
-    fun getSelectedProvince() = userPreferences.getSelectedProvinceName()
 
     fun getSelectedProvider() = userPreferences.getFavoriteProviderName()
 
