@@ -26,7 +26,8 @@ import com.pompa.android.ui.theme.PompaTheme
 fun PompaAppBottomBar(
     destinations: List<PompaRoutes.BottomNavRoutes>,
     navController: NavController,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onTabReselected: (PompaRoutes.BottomNavRoutes) -> Unit
 ) {
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -53,7 +54,11 @@ fun PompaAppBottomBar(
                         indicatorColor = MaterialTheme.pompaColorPalette.bottomBarColors.indicatorColor
                     ),
                     onClick = {
-                        if (!selected) {
+                        if (selected) {
+                            if (destination.scrollable) {
+                                onTabReselected(destination)
+                            }
+                        } else {
                             navController.navigate(destination) {
                                 popUpTo(navController.graph.startDestinationId) {
                                     saveState = true
@@ -88,6 +93,8 @@ private fun PompaAppBottomBarPrev() {
                 PompaRoutes.BottomNavRoutes.Home,
                 PompaRoutes.BottomNavRoutes.Settings
             )
-        )
+        ) {
+
+        }
     }
 }

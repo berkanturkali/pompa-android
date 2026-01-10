@@ -16,6 +16,7 @@ import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -41,9 +42,11 @@ import com.pompa.android.ui.providers.pompaColorPalette
 
 @Composable
 fun HomeScreen(
-    modifier: Modifier = Modifier,
+    tabReselected: Boolean,
     viewModel: HomeScreenViewModel,
+    modifier: Modifier = Modifier,
     onSortButtonClick: () -> Unit,
+    onReselectionConsumed: () -> Unit,
     onFuelItemClick: (FuelPriceProvider, FuelPriceRecord, Boolean) -> Unit,
 ) {
 
@@ -58,7 +61,9 @@ fun HomeScreen(
             isLoading = viewModel.isLoading.value,
             onRefresh = {
                 viewModel.fetchPrices()
-            }
+            },
+            onReselectionConsumed = onReselectionConsumed,
+            tabReselected = tabReselected
         )
 
         if (viewModel.isLoading.value) {
@@ -78,10 +83,12 @@ fun HomeScreen(
 @Composable
 fun HomeScreenContent(
     isLoading: Boolean,
+    tabReselected: Boolean,
     selectedProvider: String,
     providers: List<FuelPriceProvider>,
     modifier: Modifier = Modifier,
     onRefresh: () -> Unit,
+    onReselectionConsumed: () -> Unit,
     onSortButtonClick: () -> Unit,
     onFuelItemClick: (FuelPriceProvider, FuelPriceRecord, Boolean) -> Unit,
 ) {
@@ -99,6 +106,13 @@ fun HomeScreenContent(
     val isHeaderPinned by remember {
         derivedStateOf {
             listState.firstVisibleItemIndex > 0 || listState.firstVisibleItemScrollOffset > 0
+        }
+    }
+
+    LaunchedEffect(tabReselected) {
+        if (tabReselected) {
+            listState.animateScrollToItem(0)
+            onReselectionConsumed()
         }
     }
 

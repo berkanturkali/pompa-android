@@ -28,18 +28,21 @@ sealed class PompaRoutes {
     @Serializable
     sealed class BottomNavRoutes(
         @param:DrawableRes val icon: Int,
-        @param:StringRes val title: Int
+        @param:StringRes val title: Int,
+        val scrollable: Boolean,
     ) : PompaRoutes() {
         @Serializable
         data object Home : BottomNavRoutes(
             icon = R.drawable.ic_home,
             title = R.string.home,
+            scrollable = true
         )
 
         @Serializable
         data object Settings : BottomNavRoutes(
             icon = R.drawable.ic_settings,
-            title = R.string.settings
+            title = R.string.settings,
+            scrollable = false
         )
     }
 }

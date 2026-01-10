@@ -17,6 +17,9 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -51,6 +54,8 @@ fun PompaApp(
 ) {
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
+
+    var reselectedTab by remember { mutableStateOf<PompaRoutes.BottomNavRoutes?>(null) }
 
     viewModel.setIsTopBarVisible(navBackStackEntry?.destination)
     viewModel.setShowBottomBar(navBackStackEntry?.destination)
@@ -176,6 +181,8 @@ fun PompaApp(
 
                         val homeScreenViewModel: HomeScreenViewModel = hiltViewModel()
 
+                        val tabReselected = reselectedTab == PompaRoutes.BottomNavRoutes.Home
+
                         LaunchedEffect(navBackStackEntry) {
                             navBackStackEntry?.savedStateHandle?.get<Boolean>(REFRESH_LIST_KEY)
                                 ?.let {
@@ -208,7 +215,12 @@ fun PompaApp(
                             },
                             onSortButtonClick = {
                                 navController.navigate(PompaRoutes.SortScreen.toString())
-                            })
+                            },
+                            onReselectionConsumed = {
+                                reselectedTab = null
+                            },
+                            tabReselected = tabReselected
+                        )
                     }
 
 
@@ -250,7 +262,10 @@ fun PompaApp(
             ) {
                 PompaAppBottomBar(
                     navController = navController,
-                    destinations = viewModel.topLevelDestinations
+                    destinations = viewModel.topLevelDestinations,
+                    onTabReselected = { destination ->
+                        reselectedTab = destination
+                    }
                 )
             }
         }
