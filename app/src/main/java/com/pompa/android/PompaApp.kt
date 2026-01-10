@@ -20,6 +20,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -53,6 +54,8 @@ fun PompaApp(
 
     viewModel.setIsTopBarVisible(navBackStackEntry?.destination)
     viewModel.setShowBottomBar(navBackStackEntry?.destination)
+
+    val bottomBarHeight = 50.dp
 
     Scaffold(
         modifier = modifier
@@ -89,133 +92,146 @@ fun PompaApp(
                 .fillMaxSize()
                 .padding(it)
         ) {
-            NavHost(
-                navController = navController,
-                startDestination = if (viewModel.checkProvinceAndFavoriteProviderAlreadySelected()) PompaRoutes.BottomNavRoutes.Home else PompaRoutes.ProvincesScreen
-            ) {
-                composable<PompaRoutes.ProvincesScreen> {
-                    viewModel.setAppTopBarTitle(stringResource(R.string.select_province))
-                    viewModel.showBackButton = navController.previousBackStackEntry != null
-                    ProvincesScreen(
-                        navigatedFromDestination = navController.previousBackStackEntry != null,
-                        navigateUp = {
-                            navController.previousBackStackEntry?.savedStateHandle?.set(
-                                REFRESH_LIST_KEY,
-                                true
-                            )
-                            navController.navigateUp()
-                        },
-                        navigateToFuelBrandsScreen = {
-                            navController.navigate(PompaRoutes.ProvidersScreen)
-                        }
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(
+                        bottom = if (viewModel.showBottomBar)
+                            bottomBarHeight
+                        else
+                            0.dp
                     )
-                }
+            ) {
 
-                composable<PompaRoutes.ProvidersScreen>(
-                    enterTransition = {
-                        slideInHorizontally(
-                            initialOffsetX = { fullWidth -> -fullWidth },
-                        )
-                    },
-                    exitTransition = {
-                        slideOutHorizontally(
-                            targetOffsetX = { fullWidth -> -fullWidth },
-                        )
-                    },
-                    popEnterTransition = {
-                        slideInHorizontally(
-                            initialOffsetX = { fullWidth -> fullWidth },
-                        )
-                    },
-                    popExitTransition = {
-                        slideOutHorizontally(
-                            targetOffsetX = { fullWidth -> -fullWidth },
+                NavHost(
+                    navController = navController,
+                    startDestination = if (viewModel.checkProvinceAndFavoriteProviderAlreadySelected()) PompaRoutes.BottomNavRoutes.Home else PompaRoutes.ProvincesScreen
+                ) {
+                    composable<PompaRoutes.ProvincesScreen> {
+                        viewModel.setAppTopBarTitle(stringResource(R.string.select_province))
+                        viewModel.showBackButton = navController.previousBackStackEntry != null
+                        ProvincesScreen(
+                            navigatedFromDestination = navController.previousBackStackEntry != null,
+                            navigateUp = {
+                                navController.previousBackStackEntry?.savedStateHandle?.set(
+                                    REFRESH_LIST_KEY,
+                                    true
+                                )
+                                navController.navigateUp()
+                            },
+                            navigateToFuelBrandsScreen = {
+                                navController.navigate(PompaRoutes.ProvidersScreen)
+                            }
                         )
                     }
-                ) {
-                    viewModel.showBackButton = true
-                    viewModel.showSelectedProvince = true
-                    viewModel.setAppTopBarTitle(stringResource(R.string.select_fuel_provider))
-                    ProvidersScreen {
-                        navController.navigate(PompaRoutes.BottomNavRoutes.Home) {
-                            popUpTo(PompaRoutes.ProvidersScreen) {
-                                inclusive = true
+
+                    composable<PompaRoutes.ProvidersScreen>(
+                        enterTransition = {
+                            slideInHorizontally(
+                                initialOffsetX = { fullWidth -> -fullWidth },
+                            )
+                        },
+                        exitTransition = {
+                            slideOutHorizontally(
+                                targetOffsetX = { fullWidth -> -fullWidth },
+                            )
+                        },
+                        popEnterTransition = {
+                            slideInHorizontally(
+                                initialOffsetX = { fullWidth -> fullWidth },
+                            )
+                        },
+                        popExitTransition = {
+                            slideOutHorizontally(
+                                targetOffsetX = { fullWidth -> -fullWidth },
+                            )
+                        }
+                    ) {
+                        viewModel.showBackButton = true
+                        viewModel.showSelectedProvince = true
+                        viewModel.setAppTopBarTitle(stringResource(R.string.select_fuel_provider))
+                        ProvidersScreen {
+                            navController.navigate(PompaRoutes.BottomNavRoutes.Home) {
+                                popUpTo(PompaRoutes.ProvidersScreen) {
+                                    inclusive = true
+                                }
                             }
                         }
                     }
-                }
 
-                composable<PompaRoutes.BottomNavRoutes.Home>(
-                    enterTransition = {
-                        slideInHorizontally(
-                            initialOffsetX = { fullWidth -> fullWidth },
-                        )
-                    },
-                    exitTransition = {
-                        slideOutHorizontally(
-                            targetOffsetX = { fullWidth -> -fullWidth },
-                        )
-                    }
-                ) {
-                    viewModel.setAppTopBarTitle("")
-                    viewModel.showBackButton = false
-
-                    val homeScreenViewModel: HomeScreenViewModel = hiltViewModel()
-
-                    LaunchedEffect(navBackStackEntry) {
-                        navBackStackEntry?.savedStateHandle?.get<Boolean>(REFRESH_LIST_KEY)?.let {
-                            homeScreenViewModel.fetchPrices()
-                            navBackStackEntry?.savedStateHandle[REFRESH_LIST_KEY] = null
-                        }
-                    }
-
-                    HomeScreen(
-                        viewModel = homeScreenViewModel,
-                        onFuelItemClick = { provider, record, isFavoriteProvider ->
-                            val args = encodeNavArg(
-                                DistrictFuelDetailsArgs(
-                                    isFavoriteProvider = isFavoriteProvider,
-                                    providerName = provider.provider,
-                                    providerLogo = provider.providerLogo,
-                                    fuelPrices = record.prices?.mapToUiItems(
-                                        record.unit ?: "",
-                                        record.weightUnit ?: ""
-                                    ) ?: emptyList(),
-                                    districtName = record.districtName ?: ""
-                                )
-                            )
-
-                            navController.navigate(
-                                PompaRoutes.DistrictFuelPriceDetailsScreen.createRouteWithArgs(
-                                    args = args
-                                )
+                    composable<PompaRoutes.BottomNavRoutes.Home>(
+                        enterTransition = {
+                            slideInHorizontally(
+                                initialOffsetX = { fullWidth -> fullWidth },
                             )
                         },
-                        onSortButtonClick = {
-                            navController.navigate(PompaRoutes.SortScreen.toString())
-                        })
-                }
+                        exitTransition = {
+                            slideOutHorizontally(
+                                targetOffsetX = { fullWidth -> -fullWidth },
+                            )
+                        }
+                    ) {
+                        viewModel.setAppTopBarTitle("")
+                        viewModel.showBackButton = false
+
+                        val homeScreenViewModel: HomeScreenViewModel = hiltViewModel()
+
+                        LaunchedEffect(navBackStackEntry) {
+                            navBackStackEntry?.savedStateHandle?.get<Boolean>(REFRESH_LIST_KEY)
+                                ?.let {
+                                    homeScreenViewModel.fetchPrices()
+                                    navBackStackEntry?.savedStateHandle[REFRESH_LIST_KEY] = null
+                                }
+                        }
+
+                        HomeScreen(
+                            viewModel = homeScreenViewModel,
+                            onFuelItemClick = { provider, record, isFavoriteProvider ->
+                                val args = encodeNavArg(
+                                    DistrictFuelDetailsArgs(
+                                        isFavoriteProvider = isFavoriteProvider,
+                                        providerName = provider.provider,
+                                        providerLogo = provider.providerLogo,
+                                        fuelPrices = record.prices?.mapToUiItems(
+                                            record.unit ?: "",
+                                            record.weightUnit ?: ""
+                                        ) ?: emptyList(),
+                                        districtName = record.districtName ?: ""
+                                    )
+                                )
+
+                                navController.navigate(
+                                    PompaRoutes.DistrictFuelPriceDetailsScreen.createRouteWithArgs(
+                                        args = args
+                                    )
+                                )
+                            },
+                            onSortButtonClick = {
+                                navController.navigate(PompaRoutes.SortScreen.toString())
+                            })
+                    }
 
 
-                bottomSheet(
-                    route = PompaRoutes.DistrictFuelPriceDetailsScreen.route,
-                ) { entry ->
-                    val argumentsAsString = entry.arguments?.getString("args")!!
-                    val args: DistrictFuelDetailsArgs = decodeNavArg(argumentsAsString)
-                    viewModel.setAppTopBarTitle("")
-                    viewModel.showBackButton = false
+                    bottomSheet(
+                        route = PompaRoutes.DistrictFuelPriceDetailsScreen.route,
+                    ) { entry ->
+                        val argumentsAsString = entry.arguments?.getString("args")!!
+                        val args: DistrictFuelDetailsArgs = decodeNavArg(argumentsAsString)
+                        viewModel.setAppTopBarTitle("")
+                        viewModel.showBackButton = false
 
-                    DistrictFuelPriceDetailsScreen(
-                        args = args
-                    )
-                }
+                        DistrictFuelPriceDetailsScreen(
+                            args = args
+                        )
+                    }
 
 
-                bottomSheet(
-                    route = PompaRoutes.SortScreen.toString(),
-                ) {
-                    SortScreen {
-                        navController.navigateUp()
+                    bottomSheet(
+                        route = PompaRoutes.SortScreen.toString(),
+                    ) {
+                        SortScreen {
+                            navController.navigateUp()
+                        }
                     }
                 }
             }

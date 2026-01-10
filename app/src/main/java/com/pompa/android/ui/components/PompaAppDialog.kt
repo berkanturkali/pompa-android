@@ -128,7 +128,7 @@ fun PompaAppDialog(
 private fun PompaAppDialogPrev() {
     CompositionLocalProvider(LocalPompaColors provides OpetColors) {
         PompaTheme {
-            PompaAppDialog(null) { }
+            PompaAppDialog("Something went wrong") { }
         }
     }
 }

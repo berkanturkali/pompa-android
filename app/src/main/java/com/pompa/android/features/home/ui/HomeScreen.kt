@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import com.pompa.android.features.home.components.FuelFilters
 import com.pompa.android.features.home.components.FuelSearchBar
 import com.pompa.android.features.home.components.PriceDateView
+import com.pompa.android.features.home.components.ProviderErrorView
 import com.pompa.android.features.home.viewmodel.HomeScreenViewModel
 import com.pompa.android.model.fuel.FuelPriceProvider
 import com.pompa.android.model.fuel.FuelPriceRecord
@@ -66,7 +67,10 @@ fun HomeScreen(
 
         PompaAppDialog(
             message = viewModel.errorMessage?.asString(context),
-            onOkayButtonClick = { viewModel.errorMessage = null }
+            onOkayButtonClick = {
+                viewModel.errorMessage = null
+                viewModel.fetchPrices()
+            }
         )
     }
 }
@@ -179,7 +183,7 @@ fun HomeScreenContent(
                                 isHeaderPinned = isHeaderPinned,
                                 name = provider.provider,
                                 logo = provider.providerLogo,
-                                averagePrice = provider.averagePrice.toString(),
+                                averagePrice = provider.averagePrice?.toString(),
                                 isFavorite = isFavoriteProvider
                             )
                         }
@@ -197,6 +201,14 @@ fun HomeScreenContent(
                                     onFuelItemClick(provider, record, isFavoriteProvider)
                                 }
                             )
+                        }
+
+                        if (!provider.ok) {
+                            item {
+                                ProviderErrorView(
+                                    provider = provider.provider
+                                )
+                            }
                         }
                     }
                 }

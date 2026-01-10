@@ -50,7 +50,7 @@ import com.pompa.android.util.DeviceManager
 fun PriceListBrandSection(
     name: String,
     logo: String,
-    averagePrice: String,
+    averagePrice: String?,
     isHeaderPinned: Boolean,
     isFavorite: Boolean,
     modifier: Modifier = Modifier,
@@ -201,39 +201,41 @@ fun PriceListBrandSection(
                     color = MaterialTheme.pompaColorPalette.borderColor.copy(0.8f)
                 )
             ) {
-                Row(
-                    modifier = Modifier
-                        .background(MaterialTheme.pompaColorPalette.backgroundColors.primary)
-                        .padding(horizontal = 8.dp, vertical = 6.dp),
-                    horizontalArrangement = Arrangement.spacedBy(4.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        text = stringResource(R.string.average),
-                        style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Medium),
-                        color = MaterialTheme.pompaColorPalette.textColors.onBrand.copy(
-                            alpha = 0.7f
+                averagePrice?.let {
+                    Row(
+                        modifier = Modifier
+                            .background(MaterialTheme.pompaColorPalette.backgroundColors.primary)
+                            .padding(horizontal = 8.dp, vertical = 6.dp),
+                        horizontalArrangement = Arrangement.spacedBy(4.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = stringResource(R.string.average),
+                            style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Medium),
+                            color = MaterialTheme.pompaColorPalette.textColors.onBrand.copy(
+                                alpha = 0.7f
+                            )
                         )
-                    )
 
-                    Text(
-                        text = buildAnnotatedString {
-                            withStyle(
-                                MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold)
-                                    .toSpanStyle()
-                            ) {
-                                append(averagePrice)
-                            }
-                            withStyle(
-                                MaterialTheme.typography.labelSmall
-                                    .toSpanStyle()
-                            ) {
-                                append("₺")
-                            }
-                        },
-                        color = MaterialTheme.pompaColorPalette.textColors.onBrand
-                    )
+                        Text(
+                            text = buildAnnotatedString {
+                                withStyle(
+                                    MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold)
+                                        .toSpanStyle()
+                                ) {
+                                    append(averagePrice)
+                                }
+                                withStyle(
+                                    MaterialTheme.typography.labelSmall
+                                        .toSpanStyle()
+                                ) {
+                                    append("₺")
+                                }
+                            },
+                            color = MaterialTheme.pompaColorPalette.textColors.onBrand
+                        )
 
+                    }
                 }
 
             }

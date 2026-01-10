@@ -8,7 +8,7 @@ import kotlin.reflect.full.memberProperties
 data class FuelPriceProvider(
     val provider: String,
     val providerLogo: String,
-    val averagePrice: Double,
+    val averagePrice: Double?,
     val ok: Boolean,
     val data: List<FuelPriceRecord?>,
     val error: String?,
