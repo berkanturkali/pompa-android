@@ -29,8 +29,10 @@ import androidx.compose.ui.unit.dp
 import com.pompa.android.features.home.components.FuelFilters
 import com.pompa.android.features.home.components.FuelSearchBar
 import com.pompa.android.features.home.components.PriceDateView
+import com.pompa.android.features.home.components.ProviderEmptyView
 import com.pompa.android.features.home.components.ProviderErrorView
 import com.pompa.android.features.home.viewmodel.HomeScreenViewModel
+import com.pompa.android.model.FuelType
 import com.pompa.android.model.fuel.FuelPriceProvider
 import com.pompa.android.model.fuel.FuelPriceRecord
 import com.pompa.android.ui.components.FuelItem
@@ -63,7 +65,10 @@ fun HomeScreen(
                 viewModel.fetchPrices()
             },
             onReselectionConsumed = onReselectionConsumed,
-            tabReselected = tabReselected
+            tabReselected = tabReselected,
+            onFuelTypeSelected = { type ->
+                viewModel.setSelectedFuelType(type.value)
+            }
         )
 
         if (viewModel.isLoading.value) {
@@ -90,6 +95,7 @@ fun HomeScreenContent(
     onRefresh: () -> Unit,
     onReselectionConsumed: () -> Unit,
     onSortButtonClick: () -> Unit,
+    onFuelTypeSelected: (FuelType) -> Unit,
     onFuelItemClick: (FuelPriceProvider, FuelPriceRecord, Boolean) -> Unit,
 ) {
 
@@ -146,7 +152,9 @@ fun HomeScreenContent(
 
             FuelFilters(
                 modifier = Modifier.padding(horizontal = containerPadding, vertical = 2.dp),
-            )
+            ) { fuelType ->
+                onFuelTypeSelected(fuelType)
+            }
 
             HorizontalDivider(
                 thickness = 0.5.dp,
@@ -198,30 +206,37 @@ fun HomeScreenContent(
                                 name = provider.provider,
                                 logo = provider.providerLogo,
                                 averagePrice = provider.averagePrice?.toString(),
-                                isFavorite = isFavoriteProvider
+                                isFavorite = isFavoriteProvider,
+                                showDivider = provider.ok && provider.data.isNotEmpty()
                             )
                         }
-
-                        items(provider.data.filterNotNull()) { record ->
-                            FuelItem(
-                                districtName = record.districtName ?: "",
-                                actualFuelPriceListCount = record.prices?.notNullCount() ?: 0,
-                                fuelPrices = record.prices?.mapToUiItems(
-                                    unit = record.unit ?: "",
-                                    weightUnit = record.weightUnit ?: ""
-                                )?.take(3) ?: emptyList(),
-                                modifier = Modifier.padding(containerPadding),
-                                onItemClick = {
-                                    onFuelItemClick(provider, record, isFavoriteProvider)
-                                }
-                            )
-                        }
-
                         if (!provider.ok) {
                             item {
                                 ProviderErrorView(
                                     provider = provider.provider
                                 )
+                            }
+                        } else {
+                            if (provider.data.isEmpty()) {
+                                item {
+                                    ProviderEmptyView(provider = provider.provider)
+                                }
+                            } else {
+                                items(provider.data.filterNotNull()) { record ->
+                                    FuelItem(
+                                        districtName = record.districtName ?: "",
+                                        actualFuelPriceListCount = record.prices?.notNullCount()
+                                            ?: 0,
+                                        fuelPrices = record.prices?.mapToUiItems(
+                                            unit = record.unit ?: "",
+                                            weightUnit = record.weightUnit ?: ""
+                                        )?.take(3) ?: emptyList(),
+                                        modifier = Modifier.padding(containerPadding),
+                                        onItemClick = {
+                                            onFuelItemClick(provider, record, isFavoriteProvider)
+                                        }
+                                    )
+                                }
                             }
                         }
                     }

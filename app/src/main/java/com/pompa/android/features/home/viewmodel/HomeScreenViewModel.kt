@@ -8,7 +8,6 @@ import androidx.lifecycle.viewModelScope
 import com.pompa.android.data.datastore.PompaFilterPrefs
 import com.pompa.android.data.repo.fuel.FuelRepository
 import com.pompa.android.data.util.collectResource
-import com.pompa.android.features.sort.model.SortDirection
 import com.pompa.android.model.fuel.FuelPriceProvider
 import com.pompa.android.model.util.UIText
 import com.pompa.android.util.UserPreferences
@@ -31,12 +30,15 @@ class HomeScreenViewModel @Inject constructor(
 
     var providers by mutableStateOf(emptyList<FuelPriceProvider>())
 
-    var sortDirection: Int? = 0
+    var sortDirection: Int = 0
+
+    var fuelType: Int = 0
 
     init {
         viewModelScope.launch {
             pompaFilterPrefs.filterPreferences.collect { filterPreferences ->
                 sortDirection = filterPreferences.sortDirection
+                fuelType = filterPreferences.fuelType
                 fetchPrices()
             }
         }
@@ -50,7 +52,9 @@ class HomeScreenViewModel @Inject constructor(
                 cityCode = userPreferences.getSelectedProvinceCode()!!,
                 cityName = userPreferences.getSelectedProvinceName()!!,
                 provider = userPreferences.getFavoriteProviderName()!!,
-                sortDirection = sortDirection ?: SortDirection.ASCENDING.value,
+                sortDirection = sortDirection,
+                fuelType = fuelType
+
             ).collectResource(
                 onError = {
                     errorMessage = it
@@ -59,6 +63,12 @@ class HomeScreenViewModel @Inject constructor(
             ) {
                 providers = it?.filterNotNull() ?: emptyList()
             }
+        }
+    }
+
+    fun setSelectedFuelType(type: Int) {
+        viewModelScope.launch {
+            pompaFilterPrefs.setSelectedFuelType(type)
         }
     }
 

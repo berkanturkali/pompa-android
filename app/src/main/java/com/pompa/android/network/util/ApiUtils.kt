@@ -1,5 +1,6 @@
 package com.pompa.android.network.util
 
+import android.util.Log
 import com.pompa.android.R
 import com.pompa.android.model.base.BaseApiResponse
 import com.pompa.android.model.util.Resource
@@ -18,6 +19,8 @@ import retrofit2.Response
 import java.io.IOException
 import java.net.ConnectException
 import java.net.SocketTimeoutException
+
+private const val TAG = "ApiUtils"
 
 object ApiUtils {
 
@@ -40,6 +43,7 @@ object ApiUtils {
                     } ?: emit(Resource.Error(UIText.StringResource(R.string.no_content)))
                 }
             } catch (exception: Exception) {
+                Log.e(TAG, "fetchData: error occured ${exception.printStackTrace()}")
                 exception.printStackTrace()
                 handleException(exception = exception)
             }

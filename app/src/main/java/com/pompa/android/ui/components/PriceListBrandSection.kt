@@ -52,6 +52,7 @@ fun PriceListBrandSection(
     logo: String,
     averagePrice: String?,
     isHeaderPinned: Boolean,
+    showDivider: Boolean,
     isFavorite: Boolean,
     modifier: Modifier = Modifier,
 ) {
@@ -109,7 +110,7 @@ fun PriceListBrandSection(
             .padding(horizontal = headerHorizontalPadding, vertical = headerParentVerticalPadding)
             .background(MaterialTheme.colorScheme.background)
             .then(
-                if (isHeaderPinned) {
+                if (isHeaderPinned && showDivider) {
                     Modifier.drawBehind {
                         val strokeWidth = 1.dp.toPx()
                         val y = size.height - strokeWidth / 2
@@ -254,7 +255,8 @@ private fun PriceListBrandSectionPrev() {
             logo = "",
             averagePrice = "42.15",
             isHeaderPinned = true,
-            isFavorite = true
+            isFavorite = true,
+            showDivider = true
         )
     }
 }

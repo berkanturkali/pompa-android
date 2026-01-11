@@ -1,6 +1,5 @@
 package com.pompa.android.data.repo.fuel
 
-import com.pompa.android.model.base.BaseApiResponse
 import com.pompa.android.model.fuel.FuelPriceProvider
 import com.pompa.android.model.util.Resource
 import com.pompa.android.network.service.fuel.FuelService
@@ -18,13 +17,15 @@ class FuelRepositoryImpl @Inject constructor(
         cityCode: String,
         provider: String,
         sortDirection: Int,
-    ): Flow<Resource<List<FuelPriceProvider?>>>{
+        fuelType: Int,
+    ): Flow<Resource<List<FuelPriceProvider?>>> {
         return ApiUtils.fetchData {
             service.fetchAllFuelPricesByCity(
                 cityCode = cityCode,
                 cityName = cityName,
                 provider = provider,
-                sortDirection = sortDirection
+                sortDirection = sortDirection,
+                type = fuelType
             )
         }
     }

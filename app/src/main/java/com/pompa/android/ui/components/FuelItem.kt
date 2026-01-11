@@ -68,23 +68,25 @@ fun FuelItem(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
 
-                    Text(
-                        text = String.format(
-                            stringResource(R.string.see_all),
-                            actualFuelPriceListCount
-                        ),
-                        style = MaterialTheme.typography.labelSmall.copy(
-                            fontWeight = FontWeight.Medium,
-                            fontSize = 10.sp
-                        ),
-                        color = MaterialTheme.pompaColorPalette.textColors.link,
-                        textDecoration = TextDecoration.Underline
-                    )
-                    Icon(
-                        painter = painterResource(R.drawable.ic_next),
-                        contentDescription = null,
-                        tint = Color.LightGray
-                    )
+                    if (actualFuelPriceListCount > 3) {
+                        Text(
+                            text = String.format(
+                                stringResource(R.string.see_all),
+                                actualFuelPriceListCount
+                            ),
+                            style = MaterialTheme.typography.labelSmall.copy(
+                                fontWeight = FontWeight.Medium,
+                                fontSize = 10.sp
+                            ),
+                            color = MaterialTheme.pompaColorPalette.textColors.link,
+                            textDecoration = TextDecoration.Underline
+                        )
+                        Icon(
+                            painter = painterResource(R.drawable.ic_next),
+                            contentDescription = null,
+                            tint = Color.LightGray
+                        )
+                    }
                 }
             }
         }
@@ -98,7 +100,9 @@ fun FuelItem(
                 1.dp
             ),
             colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.pompaColorPalette.cardColors.primaryBackground.copy(0.95f)
+                containerColor = MaterialTheme.pompaColorPalette.cardColors.primaryBackground.copy(
+                    0.95f
+                )
             ),
             border = BorderStroke(0.5.dp, MaterialTheme.pompaColorPalette.borderColor)
         ) {

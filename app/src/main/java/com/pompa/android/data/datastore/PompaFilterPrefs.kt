@@ -5,7 +5,10 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import com.pompa.android.data.datastore.PompaFilterPrefs.FilterPreferencesKeys.FUEL_TYPE
 import com.pompa.android.data.datastore.PompaFilterPrefs.FilterPreferencesKeys.SORT_DIRECTION
+import com.pompa.android.features.sort.model.SortDirection
+import com.pompa.android.model.FuelType
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first
@@ -14,7 +17,8 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 data class HomeScreenFilterPreferences(
-    val sortDirection: Int?,
+    val sortDirection: Int,
+    val fuelType: Int
 )
 
 @Singleton
@@ -23,6 +27,7 @@ class PompaFilterPrefs @Inject constructor(@ApplicationContext context: Context)
     companion object {
         private const val FILTER_PREFS_NAME = "pompa_filter_prefs"
         private const val SELECTED_DIRECTION = "sort_direction"
+        private const val SELECTED_FUEL_TYPE = "fuel_type"
     }
 
     private val Context.pompaFiltersDataStore by preferencesDataStore(name = FILTER_PREFS_NAME)
@@ -35,8 +40,10 @@ class PompaFilterPrefs @Inject constructor(@ApplicationContext context: Context)
     }
         .map { preferences ->
             val direction = preferences[SORT_DIRECTION]
+            val fuelType = preferences[FUEL_TYPE]
             HomeScreenFilterPreferences(
-                sortDirection = direction,
+                sortDirection = direction ?: SortDirection.ASCENDING.value,
+                fuelType = fuelType ?: FuelType.ALL.value
             )
         }
 
@@ -46,12 +53,19 @@ class PompaFilterPrefs @Inject constructor(@ApplicationContext context: Context)
         }
     }
 
+    suspend fun setSelectedFuelType(type: Int) {
+        dataStore.edit { preferences ->
+            preferences[FUEL_TYPE] = type
+        }
+    }
+
     suspend fun getSelectedSortDirection(): Int {
         val prefs = dataStore.data.first()
-        return prefs[SORT_DIRECTION] ?: 0
+        return prefs[SORT_DIRECTION] ?: SortDirection.ASCENDING.value
     }
 
     private object FilterPreferencesKeys {
         val SORT_DIRECTION = intPreferencesKey(SELECTED_DIRECTION)
+        val FUEL_TYPE = intPreferencesKey(SELECTED_FUEL_TYPE)
     }
 }

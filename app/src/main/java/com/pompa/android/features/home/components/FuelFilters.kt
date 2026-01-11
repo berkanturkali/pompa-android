@@ -13,12 +13,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import com.pompa.android.model.FuelFilterDataSource
+import com.pompa.android.model.FuelType
 import com.pompa.android.ui.components.FuelFilterChip
 import com.pompa.android.ui.theme.PompaTheme
 
 @Composable
 fun FuelFilters(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onFilterSelected: (FuelType) -> Unit
 ) {
 
     val context = LocalContext.current
@@ -44,6 +46,7 @@ fun FuelFilters(
                 onItemClick = {
                     if (selectedFilter != filterItem) {
                         selectedFilter = filterItem
+                        onFilterSelected(filterItem.type)
                     }
                 }
             )
@@ -55,6 +58,6 @@ fun FuelFilters(
 @Composable
 private fun FuelFiltersPrev() {
     PompaTheme {
-        FuelFilters()
+        FuelFilters {}
     }
 }

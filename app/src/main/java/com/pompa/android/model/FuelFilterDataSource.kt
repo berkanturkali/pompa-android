@@ -16,9 +16,17 @@ object FuelFilterDataSource {
             FuelFilterItem(
                 value = label,
                 icon = icons.getResourceId(index, 0),
-                selected = index == 0
+                selected = index == 0,
+                type = FuelType.entries[index]
             )
         }
         return items
     }
+}
+
+enum class FuelType(val value: Int) {
+    ALL(0),
+    GASOLINE(1),
+    DIESEL(2),
+    LPG(3)
 }

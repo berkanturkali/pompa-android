@@ -6,4 +6,5 @@ data class FuelFilterItem(
     val value: String,
     @param:DrawableRes val icon: Int,
     val selected: Boolean,
+    val type: FuelType
 )
