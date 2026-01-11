@@ -1,5 +1,6 @@
 package com.pompa.android.features.home.viewmodel
 
+import android.content.Context
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -8,10 +9,13 @@ import androidx.lifecycle.viewModelScope
 import com.pompa.android.data.datastore.PompaFilterPrefs
 import com.pompa.android.data.repo.fuel.FuelRepository
 import com.pompa.android.data.util.collectResource
+import com.pompa.android.model.FuelFilterDataSource
+import com.pompa.android.model.FuelFilterItem
 import com.pompa.android.model.fuel.FuelPriceProvider
 import com.pompa.android.model.util.UIText
 import com.pompa.android.util.UserPreferences
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -22,6 +26,7 @@ class HomeScreenViewModel @Inject constructor(
     private val fuelRepo: FuelRepository,
     private val userPreferences: UserPreferences,
     val pompaFilterPrefs: PompaFilterPrefs,
+    @ApplicationContext context: Context,
 ) : ViewModel() {
 
     var isLoading = mutableStateOf(false)
@@ -34,11 +39,19 @@ class HomeScreenViewModel @Inject constructor(
 
     var fuelType: Int = 0
 
+    var fuelFilters = FuelFilterDataSource.getFilters(context)
+    var selectedFuelFilter by mutableStateOf<FuelFilterItem?>(
+        null
+    )
+
     init {
         viewModelScope.launch {
             pompaFilterPrefs.filterPreferences.collect { filterPreferences ->
                 sortDirection = filterPreferences.sortDirection
                 fuelType = filterPreferences.fuelType
+                selectedFuelFilter = fuelFilters.first {
+                    it.type.value == fuelType
+                }
                 fetchPrices()
             }
         }

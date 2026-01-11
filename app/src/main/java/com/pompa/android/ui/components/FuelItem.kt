@@ -36,6 +36,7 @@ import com.pompa.android.util.safeClickable
 @Composable
 fun FuelItem(
     districtName: String,
+    clickable: Boolean,
     actualFuelPriceListCount: Int,
     fuelPrices: List<FuelPriceUiModel>,
     modifier: Modifier = Modifier,
@@ -50,7 +51,9 @@ fun FuelItem(
                     .fillMaxWidth()
                     .padding(vertical = 8.dp, horizontal = 12.dp)
                     .safeClickable(indication = ClickIndication.None) {
-                        onItemClick()
+                        if (clickable) {
+                            onItemClick()
+                        }
                     },
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
@@ -68,7 +71,7 @@ fun FuelItem(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
 
-                    if (actualFuelPriceListCount > 3) {
+                    if (clickable) {
                         Text(
                             text = String.format(
                                 stringResource(R.string.see_all),
@@ -151,6 +154,7 @@ private fun FuelItemPrev() {
         FuelItem(
             actualFuelPriceListCount = 3,
             districtName = "IZMIR",
+            clickable = true,
             fuelPrices = listOf(
                 FuelPriceUiModel(
                     title = R.string.gasoline95,

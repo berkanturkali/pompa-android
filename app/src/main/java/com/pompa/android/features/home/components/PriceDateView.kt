@@ -1,9 +1,13 @@
 package com.pompa.android.features.home.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -23,32 +27,37 @@ fun PriceDateView(
     date: String,
     modifier: Modifier = Modifier
 ) {
+    Box(modifier = modifier.fillMaxWidth(), contentAlignment = Alignment.CenterEnd) {
 
-    Row(
-        modifier = modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(
-            2.dp,
-            Alignment.End
-        ),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(
+                2.dp,
+                Alignment.End
+            ),
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .background(
+                    MaterialTheme.pompaColorPalette.textColors.onHighlight.copy(
+                        0.07f
+                    ), shape = RoundedCornerShape(8.dp)
+                )
+                .padding(horizontal = 6.dp, vertical = 6.dp)
+        ) {
 
-        Icon(
-            painter = painterResource(R.drawable.ic_calendar),
-            contentDescription = null,
-            tint = MaterialTheme.pompaColorPalette.textColors.onHighlight.copy(0.8f),
-            modifier = Modifier.size(14.dp)
-        )
+            Icon(
+                painter = painterResource(R.drawable.ic_calendar),
+                contentDescription = null,
+                tint = MaterialTheme.pompaColorPalette.textColors.onHighlight.copy(0.8f),
+                modifier = Modifier.size(14.dp)
+            )
 
-        Text(
-            date,
-            style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.SemiBold),
-            color = MaterialTheme.pompaColorPalette.textColors.onHighlight.copy(0.8f),
-        )
-
-
+            Text(
+                date,
+                style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.SemiBold),
+                color = MaterialTheme.pompaColorPalette.textColors.onHighlight.copy(0.8f),
+            )
+        }
     }
-
 }
 
 @Preview(showBackground = true)

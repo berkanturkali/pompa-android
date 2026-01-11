@@ -64,6 +64,11 @@ class PompaFilterPrefs @Inject constructor(@ApplicationContext context: Context)
         return prefs[SORT_DIRECTION] ?: SortDirection.ASCENDING.value
     }
 
+    suspend fun getSelectedFuelType(): Int {
+        val prefs = dataStore.data.first()
+        return prefs[FUEL_TYPE] ?: FuelType.ALL.value
+    }
+
     private object FilterPreferencesKeys {
         val SORT_DIRECTION = intPreferencesKey(SELECTED_DIRECTION)
         val FUEL_TYPE = intPreferencesKey(SELECTED_FUEL_TYPE)

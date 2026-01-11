@@ -80,7 +80,8 @@ fun DistrictFuelPriceDetailsScreenContent(
             districtName = districtName,
             fuelPrices = fuelPrices,
             showDistrict = false,
-            actualFuelPriceListCount = 0
+            actualFuelPriceListCount = 0,
+            clickable = false
         )
 
     }

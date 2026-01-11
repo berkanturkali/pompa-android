@@ -16,7 +16,7 @@ object FuelFilterDataSource {
             FuelFilterItem(
                 value = label,
                 icon = icons.getResourceId(index, 0),
-                selected = index == 0,
+                selected = false,
                 type = FuelType.entries[index]
             )
         }

@@ -52,7 +52,7 @@ fun FuelFilterChip(
     val borderColor = if (selected) {
         MaterialTheme.pompaColorPalette.chipColors.selectedBorderColor
     } else {
-        MaterialTheme.pompaColorPalette.chipColors.unselectedBorderColor
+        MaterialTheme.pompaColorPalette.chipColors.unselectedBorderColor.copy(0.5f)
     }
 
     val animatedBackground by animateColorAsState(

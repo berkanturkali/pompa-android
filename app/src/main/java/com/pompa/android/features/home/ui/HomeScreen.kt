@@ -32,7 +32,7 @@ import com.pompa.android.features.home.components.PriceDateView
 import com.pompa.android.features.home.components.ProviderEmptyView
 import com.pompa.android.features.home.components.ProviderErrorView
 import com.pompa.android.features.home.viewmodel.HomeScreenViewModel
-import com.pompa.android.model.FuelType
+import com.pompa.android.model.FuelFilterItem
 import com.pompa.android.model.fuel.FuelPriceProvider
 import com.pompa.android.model.fuel.FuelPriceRecord
 import com.pompa.android.ui.components.FuelItem
@@ -66,9 +66,11 @@ fun HomeScreen(
             },
             onReselectionConsumed = onReselectionConsumed,
             tabReselected = tabReselected,
-            onFuelTypeSelected = { type ->
-                viewModel.setSelectedFuelType(type.value)
-            }
+            onFuelTypeSelected = { fuelFilterItem ->
+                viewModel.setSelectedFuelType(fuelFilterItem.type.value)
+            },
+            selectedFuelFilter = viewModel.selectedFuelFilter,
+            fuelFilterList = viewModel.fuelFilters
         )
 
         if (viewModel.isLoading.value) {
@@ -88,6 +90,8 @@ fun HomeScreen(
 @Composable
 fun HomeScreenContent(
     isLoading: Boolean,
+    fuelFilterList: List<FuelFilterItem>,
+    selectedFuelFilter: FuelFilterItem?,
     tabReselected: Boolean,
     selectedProvider: String,
     providers: List<FuelPriceProvider>,
@@ -95,7 +99,7 @@ fun HomeScreenContent(
     onRefresh: () -> Unit,
     onReselectionConsumed: () -> Unit,
     onSortButtonClick: () -> Unit,
-    onFuelTypeSelected: (FuelType) -> Unit,
+    onFuelTypeSelected: (FuelFilterItem) -> Unit,
     onFuelItemClick: (FuelPriceProvider, FuelPriceRecord, Boolean) -> Unit,
 ) {
 
@@ -151,9 +155,11 @@ fun HomeScreenContent(
             }
 
             FuelFilters(
+                selectedFilter = selectedFuelFilter,
+                filterList = fuelFilterList,
                 modifier = Modifier.padding(horizontal = containerPadding, vertical = 2.dp),
-            ) { fuelType ->
-                onFuelTypeSelected(fuelType)
+            ) { fuelFilterItem ->
+                onFuelTypeSelected(fuelFilterItem)
             }
 
             HorizontalDivider(
@@ -164,11 +170,6 @@ fun HomeScreenContent(
             PriceDateView(
                 "21/12/2025",
                 modifier = Modifier.padding(end = containerPadding, top = containerPadding)
-            )
-
-            HorizontalDivider(
-                thickness = 0.5.dp,
-                color = MaterialTheme.pompaColorPalette.borderColor
             )
 
             PullToRefreshBox(
@@ -223,10 +224,12 @@ fun HomeScreenContent(
                                 }
                             } else {
                                 items(provider.data.filterNotNull()) { record ->
+                                    val actualFuelPriceListCount = record.prices?.notNullCount()
+                                        ?: 0
                                     FuelItem(
+                                        clickable = actualFuelPriceListCount > 3,
                                         districtName = record.districtName ?: "",
-                                        actualFuelPriceListCount = record.prices?.notNullCount()
-                                            ?: 0,
+                                        actualFuelPriceListCount = actualFuelPriceListCount,
                                         fuelPrices = record.prices?.mapToUiItems(
                                             unit = record.unit ?: "",
                                             weightUnit = record.weightUnit ?: ""
