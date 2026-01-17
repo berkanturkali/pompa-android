@@ -5,6 +5,8 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.clickable
@@ -16,6 +18,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -24,6 +27,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -37,12 +41,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import com.pompa.android.R
 import com.pompa.android.features.provinces.viewmodel.ProvincesScreenViewModel
 import com.pompa.android.model.provinces.Province
 import com.pompa.android.ui.components.PompaAppDialog
@@ -58,6 +65,7 @@ fun ProvincesScreen(
     navigateUp: () -> Unit,
     navigateToFuelBrandsScreen: () -> Unit,
     modifier: Modifier = Modifier,
+    selectedProvinceCode: String? = null,
     viewModel: ProvincesScreenViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
@@ -69,7 +77,7 @@ fun ProvincesScreen(
             viewModel.saveSelectedProvince(
                 province = province
             )
-            if(navigatedFromDestination) {
+            if (navigatedFromDestination) {
                 navigateUp()
             } else {
                 navigateToFuelBrandsScreen()
@@ -78,6 +86,7 @@ fun ProvincesScreen(
         onErrorDialogDismiss = {
             viewModel.errorMessage = null
         },
+        selectedProvinceCode = selectedProvinceCode,
         showLoading = viewModel.showLoading.value
     )
 
@@ -89,6 +98,7 @@ fun ProvincesScreenContent(
     provinces: List<Province>,
     modifier: Modifier = Modifier,
     errorMessage: String? = null,
+    selectedProvinceCode: String? = null,
     onErrorDialogDismiss: () -> Unit = {},
     onProvinceSelected: (Province) -> Unit
 ) {
@@ -137,7 +147,8 @@ fun ProvincesScreenContent(
                 ProvinceItem(
                     scrollingDown = isScrollingDown.value,
                     modifier = animationModifier,
-                    province = province
+                    province = province,
+                    showSelectedCheckMark = province.code == selectedProvinceCode
                 ) {
                     onProvinceSelected(province)
                 }
@@ -170,12 +181,15 @@ fun ProvincesScreenContent(
         }
     }
 }
+
 private const val TAG = "ProvincesScreen"
+
 @Composable
 fun ProvinceItem(
     scrollingDown: Boolean,
     province: Province,
     modifier: Modifier = Modifier,
+    showSelectedCheckMark: Boolean = false,
     onItemClick: () -> Unit,
 ) {
     Log.i(TAG, "ProvinceItem: code: ${province.code}")
@@ -205,36 +219,57 @@ fun ProvinceItem(
             containerColor = MaterialTheme.pompaColorPalette.cardColors.primaryBackground.copy(0.95f)
         )
     ) {
+
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 12.dp, vertical = 8.dp),
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Card(
-                shape = CircleShape,
-                colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.pompaColorPalette.buttonColors.filledPrimaryBackground,
-                    contentColor = MaterialTheme.pompaColorPalette.buttonColors.filledPrimaryContent
-                ),
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Box(
-                    contentAlignment = Alignment.Center,
-                    modifier = Modifier.padding(16.dp)
+                Card(
+                    shape = CircleShape,
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.pompaColorPalette.buttonColors.filledPrimaryBackground,
+                        contentColor = MaterialTheme.pompaColorPalette.buttonColors.filledPrimaryContent
+                    ),
                 ) {
-                    Text(
-                        text = province.code.toString(),
-                        style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Bold)
-                    )
+                    Box(
+                        contentAlignment = Alignment.Center,
+                        modifier = Modifier.padding(16.dp)
+                    ) {
+                        Text(
+                            text = province.code.toString(),
+                            style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Bold)
+                        )
+                    }
                 }
+
+                Text(
+                    text = province.name,
+                    style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.SemiBold),
+                    color = MaterialTheme.pompaColorPalette.textColors.primary
+                )
             }
 
-            Text(
-                text = province.name,
-                style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.SemiBold),
-                color = MaterialTheme.pompaColorPalette.textColors.primary
-            )
+            AnimatedVisibility(
+                visible = showSelectedCheckMark,
+                enter = scaleIn() + fadeIn(),
+                exit = scaleOut() + fadeOut()
+            ) {
+                Icon(
+                    modifier = Modifier.size(32.dp),
+                    painter = painterResource(
+                        R.drawable.ic_check
+                    ),
+                    contentDescription = null,
+                    tint = Color(0xff4CAF50)
+                )
+            }
         }
     }
 }

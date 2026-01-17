@@ -66,8 +66,7 @@ fun PompaApp(
         PompaRoutes.BottomNavRoutes.Settings.toString()
     )
 
-    viewModel.setIsTopBarVisible(navBackStackEntry?.destination)
-    viewModel.setShowBottomBar(navBackStackEntry?.destination)
+
 
     LaunchedEffect(navBackStackEntry?.destination) {
         val dest = navBackStackEntry?.destination
@@ -80,6 +79,10 @@ fun PompaApp(
             navigator == BOTTOM_SHEET_NAVIGATOR_NAME || navigator == DIALOG_NAVIGATOR_NAME
 
         viewModel.showBackButton = hasBackStack && !isBottomNavRoute && !isOverlay
+
+        viewModel.setIsTopBarVisible(dest)
+        viewModel.setShowBottomBar(dest)
+        viewModel.setShowSelectedProvinceView(dest)
     }
 
     val bottomBarHeight = 50.dp
@@ -168,7 +171,8 @@ fun PompaApp(
                             },
                             navigateToFuelBrandsScreen = {
                                 navController.navigate(PompaRoutes.ProvidersScreen)
-                            }
+                            },
+                            selectedProvinceCode = viewModel.getSelectedProvince().first
                         )
                     }
 
@@ -194,7 +198,6 @@ fun PompaApp(
                             )
                         }
                     ) {
-                        viewModel.showSelectedProvince = true
                         viewModel.setAppTopBarTitle(stringResource(R.string.select_fuel_provider))
                         ProvidersScreen {
                             navController.navigate(PompaRoutes.BottomNavRoutes.Home) {

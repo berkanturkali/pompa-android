@@ -12,10 +12,12 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
+private const val TAG = "MainActivityViewModel"
+
 @HiltViewModel
 class MainActivityViewModel @Inject constructor(
     private val userPreferences: UserPreferences,
-    @ApplicationContext private val context: Context
+    @param:ApplicationContext private val context: Context
 ) : ViewModel() {
 
     var isTopBarVisible by mutableStateOf(false)
@@ -26,8 +28,9 @@ class MainActivityViewModel @Inject constructor(
     var showBackButton by mutableStateOf(false)
 
     var showSelectedProvince by mutableStateOf(
-        !userPreferences.getSelectedProvinceCode().isNullOrBlank()
+        false
     )
+        private set
 
     var showBottomBar by mutableStateOf(false)
 
@@ -68,5 +71,12 @@ class MainActivityViewModel @Inject constructor(
         topBarTitle = title
             ?.takeIf { it.isNotBlank() }
             ?: context.getString(R.string.app_name)
+    }
+
+    fun setShowSelectedProvinceView(currentDestination: NavDestination?) {
+        val currentRouteString = currentDestination?.route
+        showSelectedProvince =
+            !getSelectedProvince().first.isNullOrBlank() && currentRouteString == topLevelDestinationsAsRoutes.first()
+
     }
 }
