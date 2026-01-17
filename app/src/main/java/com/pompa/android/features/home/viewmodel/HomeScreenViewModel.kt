@@ -7,6 +7,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.pompa.android.data.datastore.PompaFilterPrefs
+import com.pompa.android.data.datastore.PompaUserPrefs
 import com.pompa.android.data.repo.fuel.FuelRepository
 import com.pompa.android.data.util.collectResource
 import com.pompa.android.model.FuelFilterDataSource
@@ -16,6 +17,8 @@ import com.pompa.android.model.util.UIText
 import com.pompa.android.util.UserPreferences
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -26,6 +29,7 @@ class HomeScreenViewModel @Inject constructor(
     private val fuelRepo: FuelRepository,
     private val userPreferences: UserPreferences,
     val pompaFilterPrefs: PompaFilterPrefs,
+    private val pompaUserPrefs: PompaUserPrefs,
     @ApplicationContext context: Context,
 ) : ViewModel() {
 
@@ -39,6 +43,12 @@ class HomeScreenViewModel @Inject constructor(
 
     var fuelType: Int = 0
 
+    var cityCode: String? = null
+
+    var cityName: String? = null
+
+    var favProviderName: String? = null
+
     var fuelFilters = FuelFilterDataSource.getFilters(context)
     var selectedFuelFilter by mutableStateOf<FuelFilterItem?>(
         null
@@ -46,25 +56,50 @@ class HomeScreenViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            pompaFilterPrefs.filterPreferences.collect { filterPreferences ->
-                sortDirection = filterPreferences.sortDirection
-                fuelType = filterPreferences.fuelType
+            combine(
+                pompaFilterPrefs.filterPreferences,
+                pompaUserPrefs.userPreferences
+            ) { filterPrefs, userPrefs ->
+                filterPrefs to userPrefs
+            }.collectLatest { (filterPrefs, userPrefs) ->
+                sortDirection = filterPrefs.sortDirection
+                fuelType = filterPrefs.fuelType
                 selectedFuelFilter = fuelFilters.first {
                     it.type.value == fuelType
                 }
-                fetchPrices()
+                val (cityCode, cityName) = userPrefs.selectedCity
+                val (favoriteLogo, favoriteName) = userPrefs.favoriteProvider
+
+                this@HomeScreenViewModel.apply {
+                    this.cityName = cityName
+                    this.cityCode = cityCode
+                    this.favProviderName = favoriteName
+                }
+                fetchPrices(
+                    cityCode = cityCode,
+                    cityName = cityName,
+                    provider = favoriteName,
+                    sortDirection = sortDirection,
+                    fuelType = fuelType
+                )
             }
         }
     }
 
-    fun fetchPrices() {
+    fun fetchPrices(
+        cityCode: String?,
+        cityName: String?,
+        provider: String?,
+        sortDirection: Int,
+        fuelType: Int
+    ) {
         isLoading.value = true
         providers = emptyList()
         viewModelScope.launch {
             fuelRepo.fetchAllFuelPricesByCity(
-                cityCode = userPreferences.getSelectedProvinceCode()!!,
-                cityName = userPreferences.getSelectedProvinceName()!!,
-                provider = userPreferences.getFavoriteProviderName()!!,
+                cityCode = cityCode,
+                cityName = cityName,
+                provider = provider,
                 sortDirection = sortDirection,
                 fuelType = fuelType
 

@@ -62,7 +62,13 @@ fun HomeScreen(
             onSortButtonClick = onSortButtonClick,
             isLoading = viewModel.isLoading.value,
             onRefresh = {
-                viewModel.fetchPrices()
+                viewModel.fetchPrices(
+                    cityCode = viewModel.cityCode,
+                    cityName = viewModel.cityName,
+                    provider = viewModel.favProviderName,
+                    sortDirection = viewModel.sortDirection,
+                    fuelType = viewModel.fuelType
+                )
             },
             onReselectionConsumed = onReselectionConsumed,
             tabReselected = tabReselected,
@@ -81,7 +87,6 @@ fun HomeScreen(
             message = viewModel.errorMessage?.asString(context),
             onOkayButtonClick = {
                 viewModel.errorMessage = null
-                viewModel.fetchPrices()
             }
         )
     }

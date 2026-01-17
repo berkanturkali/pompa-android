@@ -68,7 +68,7 @@ import com.pompa.android.util.DeviceManager
 fun ProvidersScreen(
     modifier: Modifier = Modifier,
     viewModel: ProvidersScreenViewModel = hiltViewModel(),
-    navigateToHomeScreen: () -> Unit,
+    navigateUpOrToHomeScreen: () -> Unit,
 ) {
 
     ProvidersScreenContent(
@@ -91,7 +91,7 @@ fun ProvidersScreen(
         confirmButtonEnabled = viewModel.confirmButtonEnabled,
         onConfirmButtonClick = {
             viewModel.saveSelectedProvider()
-            navigateToHomeScreen()
+            navigateUpOrToHomeScreen()
         },
         onErrorDialogDismiss = {
             viewModel.errorMessage = null

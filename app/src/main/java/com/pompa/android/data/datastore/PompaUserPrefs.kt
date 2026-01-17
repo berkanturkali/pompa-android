@@ -11,6 +11,7 @@ import com.pompa.android.data.datastore.PompaUserPrefs.UserPrefsKeys.FUEL_PROVID
 import com.pompa.android.data.datastore.PompaUserPrefs.UserPrefsKeys.FUEL_PROVIDER_NAME
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -63,6 +64,16 @@ class PompaUserPrefs @Inject constructor(@ApplicationContext context: Context) {
             preferences[FUEL_PROVIDER_NAME] = providerName
             preferences[FUEL_PROVIDER_LOGO] = providerLogo
         }
+    }
+
+    suspend fun getSelectedCity(): Pair<String?, String?> {
+        val prefs = dataStore.data.first()
+        return Pair(prefs[CITY_CODE], prefs[CITY_NAME])
+    }
+
+    suspend fun getSelectedProvider(): Pair<String?, String?> {
+        val prefs = dataStore.data.first()
+        return Pair(prefs[FUEL_PROVIDER_LOGO], prefs[FUEL_PROVIDER_NAME])
     }
 
 

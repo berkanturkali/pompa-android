@@ -45,8 +45,6 @@ import com.pompa.android.ui.components.PompaAppTopBar
 
 private const val TAG = "PompaApp"
 
-private const val REFRESH_LIST_KEY = "refresh_list"
-
 private const val BOTTOM_SHEET_NAVIGATOR_NAME = "bottomSheet"
 private const val DIALOG_NAVIGATOR_NAME = "dialog"
 
@@ -62,8 +60,7 @@ fun PompaApp(
     var reselectedTab by remember { mutableStateOf<PompaRoutes.BottomNavRoutes?>(null) }
 
     val bottomNavRoutes = listOf(
-        PompaRoutes.BottomNavRoutes.Home.toString(),
-        PompaRoutes.BottomNavRoutes.Settings.toString()
+        PompaRoutes.BottomNavRoutes.Home.toString(), PompaRoutes.BottomNavRoutes.Settings.toString()
     )
 
 
@@ -93,13 +90,9 @@ fun PompaApp(
             .systemBarsPadding(), topBar = {
             val (code, name) = viewModel.getSelectedProvince()
             AnimatedVisibility(
-                visible = viewModel.isTopBarVisible,
-                enter = slideInVertically(
-                    initialOffsetY = { -it }
-                ) + fadeIn(),
-                exit = slideOutVertically(
-                    targetOffsetY = { -it }
-                ) + fadeOut()
+                visible = viewModel.isTopBarVisible, enter = slideInVertically(
+                    initialOffsetY = { -it }) + fadeIn(), exit = slideOutVertically(
+                    targetOffsetY = { -it }) + fadeOut()
             ) {
                 PompaAppTopBar(
                     showBackButton = viewModel.showBackButton,
@@ -112,11 +105,9 @@ fun PompaApp(
                     },
                     onSelectedProvinceClick = {
                         navController.navigate(PompaRoutes.ProvincesScreen)
-                    }
-                )
+                    })
             }
-        }
-    ) {
+        }) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -126,10 +117,8 @@ fun PompaApp(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(
-                        bottom = if (viewModel.showBottomBar)
-                            bottomBarHeight
-                        else
-                            0.dp
+                        bottom = if (viewModel.showBottomBar) bottomBarHeight
+                        else 0.dp
                     )
             ) {
 
@@ -137,36 +126,27 @@ fun PompaApp(
                     navController = navController,
                     startDestination = if (viewModel.checkProvinceAndFavoriteProviderAlreadySelected()) PompaRoutes.BottomNavRoutes.Home else PompaRoutes.ProvincesScreen
                 ) {
-                    composable<PompaRoutes.ProvincesScreen>(
-                        enterTransition = {
-                            slideInHorizontally(
-                                initialOffsetX = { fullWidth -> fullWidth },
-                            )
-                        },
-                        exitTransition = {
-                            slideOutHorizontally(
-                                targetOffsetX = { fullWidth -> -fullWidth },
-                            )
-                        },
-                        popEnterTransition = {
-                            slideInHorizontally(
-                                initialOffsetX = { fullWidth -> -fullWidth },
-                            )
-                        },
-                        popExitTransition = {
-                            slideOutHorizontally(
-                                targetOffsetX = { fullWidth -> fullWidth },
-                            )
-                        }
-                    ) {
+                    composable<PompaRoutes.ProvincesScreen>(enterTransition = {
+                        slideInHorizontally(
+                            initialOffsetX = { fullWidth -> fullWidth },
+                        )
+                    }, exitTransition = {
+                        slideOutHorizontally(
+                            targetOffsetX = { fullWidth -> -fullWidth },
+                        )
+                    }, popEnterTransition = {
+                        slideInHorizontally(
+                            initialOffsetX = { fullWidth -> -fullWidth },
+                        )
+                    }, popExitTransition = {
+                        slideOutHorizontally(
+                            targetOffsetX = { fullWidth -> fullWidth },
+                        )
+                    }) {
                         viewModel.setAppTopBarTitle(stringResource(R.string.select_province))
                         ProvincesScreen(
                             navigatedFromDestination = navController.previousBackStackEntry != null,
                             navigateUp = {
-                                navController.previousBackStackEntry?.savedStateHandle?.set(
-                                    REFRESH_LIST_KEY,
-                                    true
-                                )
                                 navController.navigateUp()
                             },
                             navigateToFuelBrandsScreen = {
@@ -176,63 +156,51 @@ fun PompaApp(
                         )
                     }
 
-                    composable<PompaRoutes.ProvidersScreen>(
-                        enterTransition = {
-                            slideInHorizontally(
-                                initialOffsetX = { fullWidth -> -fullWidth },
-                            )
-                        },
-                        exitTransition = {
-                            slideOutHorizontally(
-                                targetOffsetX = { fullWidth -> -fullWidth },
-                            )
-                        },
-                        popEnterTransition = {
-                            slideInHorizontally(
-                                initialOffsetX = { fullWidth -> -fullWidth },
-                            )
-                        },
-                        popExitTransition = {
-                            slideOutHorizontally(
-                                targetOffsetX = { fullWidth -> fullWidth },
-                            )
-                        }
-                    ) {
+                    composable<PompaRoutes.ProvidersScreen>(enterTransition = {
+                        slideInHorizontally(
+                            initialOffsetX = { fullWidth -> -fullWidth },
+                        )
+                    }, exitTransition = {
+                        slideOutHorizontally(
+                            targetOffsetX = { fullWidth -> -fullWidth },
+                        )
+                    }, popEnterTransition = {
+                        slideInHorizontally(
+                            initialOffsetX = { fullWidth -> -fullWidth },
+                        )
+                    }, popExitTransition = {
+                        slideOutHorizontally(
+                            targetOffsetX = { fullWidth -> fullWidth },
+                        )
+                    }) {
                         viewModel.setAppTopBarTitle(stringResource(R.string.select_fuel_provider))
                         ProvidersScreen {
-                            navController.navigate(PompaRoutes.BottomNavRoutes.Home) {
-                                popUpTo(PompaRoutes.ProvidersScreen) {
-                                    inclusive = true
+                            if (navController.previousBackStackEntry != null) {
+                                navController.navigateUp()
+                            } else {
+                                navController.navigate(PompaRoutes.BottomNavRoutes.Home) {
+                                    popUpTo(PompaRoutes.ProvidersScreen) {
+                                        inclusive = true
+                                    }
                                 }
                             }
                         }
                     }
 
-                    composable<PompaRoutes.BottomNavRoutes.Home>(
-                        enterTransition = {
-                            slideInHorizontally(
-                                initialOffsetX = { fullWidth -> fullWidth },
-                            )
-                        },
-                        exitTransition = {
-                            slideOutHorizontally(
-                                targetOffsetX = { fullWidth -> -fullWidth },
-                            )
-                        }
-                    ) {
+                    composable<PompaRoutes.BottomNavRoutes.Home>(enterTransition = {
+                        slideInHorizontally(
+                            initialOffsetX = { fullWidth -> fullWidth },
+                        )
+                    }, exitTransition = {
+                        slideOutHorizontally(
+                            targetOffsetX = { fullWidth -> -fullWidth },
+                        )
+                    }) {
                         viewModel.setAppTopBarTitle("")
 
                         val homeScreenViewModel: HomeScreenViewModel = hiltViewModel()
 
                         val tabReselected = reselectedTab == PompaRoutes.BottomNavRoutes.Home
-
-                        LaunchedEffect(navBackStackEntry) {
-                            navBackStackEntry?.savedStateHandle?.get<Boolean>(REFRESH_LIST_KEY)
-                                ?.let {
-                                    homeScreenViewModel.fetchPrices()
-                                    navBackStackEntry?.savedStateHandle[REFRESH_LIST_KEY] = null
-                                }
-                        }
 
                         HomeScreen(
                             viewModel = homeScreenViewModel,
@@ -243,8 +211,7 @@ fun PompaApp(
                                         providerName = provider.provider,
                                         providerLogo = provider.providerLogo,
                                         fuelPrices = record.prices?.mapToUiItems(
-                                            record.unit ?: "",
-                                            record.weightUnit ?: ""
+                                            record.unit ?: "", record.weightUnit ?: ""
                                         ) ?: emptyList(),
                                         districtName = record.districtName ?: ""
                                     )
@@ -287,18 +254,15 @@ fun PompaApp(
                             navController.navigateUp()
                         }
                     }
-                    composable<PompaRoutes.BottomNavRoutes.Settings>(
-                        popEnterTransition = {
-                            slideInHorizontally(
-                                initialOffsetX = { fullWidth -> -fullWidth },
-                            )
-                        },
-                        popExitTransition = {
-                            slideOutHorizontally(
-                                targetOffsetX = { fullWidth -> -fullWidth },
-                            )
-                        }
-                    ) {
+                    composable<PompaRoutes.BottomNavRoutes.Settings>(popEnterTransition = {
+                        slideInHorizontally(
+                            initialOffsetX = { fullWidth -> -fullWidth },
+                        )
+                    }, popExitTransition = {
+                        slideOutHorizontally(
+                            targetOffsetX = { fullWidth -> -fullWidth },
+                        )
+                    }) {
                         viewModel.setAppTopBarTitle("")
                         SettingsScreen { route ->
                             navController.navigate(route)
@@ -313,19 +277,16 @@ fun PompaApp(
                     .navigationBarsPadding(),
                 visible = viewModel.showBottomBar,
                 enter = slideInVertically(
-                    initialOffsetY = { it }
-                ) + fadeIn(),
+                    initialOffsetY = { it }) + fadeIn(),
                 exit = slideOutVertically(
-                    targetOffsetY = { it }
-                ) + fadeOut()
+                    targetOffsetY = { it }) + fadeOut()
             ) {
                 PompaAppBottomBar(
                     navController = navController,
                     destinations = viewModel.topLevelDestinations,
                     onTabReselected = { destination ->
                         reselectedTab = destination
-                    }
-                )
+                    })
             }
         }
     }

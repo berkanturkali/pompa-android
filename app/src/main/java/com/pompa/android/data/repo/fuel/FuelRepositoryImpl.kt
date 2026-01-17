@@ -13,9 +13,9 @@ class FuelRepositoryImpl @Inject constructor(
     private val service: FuelService
 ) : FuelRepository {
     override fun fetchAllFuelPricesByCity(
-        cityName: String,
-        cityCode: String,
-        provider: String,
+        cityName: String?,
+        cityCode: String?,
+        provider: String?,
         sortDirection: Int,
         fuelType: Int,
     ): Flow<Resource<List<FuelPriceProvider?>>> {

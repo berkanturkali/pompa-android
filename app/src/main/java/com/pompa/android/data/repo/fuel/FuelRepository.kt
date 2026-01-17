@@ -7,9 +7,9 @@ import kotlinx.coroutines.flow.Flow
 interface FuelRepository {
 
     fun fetchAllFuelPricesByCity(
-        cityName: String,
-        cityCode: String,
-        provider: String,
+        cityName: String?,
+        cityCode: String?,
+        provider: String?,
         sortDirection: Int,
         fuelType: Int
     ): Flow<Resource<List<FuelPriceProvider?>>>
