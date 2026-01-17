@@ -4,7 +4,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
-import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.scaleOut
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -16,9 +16,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -53,11 +53,10 @@ fun PompaAppTopBar(
         Surface(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(56.dp)
-                .padding(vertical = 8.dp, horizontal = 6.dp),
+                .height(48.dp),
             color = MaterialTheme.pompaColorPalette.topBarColors.background,
             contentColor = MaterialTheme.pompaColorPalette.topBarColors.content,
-            shape = CircleShape
+            shape = RoundedCornerShape(bottomEnd = 28.dp, bottomStart = 28.dp)
         ) {
             Box(
                 modifier = Modifier
@@ -94,7 +93,8 @@ fun PompaAppTopBar(
 
                 AnimatedVisibility(
                     showSelectedProvince,
-                    enter = slideInHorizontally { it },
+                    enter = scaleIn(),
+                    exit = scaleOut(),
                     modifier = Modifier
                         .align(Alignment.CenterEnd),
                 ) {
@@ -141,12 +141,6 @@ fun PompaAppTopBar(
                 }
             }
         }
-
-        HorizontalDivider(
-            thickness = 1.dp,
-            color = MaterialTheme.pompaColorPalette.borderColor,
-            modifier = Modifier.align(Alignment.BottomCenter)
-        )
     }
 }
 
