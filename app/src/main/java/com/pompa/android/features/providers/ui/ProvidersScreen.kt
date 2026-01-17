@@ -86,7 +86,7 @@ fun ProvidersScreen(
         },
         confirmButtonEnabled = viewModel.confirmButtonEnabled,
         onConfirmButtonClick = {
-            viewModel.saveSelectedBrand()
+            viewModel.saveSelectedProvider()
             navigateToHomeScreen()
         },
         onErrorDialogDismiss = {

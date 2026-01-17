@@ -21,6 +21,7 @@ class MainActivityViewModel @Inject constructor(
     var isTopBarVisible by mutableStateOf(false)
 
     var topBarTitle by mutableStateOf("")
+        private set
 
     var showBackButton by mutableStateOf(false)
 

@@ -34,6 +34,7 @@ import com.pompa.android.features.home.ui.HomeScreen
 import com.pompa.android.features.home.viewmodel.HomeScreenViewModel
 import com.pompa.android.features.providers.ui.ProvidersScreen
 import com.pompa.android.features.provinces.ui.ProvincesScreen
+import com.pompa.android.features.settings.ui.SettingsScreen
 import com.pompa.android.features.sort.ui.SortScreen
 import com.pompa.android.navigation.PompaRoutes
 import com.pompa.android.navigation.args.DistrictFuelDetailsArgs
@@ -46,6 +47,9 @@ private const val TAG = "PompaApp"
 
 private const val REFRESH_LIST_KEY = "refresh_list"
 
+private const val BOTTOM_SHEET_NAVIGATOR_NAME = "bottomSheet"
+private const val DIALOG_NAVIGATOR_NAME = "dialog"
+
 @Composable
 fun PompaApp(
     viewModel: MainActivityViewModel,
@@ -57,8 +61,26 @@ fun PompaApp(
 
     var reselectedTab by remember { mutableStateOf<PompaRoutes.BottomNavRoutes?>(null) }
 
+    val bottomNavRoutes = listOf(
+        PompaRoutes.BottomNavRoutes.Home.toString(),
+        PompaRoutes.BottomNavRoutes.Settings.toString()
+    )
+
     viewModel.setIsTopBarVisible(navBackStackEntry?.destination)
     viewModel.setShowBottomBar(navBackStackEntry?.destination)
+
+    LaunchedEffect(navBackStackEntry?.destination) {
+        val dest = navBackStackEntry?.destination
+        val navigator = dest?.navigatorName
+        val route = dest?.route?.substringAfterLast(".")
+
+        val hasBackStack = navController.previousBackStackEntry != null
+        val isBottomNavRoute = route in bottomNavRoutes
+        val isOverlay =
+            navigator == BOTTOM_SHEET_NAVIGATOR_NAME || navigator == DIALOG_NAVIGATOR_NAME
+
+        viewModel.showBackButton = hasBackStack && !isBottomNavRoute && !isOverlay
+    }
 
     val bottomBarHeight = 50.dp
 
@@ -112,9 +134,29 @@ fun PompaApp(
                     navController = navController,
                     startDestination = if (viewModel.checkProvinceAndFavoriteProviderAlreadySelected()) PompaRoutes.BottomNavRoutes.Home else PompaRoutes.ProvincesScreen
                 ) {
-                    composable<PompaRoutes.ProvincesScreen> {
+                    composable<PompaRoutes.ProvincesScreen>(
+                        enterTransition = {
+                            slideInHorizontally(
+                                initialOffsetX = { fullWidth -> fullWidth },
+                            )
+                        },
+                        exitTransition = {
+                            slideOutHorizontally(
+                                targetOffsetX = { fullWidth -> -fullWidth },
+                            )
+                        },
+                        popEnterTransition = {
+                            slideInHorizontally(
+                                initialOffsetX = { fullWidth -> -fullWidth },
+                            )
+                        },
+                        popExitTransition = {
+                            slideOutHorizontally(
+                                targetOffsetX = { fullWidth -> fullWidth },
+                            )
+                        }
+                    ) {
                         viewModel.setAppTopBarTitle(stringResource(R.string.select_province))
-                        viewModel.showBackButton = navController.previousBackStackEntry != null
                         ProvincesScreen(
                             navigatedFromDestination = navController.previousBackStackEntry != null,
                             navigateUp = {
@@ -143,16 +185,15 @@ fun PompaApp(
                         },
                         popEnterTransition = {
                             slideInHorizontally(
-                                initialOffsetX = { fullWidth -> fullWidth },
+                                initialOffsetX = { fullWidth -> -fullWidth },
                             )
                         },
                         popExitTransition = {
                             slideOutHorizontally(
-                                targetOffsetX = { fullWidth -> -fullWidth },
+                                targetOffsetX = { fullWidth -> fullWidth },
                             )
                         }
                     ) {
-                        viewModel.showBackButton = true
                         viewModel.showSelectedProvince = true
                         viewModel.setAppTopBarTitle(stringResource(R.string.select_fuel_provider))
                         ProvidersScreen {
@@ -177,7 +218,6 @@ fun PompaApp(
                         }
                     ) {
                         viewModel.setAppTopBarTitle("")
-                        viewModel.showBackButton = false
 
                         val homeScreenViewModel: HomeScreenViewModel = hiltViewModel()
 
@@ -230,7 +270,6 @@ fun PompaApp(
                         val argumentsAsString = entry.arguments?.getString("args")!!
                         val args: DistrictFuelDetailsArgs = decodeNavArg(argumentsAsString)
                         viewModel.setAppTopBarTitle("")
-                        viewModel.showBackButton = false
 
                         DistrictFuelPriceDetailsScreen(
                             args = args
@@ -243,6 +282,23 @@ fun PompaApp(
                     ) {
                         SortScreen {
                             navController.navigateUp()
+                        }
+                    }
+                    composable<PompaRoutes.BottomNavRoutes.Settings>(
+                        popEnterTransition = {
+                            slideInHorizontally(
+                                initialOffsetX = { fullWidth -> -fullWidth },
+                            )
+                        },
+                        popExitTransition = {
+                            slideOutHorizontally(
+                                targetOffsetX = { fullWidth -> -fullWidth },
+                            )
+                        }
+                    ) {
+                        viewModel.setAppTopBarTitle("")
+                        SettingsScreen { route ->
+                            navController.navigate(route)
                         }
                     }
                 }

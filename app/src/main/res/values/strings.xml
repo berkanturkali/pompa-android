@@ -39,4 +39,7 @@
     <string name="connection_exception_error_message">%1$s adresine bağlanılamadı. Lütfen daha sonra tekrar deneyin.</string>
     <string name="something_went_wrong_while_fetching_prices_for_this_provider">%1$s için fiyatlar yüklenirken bir hata oluştu.\nLütfen daha sonra tekrar deneyin.</string>
     <string name="could_not_find_any_result_for_this_provider">%1$s için sonuç bulunamadı.</string>
+    <string name="settings_city_option">Şehir</string>
+    <string name="settings_favorite_provider_option">Favori İstasyon</string>
+    <string name="preferences">Tercihler</string>
 </resources>

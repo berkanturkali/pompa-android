@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.pompa.android.data.datastore.PompaUserPrefs
 import com.pompa.android.data.repo.provider.ProviderRepository
 import com.pompa.android.data.util.collectResource
 import com.pompa.android.model.brands.Provider
@@ -18,6 +19,7 @@ import javax.inject.Inject
 class ProvidersScreenViewModel @Inject constructor(
     private val repo: ProviderRepository,
     private val userPreferences: UserPreferences,
+    private val pompaUserPrefs: PompaUserPrefs
 ) : ViewModel() {
 
     var isLoading = mutableStateOf(false)
@@ -47,10 +49,16 @@ class ProvidersScreenViewModel @Inject constructor(
         }
     }
 
-    fun saveSelectedBrand() {
+    fun saveSelectedProvider() {
         selectedProvider?.let {
             userPreferences.setFavoriteProviderId(it.id)
             userPreferences.setFavoriteProviderName(it.name)
+            viewModelScope.launch {
+                pompaUserPrefs.setSelectedProvider(
+                    providerName = it.name,
+                    providerLogo = it.logo
+                )
+            }
         }
     }
 }

@@ -38,4 +38,7 @@
     <string name="connection_exception_error_message">Could not connect to %1$s. Please try again later.</string>
     <string name="something_went_wrong_while_fetching_prices_for_this_provider">An error occurred while fetching prices for %1$s.\nPlease try again later.</string>
     <string name="could_not_find_any_result_for_this_provider">We could not found any result for %1$s.</string>
+    <string name="settings_city_option">City</string>
+    <string name="settings_favorite_provider_option">Favorite Provider</string>
+    <string name="preferences">Preferences</string>
 </resources>

@@ -56,7 +56,7 @@ val OpetColors = PompaColors(
     ),
     textColors = TextColors(
         primary = Color(0xff162133),
-        secondary = Color(0xff162133),
+        secondary = OpetBrandYellow,
         link = Color(0xFF1A73E8),
         onBrand = Color.White,
         onHighlight = OpetBrandBlue
