@@ -42,4 +42,5 @@
     <string name="settings_city_option">Şehir</string>
     <string name="settings_favorite_provider_option">Favori İstasyon</string>
     <string name="preferences">Tercihler</string>
+    <string name="pompa_version">Pompa Versiyon %1$s</string>
 </resources>

@@ -41,4 +41,5 @@
     <string name="settings_city_option">City</string>
     <string name="settings_favorite_provider_option">Favorite Provider</string>
     <string name="preferences">Preferences</string>
+    <string name="pompa_version">Pompa Version %1$s</string>
 </resources>

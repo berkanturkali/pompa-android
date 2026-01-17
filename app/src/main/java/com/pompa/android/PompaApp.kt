@@ -63,8 +63,6 @@ fun PompaApp(
         PompaRoutes.BottomNavRoutes.Home.toString(), PompaRoutes.BottomNavRoutes.Settings.toString()
     )
 
-
-
     LaunchedEffect(navBackStackEntry?.destination) {
         val dest = navBackStackEntry?.destination
         val navigator = dest?.navigatorName
