@@ -1,6 +1,7 @@
 package com.pompa.android.ui.components
 
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -34,12 +35,12 @@ fun PompaAppBottomBar(
     val currentRoute = navBackStackEntry?.destination?.route
 
     Surface(
-        modifier = modifier,
-        shape = RoundedCornerShape(topStart = 32.dp, topEnd = 32.dp),
+        modifier = modifier.padding(vertical = 8.dp, horizontal = 16.dp),
+        shape = RoundedCornerShape(24.dp),
         shadowElevation = 12.dp,
     ) {
         NavigationBar(
-            modifier = modifier.height(50.dp),
+            modifier = modifier.height(46.dp),
             containerColor = MaterialTheme.pompaColorPalette.bottomBarColors.background,
             contentColor = MaterialTheme.pompaColorPalette.bottomBarColors.content
         ) {

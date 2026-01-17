@@ -79,9 +79,9 @@ val OpetColors = PompaColors(
     bottomBarColors = BottomBarColors(
         background = OpetBrandBlue,
         content = Color.White,
-        selectedItemColor = Color.White,
+        selectedItemColor = OpetBrandYellow,
         unSelectedItemColor = Color.White.copy(alpha = 0.5f),
-        indicatorColor = OpetBrandYellow
+        indicatorColor = Color.White.copy(alpha = 0.2f)
     ),
     chipColors = ChipColors(
         unselectedBackground = Color.White.copy(0.5f),
