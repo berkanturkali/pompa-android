@@ -45,6 +45,12 @@ class ProvidersScreenViewModel @Inject constructor(
                 }
             ) {
                 providers = it ?: emptyList()
+                selectedProvider = providers.find { provider ->
+                    provider.name.equals(
+                        getFavoriteProviderName(),
+                        ignoreCase = true
+                    )
+                }
             }
         }
     }
@@ -61,4 +67,6 @@ class ProvidersScreenViewModel @Inject constructor(
             }
         }
     }
+
+    fun getFavoriteProviderName() = userPreferences.getFavoriteProviderName()
 }

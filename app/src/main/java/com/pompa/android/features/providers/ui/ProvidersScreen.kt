@@ -81,7 +81,11 @@ fun ProvidersScreen(
                 viewModel.confirmButtonEnabled = false
                 return@ProvidersScreenContent
             }
-            viewModel.confirmButtonEnabled = viewModel.selectedProvider != provider
+            viewModel.confirmButtonEnabled =
+                viewModel.selectedProvider != provider && !provider.name.equals(
+                    viewModel.getFavoriteProviderName(),
+                    ignoreCase = true
+                )
             viewModel.selectedProvider = provider
         },
         confirmButtonEnabled = viewModel.confirmButtonEnabled,
