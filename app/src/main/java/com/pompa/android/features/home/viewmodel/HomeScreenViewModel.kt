@@ -1,6 +1,8 @@
 package com.pompa.android.features.home.viewmodel
 
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -21,6 +23,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import androidx.core.net.toUri
 
 private const val TAG = "HomeScreenViewModel"
 
@@ -30,7 +33,7 @@ class HomeScreenViewModel @Inject constructor(
     private val userPreferences: UserPreferences,
     val pompaFilterPrefs: PompaFilterPrefs,
     private val pompaUserPrefs: PompaUserPrefs,
-    @ApplicationContext context: Context,
+    @param:ApplicationContext private val context: Context,
 ) : ViewModel() {
 
     var isLoading = mutableStateOf(false)
@@ -121,5 +124,35 @@ class HomeScreenViewModel @Inject constructor(
     }
 
     fun getSelectedProvider() = userPreferences.getFavoriteProviderName()
+
+    fun navigateToGoogleMapsWithLocation(
+        provider: String,
+        districtName: String,
+        cityName: String,
+        zoom: Int = 18,
+    ) {
+        val query = Uri.encode("$provider $districtName ${cityName.lowercase()}")
+
+        val geoUri = "geo:0,0".toUri().buildUpon()
+            .appendQueryParameter("q", query)
+            .appendQueryParameter("z", zoom.toString())
+            .build()
+        val mapIntent = Intent(Intent.ACTION_VIEW, geoUri).apply {
+            setPackage("com.google.android.apps.maps")
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        }
+
+
+        if (mapIntent.resolveActivity(context.packageManager) != null) {
+            context.startActivity(mapIntent)
+        } else {
+            val browserUri = ("https://www.google.com/maps/search/?" +
+                    "api=1&query=${query}&zoom=$zoom").toUri()
+            val browserIntent = Intent(Intent.ACTION_VIEW, browserUri).apply {
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            }
+            context.startActivity(browserIntent)
+        }
+    }
 
 }

@@ -76,7 +76,14 @@ fun HomeScreen(
                 viewModel.setSelectedFuelType(fuelFilterItem.type.value)
             },
             selectedFuelFilter = viewModel.selectedFuelFilter,
-            fuelFilterList = viewModel.fuelFilters
+            fuelFilterList = viewModel.fuelFilters,
+            onLocationButtonClick = { provider, record ->
+                viewModel.navigateToGoogleMapsWithLocation(
+                    provider = provider,
+                    districtName = record.districtName ?: "",
+                    cityName = viewModel.cityName ?: ""
+                )
+            }
         )
 
         if (viewModel.isLoading.value) {
@@ -104,6 +111,7 @@ fun HomeScreenContent(
     onRefresh: () -> Unit,
     onReselectionConsumed: () -> Unit,
     onSortButtonClick: () -> Unit,
+    onLocationButtonClick: (String, FuelPriceRecord) -> Unit,
     onFuelTypeSelected: (FuelFilterItem) -> Unit,
     onFuelItemClick: (FuelPriceProvider, FuelPriceRecord, Boolean) -> Unit,
 ) {
@@ -242,6 +250,9 @@ fun HomeScreenContent(
                                         modifier = Modifier.padding(containerPadding),
                                         onItemClick = {
                                             onFuelItemClick(provider, record, isFavoriteProvider)
+                                        },
+                                        onLocationButtonClick = {
+                                            onLocationButtonClick(provider.provider, record)
                                         }
                                     )
                                 }

@@ -3,11 +3,14 @@ package com.pompa.android.ui.components
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -41,6 +44,7 @@ fun FuelItem(
     fuelPrices: List<FuelPriceUiModel>,
     modifier: Modifier = Modifier,
     showDistrict: Boolean = true,
+    onLocationButtonClick: () -> Unit = {},
     onItemClick: () -> Unit = {},
 ) {
 
@@ -58,12 +62,42 @@ fun FuelItem(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(
-                    districtName,
-                    style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Black),
-                    color = MaterialTheme.pompaColorPalette.textColors.onHighlight,
-                    modifier = Modifier.padding(start = 4.dp)
-                )
+
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+
+                ) {
+                    Text(
+                        districtName,
+                        style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Black),
+                        color = MaterialTheme.pompaColorPalette.textColors.onHighlight,
+                        modifier = Modifier.padding(start = 4.dp)
+                    )
+
+                    Box(
+                        modifier = Modifier
+                            .size(20.dp)
+                            .background(
+                                MaterialTheme.pompaColorPalette.backgroundColors.primary.copy(0.1f),
+                                shape = CircleShape
+                            )
+                            .safeClickable(
+                                indication = ClickIndication.None
+                            ) {
+                                onLocationButtonClick()
+                            },
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            painter = painterResource(R.drawable.ic_near_me),
+                            contentDescription = null,
+                            modifier = Modifier
+                                .size(12.dp),
+                            tint = MaterialTheme.pompaColorPalette.textColors.onHighlight
+                        )
+                    }
+                }
 
 
                 Row(
