@@ -1,8 +1,5 @@
 package com.pompa.android.features.home.ui
 
-import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -28,7 +25,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.pompa.android.features.home.components.FuelFilters
@@ -46,6 +42,7 @@ import com.pompa.android.ui.components.PompaLoadingView
 import com.pompa.android.ui.components.PriceListBrandSection
 import com.pompa.android.ui.components.SortButton
 import com.pompa.android.ui.providers.pompaColorPalette
+import com.pompa.android.ui.utils.slideInByScrollDirection
 
 @Composable
 fun HomeScreen(
@@ -264,18 +261,6 @@ fun HomeScreenContent(
                                 }
                             } else {
                                 items(provider.data.filterNotNull()) { record ->
-
-                                    val animatedProgress =
-                                        remember { Animatable(initialValue = if (isScrollingDown.value) 300f else -300f) }
-                                    LaunchedEffect(Unit) {
-                                        animatedProgress.animateTo(
-                                            targetValue = 0f,
-                                            animationSpec = tween(300, easing = LinearEasing)
-                                        )
-                                    }
-                                    val animatedModifier = modifier
-                                        .fillMaxWidth()
-                                        .graphicsLayer(translationY = animatedProgress.value)
                                     val actualFuelPriceListCount = record.prices?.notNullCount()
                                         ?: 0
                                     FuelItem(
@@ -286,7 +271,9 @@ fun HomeScreenContent(
                                             unit = record.unit ?: "",
                                             weightUnit = record.weightUnit ?: ""
                                         )?.take(3) ?: emptyList(),
-                                        modifier = animatedModifier.padding(containerPadding),
+                                        modifier = Modifier
+                                            .slideInByScrollDirection(isScrollingDown.value)
+                                            .padding(containerPadding),
                                         onItemClick = {
                                             onFuelItemClick(provider, record, isFavoriteProvider)
                                         },

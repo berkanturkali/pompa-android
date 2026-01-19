@@ -1,6 +1,5 @@
 package com.pompa.android.features.provinces.ui
 
-import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.LinearEasing
@@ -58,6 +57,7 @@ import com.pompa.android.ui.providers.LocalPompaColors
 import com.pompa.android.ui.providers.pompaColorPalette
 import com.pompa.android.ui.theme.OpetColors
 import com.pompa.android.ui.theme.PompaTheme
+import com.pompa.android.ui.utils.slideInByScrollDirection
 
 @Composable
 fun ProvincesScreen(
@@ -182,8 +182,6 @@ fun ProvincesScreenContent(
     }
 }
 
-private const val TAG = "ProvincesScreen"
-
 @Composable
 fun ProvinceItem(
     scrollingDown: Boolean,
@@ -192,22 +190,11 @@ fun ProvinceItem(
     showSelectedCheckMark: Boolean = false,
     onItemClick: () -> Unit,
 ) {
-    Log.i(TAG, "ProvinceItem: code: ${province.code}")
     val interactionSource = remember { MutableInteractionSource() }
-    val animatedProgress =
-        remember { Animatable(initialValue = if (scrollingDown) 300f else -300f) }
-    LaunchedEffect(Unit) {
-        animatedProgress.animateTo(
-            targetValue = 0f,
-            animationSpec = tween(300, easing = LinearEasing)
-        )
-    }
-    val animatedModifier = modifier
-        .fillMaxWidth()
-        .graphicsLayer(translationY = animatedProgress.value)
 
     Card(
-        modifier = animatedModifier
+        modifier = modifier
+            .slideInByScrollDirection(scrollingDown = scrollingDown)
             .clickable(
                 interactionSource = interactionSource,
                 indication = null

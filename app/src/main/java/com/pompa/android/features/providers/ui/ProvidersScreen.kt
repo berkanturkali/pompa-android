@@ -62,6 +62,7 @@ import com.pompa.android.ui.providers.LocalPompaColors
 import com.pompa.android.ui.providers.pompaColorPalette
 import com.pompa.android.ui.theme.OpetColors
 import com.pompa.android.ui.theme.PompaTheme
+import com.pompa.android.ui.utils.slideInByScrollDirection
 import com.pompa.android.util.DeviceManager
 
 @Composable
