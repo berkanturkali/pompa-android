@@ -1,5 +1,8 @@
 package com.pompa.android.features.home.ui
 
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,11 +22,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.pompa.android.features.home.components.FuelFilters
@@ -121,6 +126,8 @@ fun HomeScreenContent(
     var query by remember {
         mutableStateOf("")
     }
+    var lastIndex by remember { mutableIntStateOf(0) }
+    var lastOffset by remember { mutableIntStateOf(0) }
 
     val listState = rememberLazyListState()
 
@@ -132,12 +139,30 @@ fun HomeScreenContent(
         }
     }
 
+    val isScrollingDown = remember {
+        derivedStateOf {
+            val currIndex = listState.firstVisibleItemIndex
+            val currOffset = listState.firstVisibleItemScrollOffset
+
+            val scrollingDown =
+                currIndex > lastIndex ||
+                        (currIndex == lastIndex && currOffset > lastOffset)
+
+            lastIndex = currIndex
+            lastOffset = currOffset
+
+            scrollingDown
+        }
+    }
+
+
     LaunchedEffect(tabReselected) {
         if (tabReselected) {
             listState.animateScrollToItem(0)
             onReselectionConsumed()
         }
     }
+
 
     Box(
         modifier = modifier
@@ -210,18 +235,20 @@ fun HomeScreenContent(
 
                     providers.forEach { provider ->
 
+
                         val isFavoriteProvider = provider.provider.equals(
                             selectedProvider,
                             ignoreCase = true
                         )
                         stickyHeader {
+
                             PriceListBrandSection(
                                 isHeaderPinned = isHeaderPinned,
                                 name = provider.provider,
                                 logo = provider.providerLogo,
                                 averagePrice = provider.averagePrice?.toString(),
                                 isFavorite = isFavoriteProvider,
-                                showDivider = provider.ok && provider.data.isNotEmpty()
+                                showDivider = provider.ok && provider.data.isNotEmpty(),
                             )
                         }
                         if (!provider.ok) {
@@ -237,6 +264,18 @@ fun HomeScreenContent(
                                 }
                             } else {
                                 items(provider.data.filterNotNull()) { record ->
+
+                                    val animatedProgress =
+                                        remember { Animatable(initialValue = if (isScrollingDown.value) 300f else -300f) }
+                                    LaunchedEffect(Unit) {
+                                        animatedProgress.animateTo(
+                                            targetValue = 0f,
+                                            animationSpec = tween(300, easing = LinearEasing)
+                                        )
+                                    }
+                                    val animatedModifier = modifier
+                                        .fillMaxWidth()
+                                        .graphicsLayer(translationY = animatedProgress.value)
                                     val actualFuelPriceListCount = record.prices?.notNullCount()
                                         ?: 0
                                     FuelItem(
@@ -247,7 +286,7 @@ fun HomeScreenContent(
                                             unit = record.unit ?: "",
                                             weightUnit = record.weightUnit ?: ""
                                         )?.take(3) ?: emptyList(),
-                                        modifier = Modifier.padding(containerPadding),
+                                        modifier = animatedModifier.padding(containerPadding),
                                         onItemClick = {
                                             onFuelItemClick(provider, record, isFavoriteProvider)
                                         },
@@ -261,7 +300,6 @@ fun HomeScreenContent(
                     }
                 }
             }
-
         }
     }
 }

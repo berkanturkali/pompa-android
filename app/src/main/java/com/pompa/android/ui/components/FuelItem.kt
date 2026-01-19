@@ -48,7 +48,7 @@ fun FuelItem(
     onItemClick: () -> Unit = {},
 ) {
 
-    Column {
+    Column(modifier = modifier) {
         if (showDistrict) {
             Row(
                 modifier = Modifier
