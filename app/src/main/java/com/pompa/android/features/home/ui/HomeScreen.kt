@@ -85,7 +85,8 @@ fun HomeScreen(
                     districtName = record.districtName ?: "",
                     cityName = viewModel.cityName ?: ""
                 )
-            }
+            },
+            date = viewModel.date
         )
 
         if (viewModel.isLoading.value) {
@@ -104,6 +105,7 @@ fun HomeScreen(
 @Composable
 fun HomeScreenContent(
     isLoading: Boolean,
+    date: String,
     fuelFilterList: List<FuelFilterItem>,
     selectedFuelFilter: FuelFilterItem?,
     tabReselected: Boolean,
@@ -203,7 +205,7 @@ fun HomeScreenContent(
             )
 
             PriceDateView(
-                "21/12/2025",
+                date = date,
                 modifier = Modifier.padding(end = containerPadding, top = containerPadding)
             )
 

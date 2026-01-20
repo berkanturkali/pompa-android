@@ -6,6 +6,7 @@ import android.net.Uri
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.pompa.android.data.datastore.PompaFilterPrefs
@@ -22,8 +23,10 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 import javax.inject.Inject
-import androidx.core.net.toUri
 
 private const val TAG = "HomeScreenViewModel"
 
@@ -56,6 +59,8 @@ class HomeScreenViewModel @Inject constructor(
     var selectedFuelFilter by mutableStateOf<FuelFilterItem?>(
         null
     )
+
+    var date by mutableStateOf(formatDate())
 
     init {
         viewModelScope.launch {
@@ -153,6 +158,15 @@ class HomeScreenViewModel @Inject constructor(
             }
             context.startActivity(browserIntent)
         }
+    }
+
+
+    fun formatDate(
+        pattern: String = "dd/MM/yyyy",
+        date: Date = Date()
+    ): String {
+        val formatter = SimpleDateFormat(pattern, Locale.getDefault())
+        return formatter.format(date)
     }
 
 }
