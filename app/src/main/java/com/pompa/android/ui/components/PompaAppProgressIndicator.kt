@@ -7,9 +7,14 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.pompa.android.ui.providers.LocalPompaColors
 import com.pompa.android.ui.providers.pompaColorPalette
+import com.pompa.android.ui.theme.PompaColor
+import com.pompa.android.ui.theme.PompaTheme
 
 @Composable
 fun PompaAppProgressIndicator(modifier: Modifier = Modifier) {
@@ -17,13 +22,23 @@ fun PompaAppProgressIndicator(modifier: Modifier = Modifier) {
     Card(
         modifier = modifier,
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.pompaColorPalette.progressIndicatorColors.background,
+            containerColor = MaterialTheme.pompaColorPalette.pullToRefreshColor.container,
         ),
         shape = RoundedCornerShape(8.dp)
     ) {
         CircularProgressIndicator(
             modifier = Modifier.padding(8.dp),
-            color = MaterialTheme.pompaColorPalette.progressIndicatorColors.indicator,
+            color = MaterialTheme.pompaColorPalette.pullToRefreshColor.content,
         )
+    }
+}
+
+@Preview
+@Composable
+private fun PompaAppProgressIndicatorPrev() {
+    CompositionLocalProvider(LocalPompaColors provides PompaColor) {
+        PompaTheme {
+            PompaAppProgressIndicator()
+        }
     }
 }

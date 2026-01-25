@@ -53,7 +53,7 @@ fun FuelSearchBar(
         modifier = modifier,
         shape = RoundedCornerShape(20.dp),
         shadowElevation = 0.5.dp,
-        color = Color.White,
+        color = MaterialTheme.pompaColorPalette.searchBarColors.backgroundColor,
         border = BorderStroke(0.5.dp, MaterialTheme.pompaColorPalette.borderColor)
     ) {
         BasicTextField(

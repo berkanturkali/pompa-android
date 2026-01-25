@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.dp
 import com.pompa.android.R
 import com.pompa.android.ui.providers.LocalPompaColors
 import com.pompa.android.ui.providers.pompaColorPalette
-import com.pompa.android.ui.theme.OpetColors
+import com.pompa.android.ui.theme.PompaColor
 import com.pompa.android.ui.theme.PompaTheme
 
 @Composable
@@ -32,7 +32,7 @@ fun PompaAppBackButton(
     Card(
         shape = CircleShape,
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.pompaColorPalette.buttonColors.filledSecondaryBackground,
+            containerColor = MaterialTheme.pompaColorPalette.buttonColors.filledPrimaryBackground,
             contentColor = MaterialTheme.pompaColorPalette.buttonColors.filledPrimaryContent
         ),
      modifier = modifier.clickable(
@@ -55,7 +55,7 @@ fun PompaAppBackButton(
 @Preview
 @Composable
 private fun PompaAppBackButtonPrev() {
-    CompositionLocalProvider(LocalPompaColors provides OpetColors) {
+    CompositionLocalProvider(LocalPompaColors provides PompaColor) {
         PompaTheme {
             PompaAppBackButton()
         }

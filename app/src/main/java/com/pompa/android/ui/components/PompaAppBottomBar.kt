@@ -9,11 +9,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -46,71 +46,76 @@ fun PompaAppBottomBar(
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
-
-    Surface(
-        modifier = modifier.padding(vertical = 8.dp, horizontal = 16.dp),
-        shape = RoundedCornerShape(24.dp),
-        shadowElevation = 12.dp,
-    ) {
-        NavigationBar(
-            modifier = modifier.height(46.dp),
-            containerColor = MaterialTheme.pompaColorPalette.bottomBarColors.background,
-            contentColor = MaterialTheme.pompaColorPalette.bottomBarColors.content
+    Column(modifier = modifier) {
+        HorizontalDivider(
+            thickness = 1.dp,
+            color = MaterialTheme.pompaColorPalette.borderColor,
+            modifier = Modifier.fillMaxWidth()
+        )
+        Surface(
+            modifier = modifier,
+            shadowElevation = 12.dp,
         ) {
-            destinations.forEach { destination ->
-                val selected = currentRoute == destination::class.qualifiedName
+            NavigationBar(
+                modifier = modifier.height(46.dp),
+                containerColor = MaterialTheme.pompaColorPalette.bottomBarColors.background,
+                contentColor = MaterialTheme.pompaColorPalette.bottomBarColors.content
+            ) {
+                destinations.forEach { destination ->
+                    val selected = currentRoute == destination::class.qualifiedName
 
-                NavigationBarItem(
-                    selected = selected,
-                    colors = NavigationBarItemDefaults.colors(
-                        selectedIconColor = MaterialTheme.pompaColorPalette.bottomBarColors.selectedItemColor,
-                        unselectedIconColor = MaterialTheme.pompaColorPalette.bottomBarColors.unSelectedItemColor,
-                        indicatorColor = MaterialTheme.pompaColorPalette.bottomBarColors.indicatorColor
-                    ),
-                    onClick = {
-                        if (selected) {
-                            if (destination.scrollable) {
-                                onTabReselected(destination)
-                            }
-                        } else {
-                            navController.navigate(destination) {
-                                popUpTo(navController.graph.startDestinationId) {
-                                    saveState = true
+                    NavigationBarItem(
+                        selected = selected,
+                        colors = NavigationBarItemDefaults.colors(
+                            selectedIconColor = MaterialTheme.pompaColorPalette.bottomBarColors.selectedItemColor,
+                            unselectedIconColor = MaterialTheme.pompaColorPalette.bottomBarColors.unSelectedItemColor,
+                            indicatorColor = MaterialTheme.pompaColorPalette.bottomBarColors.indicatorColor
+                        ),
+                        onClick = {
+                            if (selected) {
+                                if (destination.scrollable) {
+                                    onTabReselected(destination)
                                 }
-                                launchSingleTop = true
-                                restoreState = true
+                            } else {
+                                navController.navigate(destination) {
+                                    popUpTo(navController.graph.startDestinationId) {
+                                        saveState = true
+                                    }
+                                    launchSingleTop = true
+                                    restoreState = true
+                                }
                             }
-                        }
-                    },
-                    icon = {
-                        Column(
-                            verticalArrangement = Arrangement.spacedBy(2.dp),
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            modifier = Modifier.animateContentSize()
-                        ) {
-                            Icon(
-                                painter = painterResource(destination.icon),
-                                contentDescription = stringResource(destination.title),
-                            )
-                            AnimatedVisibility(
-                                visible = selected,
-                                enter = scaleIn(),
-                                exit = scaleOut()
+                        },
+                        icon = {
+                            Column(
+                                verticalArrangement = Arrangement.spacedBy(2.dp),
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                modifier = Modifier.animateContentSize()
                             ) {
-                                Box(
-                                    modifier = Modifier
-                                        .size(4.dp)
-                                        .background(
-                                            MaterialTheme.pompaColorPalette.bottomBarColors.selectedItemColor,
-                                            CircleShape
-                                        )
+                                Icon(
+                                    painter = painterResource(destination.icon),
+                                    contentDescription = stringResource(destination.title),
                                 )
+                                AnimatedVisibility(
+                                    visible = selected,
+                                    enter = scaleIn(),
+                                    exit = scaleOut()
+                                ) {
+                                    Box(
+                                        modifier = Modifier
+                                            .size(4.dp)
+                                            .background(
+                                                MaterialTheme.pompaColorPalette.bottomBarColors.selectedItemColor,
+                                                CircleShape
+                                            )
+                                    )
+                                }
                             }
-                        }
-                    },
-                    alwaysShowLabel = false
-                )
+                        },
+                        alwaysShowLabel = false
+                    )
 
+                }
             }
         }
     }

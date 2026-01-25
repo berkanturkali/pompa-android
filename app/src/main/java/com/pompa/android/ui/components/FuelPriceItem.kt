@@ -40,7 +40,7 @@ fun FuelPriceItem(
             style = MaterialTheme.typography.labelSmall.copy(
                 fontWeight = FontWeight.Bold,
             ),
-            color = MaterialTheme.pompaColorPalette.textColors.onHighlight,
+            color = MaterialTheme.pompaColorPalette.textColors.primary,
             textAlign = TextAlign.Start,
         )
 
@@ -63,7 +63,7 @@ fun FuelPriceItem(
                         append("₺")
                     }
                 },
-                color = MaterialTheme.pompaColorPalette.textColors.onHighlight,
+                color = MaterialTheme.pompaColorPalette.textColors.primary,
                 textAlign = TextAlign.Center
             )
 
@@ -73,7 +73,7 @@ fun FuelPriceItem(
                     fontWeight = FontWeight.Bold,
                     fontSize = 8.sp
                 ),
-                color = MaterialTheme.pompaColorPalette.textColors.onHighlight.copy(0.8f),
+                color = MaterialTheme.pompaColorPalette.textColors.primary.copy(0.8f),
                 textAlign = TextAlign.End
             )
         }

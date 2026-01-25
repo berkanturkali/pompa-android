@@ -5,6 +5,9 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,6 +17,7 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -74,16 +78,18 @@ fun SortScreenContent(
         modifier = modifier
             .fillMaxWidth()
             .wrapContentHeight()
+            .background(MaterialTheme.pompaColorPalette.backgroundColors.primary, shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
+            .border(BorderStroke(1.dp, MaterialTheme.pompaColorPalette.borderColor), shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
             .padding(horizontal = 8.dp, vertical = 6.dp)
             .navigationBarsPadding(),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
+        verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
         PompaBottomSheetHandle()
 
         Text(
             stringResource(R.string.sort),
             style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.SemiBold),
-            color = MaterialTheme.pompaColorPalette.textColors.onHighlight,
+            color = MaterialTheme.pompaColorPalette.textColors.primary,
             modifier = Modifier.padding(start = 8.dp)
         )
 
@@ -135,7 +141,7 @@ fun SortItem(
             style = MaterialTheme.typography.labelMedium.copy(
                 fontWeight = FontWeight.Medium
             ),
-            color = MaterialTheme.pompaColorPalette.textColors.onHighlight,
+            color = MaterialTheme.pompaColorPalette.textColors.primary,
         )
 
         AnimatedVisibility(

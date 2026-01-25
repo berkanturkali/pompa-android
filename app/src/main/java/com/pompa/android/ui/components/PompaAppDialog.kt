@@ -36,7 +36,7 @@ import androidx.compose.ui.window.Dialog
 import com.pompa.android.R
 import com.pompa.android.ui.providers.LocalPompaColors
 import com.pompa.android.ui.providers.pompaColorPalette
-import com.pompa.android.ui.theme.OpetColors
+import com.pompa.android.ui.theme.PompaColor
 import com.pompa.android.ui.theme.PompaTheme
 
 @Composable
@@ -93,7 +93,7 @@ fun PompaAppDialog(
                 ) {
                     Text(
                         text = message,
-                        color = MaterialTheme.pompaColorPalette.textColors.onBrand,
+                        color = MaterialTheme.pompaColorPalette.textColors.primary,
                         style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.SemiBold),
                         textAlign = TextAlign.Center
                     )
@@ -104,7 +104,7 @@ fun PompaAppDialog(
                         modifier = Modifier
                             .fillMaxWidth()
                             .background(
-                                color = MaterialTheme.pompaColorPalette.buttonColors.filledSecondaryBackground,
+                                color = MaterialTheme.pompaColorPalette.buttonColors.filledPrimaryBackground,
                                 shape = RoundedCornerShape(7.dp)
                             )
                             .clickable(
@@ -115,7 +115,7 @@ fun PompaAppDialog(
                             }
                             .padding(vertical = 8.dp),
                         textAlign = TextAlign.Center,
-                        color = MaterialTheme.pompaColorPalette.textColors.onHighlight
+                        color = MaterialTheme.pompaColorPalette.textColors.primary
                     )
                 }
             }
@@ -126,7 +126,7 @@ fun PompaAppDialog(
 @Preview
 @Composable
 private fun PompaAppDialogPrev() {
-    CompositionLocalProvider(LocalPompaColors provides OpetColors) {
+    CompositionLocalProvider(LocalPompaColors provides PompaColor) {
         PompaTheme {
             PompaAppDialog("Something went wrong") { }
         }

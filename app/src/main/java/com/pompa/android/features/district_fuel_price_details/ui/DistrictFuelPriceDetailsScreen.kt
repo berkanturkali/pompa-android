@@ -1,14 +1,18 @@
 package com.pompa.android.features.district_fuel_price_details.ui
 
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -47,9 +51,15 @@ fun DistrictFuelPriceDetailsScreenContent(
     modifier: Modifier = Modifier,
 ) {
 
+    val sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)
     Column(
         modifier = modifier
             .fillMaxWidth()
+            .clip(sheetShape)
+            .border(
+                BorderStroke(1.dp, MaterialTheme.pompaColorPalette.borderColor),
+                shape = sheetShape
+            )
             .heightIn(320.dp)
             .padding(horizontal = 8.dp, vertical = 12.dp)
     ) {
@@ -58,7 +68,7 @@ fun DistrictFuelPriceDetailsScreenContent(
         Text(
             districtName,
             style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Black),
-            color = MaterialTheme.pompaColorPalette.textColors.onHighlight,
+            color = MaterialTheme.pompaColorPalette.textColors.primary,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 12.dp),

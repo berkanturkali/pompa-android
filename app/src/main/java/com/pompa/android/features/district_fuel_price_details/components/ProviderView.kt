@@ -101,7 +101,7 @@ fun ProviderView(
                         contentDescription = null,
                         modifier = Modifier
                             .size(20.dp),
-                        tint = MaterialTheme.pompaColorPalette.textColors.onHighlight
+                        tint = MaterialTheme.pompaColorPalette.textColors.primary
                     )
                 }
             }
@@ -110,7 +110,7 @@ fun ProviderView(
         Text(
             text = name,
             style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Bold),
-            color = MaterialTheme.pompaColorPalette.textColors.onHighlight,
+            color = MaterialTheme.pompaColorPalette.textColors.primary,
             modifier = Modifier.padding(start = 8.dp)
         )
 

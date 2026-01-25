@@ -60,9 +60,8 @@ import com.pompa.android.ui.components.PompaAppDialog
 import com.pompa.android.ui.components.PompaButton
 import com.pompa.android.ui.providers.LocalPompaColors
 import com.pompa.android.ui.providers.pompaColorPalette
-import com.pompa.android.ui.theme.OpetColors
+import com.pompa.android.ui.theme.PompaColor
 import com.pompa.android.ui.theme.PompaTheme
-import com.pompa.android.ui.utils.slideInByScrollDirection
 import com.pompa.android.util.DeviceManager
 
 @Composable
@@ -307,7 +306,7 @@ fun ProviderItem(
 @Preview
 @Composable
 private fun ProviderItemPrev() {
-    CompositionLocalProvider(LocalPompaColors provides OpetColors) {
+    CompositionLocalProvider(LocalPompaColors provides PompaColor) {
         PompaTheme {
             ProviderItem(
                 provider = Provider(

@@ -61,7 +61,7 @@ fun SettingsItem(
                 modifier = Modifier.size(48.dp),
                 border = BorderStroke(0.5.dp, MaterialTheme.pompaColorPalette.borderColor),
                 colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.pompaColorPalette.textColors.onHighlight
+                    containerColor = MaterialTheme.pompaColorPalette.backgroundColors.primary
                 ),
                 shape = CircleShape
             ) {
@@ -72,7 +72,7 @@ fun SettingsItem(
                     Icon(
                         painter = painterResource(icon),
                         contentDescription = null,
-                        tint = MaterialTheme.pompaColorPalette.textColors.secondary,
+                        tint = MaterialTheme.pompaColorPalette.textColors.primary,
                         modifier = Modifier.size(20.dp)
                     )
                 }
@@ -87,7 +87,7 @@ fun SettingsItem(
             ) {
                 Text(
                     title,
-                    color = MaterialTheme.pompaColorPalette.textColors.onHighlight.copy(alpha = 0.8f),
+                    color = MaterialTheme.pompaColorPalette.textColors.secondary,
                     style = MaterialTheme.typography.bodySmall.copy(
                         fontWeight = FontWeight.SemiBold,
                         fontStyle = FontStyle.Italic
@@ -96,7 +96,7 @@ fun SettingsItem(
 
                 Text(
                     value,
-                    color = MaterialTheme.pompaColorPalette.textColors.onHighlight,
+                    color = MaterialTheme.pompaColorPalette.textColors.primary,
                     style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold)
                 )
             }

@@ -23,6 +23,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
@@ -108,7 +109,7 @@ fun PriceListBrandSection(
         modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = headerHorizontalPadding, vertical = headerParentVerticalPadding)
-            .background(MaterialTheme.colorScheme.background)
+            .background(MaterialTheme.pompaColorPalette.backgroundColors.primary)
             .then(
                 if (isHeaderPinned && showDivider) {
                     Modifier.drawBehind {
@@ -145,7 +146,7 @@ fun PriceListBrandSection(
                 Card(
                     shape = CircleShape,
                     colors = CardDefaults.cardColors(
-                        containerColor = Color.White
+                        containerColor = MaterialTheme.pompaColorPalette.cardColors.primaryBackground
                     ),
                     border = BorderStroke(
                         0.5.dp,
@@ -162,7 +163,7 @@ fun PriceListBrandSection(
                                 painter = painter,
                                 contentDescription = null,
                                 contentScale = ContentScale.Fit,
-                                modifier = Modifier.padding(4.dp),
+                                modifier = Modifier.clip(CircleShape).padding(4.dp),
                             )
                         } else {
                             Icon(
@@ -170,7 +171,7 @@ fun PriceListBrandSection(
                                 contentDescription = null,
                                 modifier = Modifier
                                     .size(20.dp),
-                                tint = MaterialTheme.pompaColorPalette.textColors.onHighlight
+                                tint = MaterialTheme.pompaColorPalette.textColors.primary
                             )
                         }
                     }
@@ -179,7 +180,7 @@ fun PriceListBrandSection(
                 Text(
                     text = name,
                     style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Bold),
-                    color = MaterialTheme.pompaColorPalette.textColors.onHighlight,
+                    color = MaterialTheme.pompaColorPalette.textColors.primary,
                     modifier = Modifier.padding(start = 8.dp)
                 )
 
@@ -213,7 +214,7 @@ fun PriceListBrandSection(
                         Text(
                             text = stringResource(R.string.average),
                             style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Medium),
-                            color = MaterialTheme.pompaColorPalette.textColors.onBrand.copy(
+                            color = MaterialTheme.pompaColorPalette.textColors.primary.copy(
                                 alpha = 0.7f
                             )
                         )
@@ -233,7 +234,7 @@ fun PriceListBrandSection(
                                     append("₺")
                                 }
                             },
-                            color = MaterialTheme.pompaColorPalette.textColors.onBrand
+                            color = MaterialTheme.pompaColorPalette.textColors.primary
                         )
 
                     }

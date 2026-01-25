@@ -1,6 +1,8 @@
 package com.pompa.android.features.home.components
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -37,9 +39,12 @@ fun PriceDateView(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .background(
-                    MaterialTheme.pompaColorPalette.textColors.onHighlight.copy(
-                        0.07f
-                    ), shape = RoundedCornerShape(8.dp)
+                    MaterialTheme.pompaColorPalette.cardColors.primaryBackground,
+                    shape = RoundedCornerShape(8.dp)
+                )
+                .border(
+                    BorderStroke(1.dp, MaterialTheme.pompaColorPalette.borderColor),
+                    shape = RoundedCornerShape(8.dp)
                 )
                 .padding(horizontal = 6.dp, vertical = 6.dp)
         ) {
@@ -47,20 +52,20 @@ fun PriceDateView(
             Icon(
                 painter = painterResource(R.drawable.ic_calendar),
                 contentDescription = null,
-                tint = MaterialTheme.pompaColorPalette.textColors.onHighlight.copy(0.8f),
+                tint = MaterialTheme.pompaColorPalette.textColors.primary.copy(0.8f),
                 modifier = Modifier.size(14.dp)
             )
 
             Text(
                 date,
                 style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.SemiBold),
-                color = MaterialTheme.pompaColorPalette.textColors.onHighlight.copy(0.8f),
+                color = MaterialTheme.pompaColorPalette.textColors.primary.copy(0.8f),
             )
         }
     }
 }
 
-@Preview(showBackground = true)
+@Preview
 @Composable
 private fun PriceDateViewPrev() {
     PompaTheme {

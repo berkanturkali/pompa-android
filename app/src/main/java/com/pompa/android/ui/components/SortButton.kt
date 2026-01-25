@@ -1,5 +1,6 @@
 package com.pompa.android.ui.components
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -35,9 +36,10 @@ fun SortButton(
             },
         shape = CircleShape,
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.pompaColorPalette.backgroundColors.primary,
-            contentColor = MaterialTheme.pompaColorPalette.textColors.onBrand
-        )
+            containerColor = MaterialTheme.pompaColorPalette.cardColors.primaryBackground,
+            contentColor = MaterialTheme.pompaColorPalette.textColors.primary
+        ),
+        border = BorderStroke(1.dp, MaterialTheme.pompaColorPalette.borderColor)
     ) {
         Box(
             modifier = Modifier.fillMaxSize(),

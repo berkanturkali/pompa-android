@@ -8,7 +8,6 @@ data class PompaColors(
     val textColors: TextColors = TextColors(),
     val buttonColors: ButtonColors = ButtonColors(),
     val borderColor: Color = Color.Unspecified,
-    val progressIndicatorColors: ProgressIndicatorColors = ProgressIndicatorColors(),
     val topBarColors: TopBarColors = TopBarColors(),
     val bottomBarColors: BottomBarColors = BottomBarColors(),
     val chipColors: ChipColors = ChipColors(),
@@ -28,23 +27,14 @@ data class CardColors(
 )
 
 data class TextColors(
-    val primary: Color = Color.Unspecified,   // main text on card/page (black-ish)
-    val secondary: Color = Color.Unspecified,   // muted on card/page (gray-ish)
-    val onHighlight: Color = Color.Unspecified, // text on yellow (Opet blue)
-    val onBrand: Color = Color.Unspecified,  // text on blue (white)
+    val primary: Color = Color.Unspecified,
+    val secondary: Color = Color.Unspecified,
     val link: Color = Color.Unspecified,
 )
 
 data class ButtonColors(
     val filledPrimaryBackground: Color = Color.Unspecified,
     val filledPrimaryContent: Color = Color.Unspecified,
-    val filledSecondaryBackground: Color = Color.Unspecified,
-    val filledSecondaryContent: Color = Color.Unspecified,
-)
-
-data class ProgressIndicatorColors(
-    val background: Color = Color.Unspecified,
-    val indicator: Color = Color.Unspecified
 )
 
 data class TopBarColors(
@@ -70,6 +60,7 @@ data class ChipColors(
 )
 
 data class SearchBarColors(
+    val backgroundColor: Color = Color.Unspecified,
     val cursorColor: Color = Color.Unspecified,
     val textColor: Color = Color.Unspecified,
     val startIconColor: Color = Color.Unspecified,

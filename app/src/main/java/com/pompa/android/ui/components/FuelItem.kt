@@ -71,7 +71,7 @@ fun FuelItem(
                     Text(
                         districtName,
                         style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Black),
-                        color = MaterialTheme.pompaColorPalette.textColors.onHighlight,
+                        color = MaterialTheme.pompaColorPalette.textColors.primary,
                         modifier = Modifier.padding(start = 4.dp)
                     )
 
@@ -79,7 +79,7 @@ fun FuelItem(
                         modifier = Modifier
                             .size(20.dp)
                             .background(
-                                MaterialTheme.pompaColorPalette.backgroundColors.primary.copy(0.1f),
+                                MaterialTheme.pompaColorPalette.cardColors.primaryBackground,
                                 shape = CircleShape
                             )
                             .safeClickable(
@@ -94,7 +94,7 @@ fun FuelItem(
                             contentDescription = null,
                             modifier = Modifier
                                 .size(12.dp),
-                            tint = MaterialTheme.pompaColorPalette.textColors.onHighlight
+                            tint = MaterialTheme.pompaColorPalette.textColors.primary
                         )
                     }
                 }

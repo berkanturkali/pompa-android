@@ -8,6 +8,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -55,7 +56,7 @@ import com.pompa.android.ui.components.PompaAppDialog
 import com.pompa.android.ui.components.PompaAppProgressIndicator
 import com.pompa.android.ui.providers.LocalPompaColors
 import com.pompa.android.ui.providers.pompaColorPalette
-import com.pompa.android.ui.theme.OpetColors
+import com.pompa.android.ui.theme.PompaColor
 import com.pompa.android.ui.theme.PompaTheme
 import com.pompa.android.ui.utils.slideInByScrollDirection
 
@@ -203,7 +204,7 @@ fun ProvinceItem(
             },
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.pompaColorPalette.cardColors.primaryBackground.copy(0.95f)
+            containerColor = MaterialTheme.pompaColorPalette.cardColors.primaryBackground
         )
     ) {
 
@@ -221,16 +222,17 @@ fun ProvinceItem(
                 Card(
                     shape = CircleShape,
                     colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.pompaColorPalette.buttonColors.filledPrimaryBackground,
+                        containerColor = MaterialTheme.pompaColorPalette.cardColors.primaryBackground,
                         contentColor = MaterialTheme.pompaColorPalette.buttonColors.filledPrimaryContent
                     ),
+                    border = BorderStroke(1.dp, MaterialTheme.pompaColorPalette.borderColor)
                 ) {
                     Box(
                         contentAlignment = Alignment.Center,
                         modifier = Modifier.padding(16.dp)
                     ) {
                         Text(
-                            text = province.code.toString(),
+                            text = province.code,
                             style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Bold)
                         )
                     }
@@ -261,21 +263,10 @@ fun ProvinceItem(
     }
 }
 
-
-@Preview
-@Composable
-private fun PompaAppProgressIndicatorPrev() {
-    CompositionLocalProvider(LocalPompaColors provides OpetColors) {
-        PompaTheme {
-            PompaAppProgressIndicator()
-        }
-    }
-}
-
 @Preview
 @Composable
 private fun ProvinceItemPrev() {
-    CompositionLocalProvider(LocalPompaColors provides OpetColors) {
+    CompositionLocalProvider(LocalPompaColors provides PompaColor) {
         PompaTheme {
             Column {
                 ProvinceItem(

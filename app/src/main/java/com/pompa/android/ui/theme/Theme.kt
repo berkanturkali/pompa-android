@@ -1,6 +1,11 @@
 package com.pompa.android.ui.theme
 
 import android.os.Build
+import androidx.activity.ComponentActivity
+import androidx.activity.SystemBarStyle
+import androidx.activity.compose.LocalActivity
+import androidx.activity.enableEdgeToEdge
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
@@ -9,7 +14,9 @@ import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import com.pompa.android.model.BackgroundColors
 import com.pompa.android.model.BottomBarColors
@@ -22,6 +29,7 @@ import com.pompa.android.model.SearchBarColors
 import com.pompa.android.model.TextColors
 import com.pompa.android.model.TopBarColors
 import com.pompa.android.ui.providers.LocalPompaColors
+import com.pompa.android.ui.providers.pompaColorPalette
 
 private val DarkColorScheme = darkColorScheme(
     primary = Purple80,
@@ -45,62 +53,55 @@ private val LightColorScheme = lightColorScheme(
     */
 )
 
-val OpetColors = PompaColors(
+val PompaColor = PompaColors(
     backgroundColors = BackgroundColors(
-        primary = OpetBrandBlue,
+        primary = Color(0xff0B0E14),
         secondary = Color.White,
     ),
     cardColors = CardColors(
-        primaryBackground = Color.White,
-        secondaryBackground = OpetBrandYellow,
+        primaryBackground = Color(0xff161B22),
+        secondaryBackground = Color(0xffF5C518),
     ),
     textColors = TextColors(
-        primary = Color(0xff162133),
-        secondary = OpetBrandYellow,
+        primary = Color(0xffFFFFFF),
+        secondary = Color(0xff8B949E),
         link = Color(0xFF1A73E8),
-        onBrand = Color.White,
-        onHighlight = OpetBrandBlue
     ),
     buttonColors = ButtonColors(
-        filledPrimaryBackground = OpetBrandYellow,
-        filledPrimaryContent = OpetBrandBlue,
-        filledSecondaryBackground = Color.White,
-        filledSecondaryContent = OpetBrandBlue
+        filledPrimaryBackground = Color(0xff2B59FF),
+        filledPrimaryContent = Color.White,
     ),
-    borderColor = Color(0xffdfe4ec),
-    progressIndicatorColors = com.pompa.android.model.ProgressIndicatorColors(
-        indicator = Color.White,
-        background = OpetBrandBlue
-    ),
+    borderColor = Color(0xff30363D),
     topBarColors = TopBarColors(
-        background = OpetBrandBlue,
+        background = Color(0xff0B0E14),
         content = Color.White
     ),
     bottomBarColors = BottomBarColors(
-        background = OpetBrandBlue,
+        background = Color(0xff0B0E14),
         content = Color.White,
-        selectedItemColor = OpetBrandYellow,
+        selectedItemColor = Color(0xffF5C518),
         unSelectedItemColor = Color.White.copy(alpha = 0.5f),
         indicatorColor = Color.White.copy(alpha = 0.2f)
     ),
     chipColors = ChipColors(
-        unselectedBackground = Color.White.copy(0.5f),
-        selectedBackground = OpetBrandBlue,
-        unselectedTextColor = OpetBrandBlue,
-        selectedTextColor = Color.White,
-        selectedBorderColor = Color.White,
-        unselectedBorderColor = OpetBrandBlue
+        unselectedBackground = Color(0xff161B22),
+        selectedBackground = Color(0xff0B0E14),
+        unselectedTextColor = Color(0xff8B949E),
+        selectedTextColor = Color(0xffF5C518),
+        selectedBorderColor = Color(0xffF5C518),
+        unselectedBorderColor = Color(0xff30363D),
     ),
     searchBarColors = SearchBarColors(
-        cursorColor = OpetBrandBlue,
-        textColor = OpetBrandBlue,
-        startIconColor = Color.LightGray.copy(0.8f),
-        closeIconColor = OpetBrandBlue,
-        hintColor = Color.LightGray.copy(0.8f)
+        backgroundColor = Color(0xff161B22),
+        cursorColor = Color.White,
+        textColor = Color.White,
+        startIconColor = Color(0xff8B949E),
+        closeIconColor = Color.White,
+        hintColor = Color(0xff8B949E),
     ),
     pullToRefreshColor = PullToRefreshColors(
-        container = OpetBrandBlue,
-        content = OpetBrandYellow
+        container = Color(0xff0B0E14),
+        content = Color.White
     )
 )
 
@@ -122,11 +123,23 @@ fun PompaTheme(
     }
 
 
-    CompositionLocalProvider(LocalPompaColors provides OpetColors) {
+    CompositionLocalProvider(LocalPompaColors provides PompaColor) {
         MaterialTheme(
             colorScheme = colorScheme,
             typography = MontserratTypography,
             content = content
+        )
+    }
+}
+
+@Composable
+fun ChangeSystemBarsTheme() {
+    val activity = LocalActivity.current as ComponentActivity
+    val barColor = MaterialTheme.pompaColorPalette.backgroundColors.primary.toArgb()
+    LaunchedEffect(barColor) {
+        activity.enableEdgeToEdge(
+            statusBarStyle = SystemBarStyle.dark(barColor),
+            navigationBarStyle = SystemBarStyle.dark(barColor),
         )
     }
 }

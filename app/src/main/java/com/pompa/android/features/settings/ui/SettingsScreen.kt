@@ -85,7 +85,7 @@ fun SettingsScreenContent(
                     )
                     Text(
                         stringResource(R.string.preferences),
-                        color = MaterialTheme.pompaColorPalette.textColors.onHighlight,
+                        color = MaterialTheme.pompaColorPalette.textColors.primary,
                         style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
                         modifier = Modifier.padding(vertical = 4.dp)
                     )
@@ -152,7 +152,7 @@ fun SettingsScreenContent(
 
                     Text(
                         text = stringResource(R.string.pompa_version, BuildConfig.VERSION_NAME),
-                        color = Color.LightGray,
+                        color = Color.LightGray.copy(alpha = 0.5f),
                         style = MaterialTheme.typography.labelSmall.copy(
                             fontWeight = FontWeight.SemiBold,
                         ),

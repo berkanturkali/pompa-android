@@ -6,6 +6,7 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,9 +17,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -56,7 +57,6 @@ fun PompaAppTopBar(
                 .height(48.dp),
             color = MaterialTheme.pompaColorPalette.topBarColors.background,
             contentColor = MaterialTheme.pompaColorPalette.topBarColors.content,
-            shape = RoundedCornerShape(bottomEnd = 28.dp, bottomStart = 28.dp)
         ) {
             Box(
                 modifier = Modifier
@@ -109,9 +109,10 @@ fun PompaAppTopBar(
                         Card(
                             shape = CircleShape,
                             colors = CardDefaults.cardColors(
-                                containerColor = MaterialTheme.pompaColorPalette.buttonColors.filledPrimaryBackground,
+                                containerColor = MaterialTheme.pompaColorPalette.cardColors.primaryBackground,
                                 contentColor = MaterialTheme.pompaColorPalette.buttonColors.filledPrimaryContent
                             ),
+                            border = BorderStroke(1.dp, MaterialTheme.pompaColorPalette.borderColor),
                             modifier = Modifier.size(16.dp)
                         ) {
                             Box(
@@ -140,7 +141,15 @@ fun PompaAppTopBar(
                     }
                 }
             }
+
         }
+        HorizontalDivider(
+            color = MaterialTheme.pompaColorPalette.borderColor,
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.BottomCenter),
+            thickness = 1.dp
+        )
     }
 }
 
