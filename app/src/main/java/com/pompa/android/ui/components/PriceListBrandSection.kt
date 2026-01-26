@@ -163,7 +163,10 @@ fun PriceListBrandSection(
                                 painter = painter,
                                 contentDescription = null,
                                 contentScale = ContentScale.Fit,
-                                modifier = Modifier.clip(CircleShape).padding(4.dp),
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .padding(3.dp)
+                                    .clip(CircleShape),
                             )
                         } else {
                             Icon(
@@ -189,13 +192,17 @@ fun PriceListBrandSection(
                         painter = painterResource(R.drawable.ic_star),
                         contentDescription = null,
                         tint = Color(0xffFFD700),
-                        modifier = Modifier.size(16.dp).padding(start = 4.dp)
+                        modifier = Modifier
+                            .size(16.dp)
+                            .padding(start = 4.dp)
                     )
                 }
             }
             Card(
                 colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.pompaColorPalette.cardColors.primaryBackground.copy(0.8f)
+                    containerColor = MaterialTheme.pompaColorPalette.cardColors.primaryBackground.copy(
+                        0.8f
+                    )
                 ),
                 shape = RoundedCornerShape(6.dp),
                 border = BorderStroke(

@@ -31,7 +31,7 @@ fun SortButton(
     Card(
         modifier = modifier
             .size(28.dp)
-            .safeClickable(indication = ClickIndication.Ripple) {
+            .safeClickable(indication = ClickIndication.None) {
                 onClick()
             },
         shape = CircleShape,
