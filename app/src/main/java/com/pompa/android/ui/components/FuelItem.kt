@@ -19,6 +19,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -31,6 +32,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.pompa.android.R
 import com.pompa.android.features.home.model.FuelPriceUiModel
+import com.pompa.android.features.home.model.PriceTrendUiModel
+import com.pompa.android.model.fuel.PriceTrend
 import com.pompa.android.ui.providers.pompaColorPalette
 import com.pompa.android.ui.theme.PompaTheme
 import com.pompa.android.util.ClickIndication
@@ -42,23 +45,23 @@ fun FuelItem(
     clickable: Boolean,
     actualFuelPriceListCount: Int,
     fuelPrices: List<FuelPriceUiModel>,
+    fuelPriceTrends: List<PriceTrend>,
     modifier: Modifier = Modifier,
     showDistrict: Boolean = true,
     onLocationButtonClick: () -> Unit = {},
     onItemClick: () -> Unit = {},
 ) {
 
+    val trendMap = remember(fuelPriceTrends) {
+        fuelPriceTrends.associateBy { it.fuelKey }
+    }
+
     Column(modifier = modifier) {
         if (showDistrict) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 8.dp, horizontal = 12.dp)
-                    .safeClickable(indication = ClickIndication.None) {
-                        if (clickable) {
-                            onItemClick()
-                        }
-                    },
+                    .padding(vertical = 8.dp, horizontal = 12.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -116,7 +119,10 @@ fun FuelItem(
                                 fontSize = 10.sp
                             ),
                             color = MaterialTheme.pompaColorPalette.textColors.link,
-                            textDecoration = TextDecoration.Underline
+                            textDecoration = TextDecoration.Underline,
+                            modifier = Modifier.safeClickable(indication = ClickIndication.None) {
+                                onItemClick()
+                            }
                         )
                         Icon(
                             painter = painterResource(R.drawable.ic_next),
@@ -158,13 +164,16 @@ fun FuelItem(
                     verticalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
                     fuelPrices.forEachIndexed { index, priceItem ->
+                        val fuelKey = fuelKeyFor(priceItem)
+                        val trend = fuelKey?.let { trendMap[it] }
                         FuelPriceItem(
                             title = stringResource(priceItem.title),
                             price = priceItem.price,
                             unit = priceItem.unit,
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(vertical = 6.dp)
+                                .padding(vertical = 6.dp),
+                            priceTrend = PriceTrendUiModel.mapToTrendUiModel(trend)
                         )
                         if (index != fuelPrices.lastIndex) {
                             HorizontalDivider(
@@ -180,6 +189,20 @@ fun FuelItem(
     }
 }
 
+fun fuelKeyFor(priceItem: FuelPriceUiModel): String? =
+    when (priceItem.title) {
+        R.string.gasoline95 -> "gasoline95"
+        R.string.gasoline95Premium -> "gasoline95_premium"
+        R.string.diesel -> "diesel"
+        R.string.dieselPremium -> "diesel_premium"
+        R.string.kerosene -> "kerosene"
+        R.string.heatingOil -> "heating_oil"
+        R.string.fuelOil -> "fuel_oil"
+        R.string.fuelOilHighSulfur -> "fuel_oil_high_sulfur"
+        R.string.autogas -> "autogas"
+        else -> null
+    }
+
 
 @Preview
 @Composable
@@ -189,6 +212,26 @@ private fun FuelItemPrev() {
             actualFuelPriceListCount = 3,
             districtName = "IZMIR",
             clickable = true,
+            fuelPriceTrends = listOf(
+                PriceTrend(
+                    fuelKey = "gasoline95",
+                    previousPrice = 56.57,
+                    priceChange = 1.62,
+                    changeDirection = "UP"
+                ),
+                PriceTrend(
+                    fuelKey = "gasoline95",
+                    previousPrice = 56.57,
+                    priceChange = 1.62,
+                    changeDirection = "UP"
+                ),
+                PriceTrend(
+                    fuelKey = "gasoline95",
+                    previousPrice = 56.57,
+                    priceChange = 1.62,
+                    changeDirection = "UP"
+                ),
+            ),
             fuelPrices = listOf(
                 FuelPriceUiModel(
                     title = R.string.gasoline95,

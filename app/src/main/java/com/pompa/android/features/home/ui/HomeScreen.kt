@@ -36,6 +36,7 @@ import com.pompa.android.features.home.viewmodel.HomeScreenViewModel
 import com.pompa.android.model.FuelFilterItem
 import com.pompa.android.model.fuel.FuelPriceProvider
 import com.pompa.android.model.fuel.FuelPriceRecord
+import com.pompa.android.model.fuel.PriceTrend
 import com.pompa.android.ui.components.FuelItem
 import com.pompa.android.ui.components.PompaAppDialog
 import com.pompa.android.ui.components.PompaLoadingView
@@ -51,7 +52,7 @@ fun HomeScreen(
     modifier: Modifier = Modifier,
     onSortButtonClick: () -> Unit,
     onReselectionConsumed: () -> Unit,
-    onFuelItemClick: (FuelPriceProvider, FuelPriceRecord, Boolean) -> Unit,
+    onFuelItemClick: (FuelPriceProvider, FuelPriceRecord, Boolean, List<PriceTrend>) -> Unit,
 ) {
 
     val context = LocalContext.current
@@ -117,7 +118,7 @@ fun HomeScreenContent(
     onSortButtonClick: () -> Unit,
     onLocationButtonClick: (String, FuelPriceRecord) -> Unit,
     onFuelTypeSelected: (FuelFilterItem) -> Unit,
-    onFuelItemClick: (FuelPriceProvider, FuelPriceRecord, Boolean) -> Unit,
+    onFuelItemClick: (FuelPriceProvider, FuelPriceRecord, Boolean, List<PriceTrend>) -> Unit,
 ) {
 
     val containerPadding = 8.dp
@@ -277,11 +278,18 @@ fun HomeScreenContent(
                                             .slideInByScrollDirection(isScrollingDown.value)
                                             .padding(containerPadding),
                                         onItemClick = {
-                                            onFuelItemClick(provider, record, isFavoriteProvider)
+                                            onFuelItemClick(
+                                                provider,
+                                                record,
+                                                isFavoriteProvider,
+                                                record.priceTrends ?: emptyList()
+                                            )
                                         },
                                         onLocationButtonClick = {
                                             onLocationButtonClick(provider.provider, record)
-                                        }
+                                        },
+                                        fuelPriceTrends = record.priceTrends ?: emptyList()
+
                                     )
                                 }
                             }

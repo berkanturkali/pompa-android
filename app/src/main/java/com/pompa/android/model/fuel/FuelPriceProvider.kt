@@ -2,9 +2,11 @@ package com.pompa.android.model.fuel
 
 import android.os.Parcelable
 import com.pompa.android.features.home.model.FuelPriceUiModel
+import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 import kotlin.reflect.full.memberProperties
 
-@kotlinx.parcelize.Parcelize
+@Parcelize
 data class FuelPriceProvider(
     val provider: String,
     val providerLogo: String,
@@ -14,7 +16,7 @@ data class FuelPriceProvider(
     val error: String?,
 ) : Parcelable
 
-@kotlinx.parcelize.Parcelize
+@Parcelize
 data class FuelPriceRecord(
     val brand: String?,
     val cityCode: String?,
@@ -24,10 +26,11 @@ data class FuelPriceRecord(
     val unit: String?,
     val weightUnit: String?,
     val source: String?,
-    val fetchedAt: String?
+    val fetchedAt: String?,
+    val priceTrends: List<PriceTrend>?
 ) : Parcelable
 
-@kotlinx.parcelize.Parcelize
+@Parcelize
 data class FuelPrices(
     val gasoline95: Double?,
     val gasoline95Premium: Double?,
@@ -146,4 +149,20 @@ data class FuelPrices(
 
     fun Double?.toText(): String? =
         this?.let { "%.2f".format(it) }
+}
+
+@Parcelize
+@Serializable
+data class PriceTrend(
+    val fuelKey: String?,
+    val previousPrice: Double?,
+    val priceChange: Double?,
+    val changeDirection: String?
+) : Parcelable
+
+enum class ChangeDirection {
+    UP,
+    DOWN,
+    SAME,
+    NO_DATA
 }

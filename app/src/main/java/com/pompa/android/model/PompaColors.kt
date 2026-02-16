@@ -12,7 +12,7 @@ data class PompaColors(
     val bottomBarColors: BottomBarColors = BottomBarColors(),
     val chipColors: ChipColors = ChipColors(),
     val searchBarColors: SearchBarColors = SearchBarColors(),
-    val pullToRefreshColor: PullToRefreshColors = PullToRefreshColors()
+    val pullToRefreshColor: PullToRefreshColors = PullToRefreshColors(),
 )
 
 data class BackgroundColors(

@@ -216,7 +216,7 @@ fun PompaApp(
 
                         HomeScreen(
                             viewModel = homeScreenViewModel,
-                            onFuelItemClick = { provider, record, isFavoriteProvider ->
+                            onFuelItemClick = { provider, record, isFavoriteProvider, priceTrends ->
                                 val args = encodeNavArg(
                                     DistrictFuelDetailsArgs(
                                         isFavoriteProvider = isFavoriteProvider,
@@ -225,7 +225,8 @@ fun PompaApp(
                                         fuelPrices = record.prices?.mapToUiItems(
                                             record.unit ?: "", record.weightUnit ?: ""
                                         ) ?: emptyList(),
-                                        districtName = record.districtName ?: ""
+                                        districtName = record.districtName ?: "",
+                                        priceTrends = priceTrends
                                     )
                                 )
 

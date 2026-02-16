@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import com.pompa.android.R
 import com.pompa.android.features.district_fuel_price_details.components.ProviderView
 import com.pompa.android.features.home.model.FuelPriceUiModel
+import com.pompa.android.model.fuel.PriceTrend
 import com.pompa.android.navigation.args.DistrictFuelDetailsArgs
 import com.pompa.android.ui.components.FuelItem
 import com.pompa.android.ui.components.PompaBottomSheetHandle
@@ -37,7 +38,8 @@ fun DistrictFuelPriceDetailsScreen(
         providerLogo = args.providerLogo,
         isProviderFavorite = args.isFavoriteProvider,
         fuelPrices = args.fuelPrices,
-        districtName = args.districtName
+        districtName = args.districtName,
+        priceTrends = args.priceTrends
     )
 }
 
@@ -48,6 +50,7 @@ fun DistrictFuelPriceDetailsScreenContent(
     isProviderFavorite: Boolean,
     districtName: String,
     fuelPrices: List<FuelPriceUiModel>,
+    priceTrends: List<PriceTrend>,
     modifier: Modifier = Modifier,
 ) {
 
@@ -91,7 +94,8 @@ fun DistrictFuelPriceDetailsScreenContent(
             fuelPrices = fuelPrices,
             showDistrict = false,
             actualFuelPriceListCount = 0,
-            clickable = false
+            clickable = false,
+            fuelPriceTrends = priceTrends
         )
 
     }
@@ -122,7 +126,27 @@ private fun DistrictFuelPriceDetailsScreenContentPrev() {
                     price = "52, 63",
                     unit = "tl/lt"
                 ),
-            )
+            ),
+            listOf(
+                PriceTrend(
+                    fuelKey = "gasoline95",
+                    previousPrice = 56.57,
+                    priceChange = 1.62,
+                    changeDirection = "UP"
+                ),
+                PriceTrend(
+                    fuelKey = "gasoline95",
+                    previousPrice = 56.57,
+                    priceChange = 1.62,
+                    changeDirection = "UP"
+                ),
+                PriceTrend(
+                    fuelKey = "gasoline95",
+                    previousPrice = 56.57,
+                    priceChange = 1.62,
+                    changeDirection = "UP"
+                ),
+            ),
         )
     }
 }

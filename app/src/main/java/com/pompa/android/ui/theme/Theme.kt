@@ -102,7 +102,7 @@ val PompaColor = PompaColors(
     pullToRefreshColor = PullToRefreshColors(
         container = Color(0xff0B0E14),
         content = Color.White
-    )
+    ),
 )
 
 @Composable
