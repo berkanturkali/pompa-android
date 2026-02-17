@@ -15,6 +15,7 @@ interface FuelService {
         @Query("provider") provider: String?,
         @Query("sortDirection") sortDirection: Int,
         @Query("fuelType") type: Int,
+        @Query("q") searchQuery: String
     ): Response<BaseApiResponse<List<FuelPriceProvider?>>>
 
 }

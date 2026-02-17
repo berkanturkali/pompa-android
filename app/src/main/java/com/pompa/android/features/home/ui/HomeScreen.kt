@@ -17,10 +17,10 @@ import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -57,6 +57,8 @@ fun HomeScreen(
 
     val context = LocalContext.current
 
+    val searchQuery by viewModel.searchQuery.collectAsState()
+
     Box(modifier = modifier.fillMaxSize()) {
         HomeScreenContent(
             providers = viewModel.providers,
@@ -70,7 +72,8 @@ fun HomeScreen(
                     cityName = viewModel.cityName,
                     provider = viewModel.favProviderName,
                     sortDirection = viewModel.sortDirection,
-                    fuelType = viewModel.fuelType
+                    fuelType = viewModel.fuelType,
+                    searchQuery = searchQuery
                 )
             },
             onReselectionConsumed = onReselectionConsumed,
@@ -87,7 +90,11 @@ fun HomeScreen(
                     cityName = viewModel.cityName ?: ""
                 )
             },
-            date = viewModel.date
+            date = viewModel.date,
+            onQueryChange = {
+                viewModel.searchQuery.value = it
+            },
+            searchQuery = searchQuery
         )
 
         if (viewModel.isLoading.value) {
@@ -106,6 +113,7 @@ fun HomeScreen(
 @Composable
 fun HomeScreenContent(
     isLoading: Boolean,
+    searchQuery: String,
     date: String,
     fuelFilterList: List<FuelFilterItem>,
     selectedFuelFilter: FuelFilterItem?,
@@ -116,6 +124,7 @@ fun HomeScreenContent(
     onRefresh: () -> Unit,
     onReselectionConsumed: () -> Unit,
     onSortButtonClick: () -> Unit,
+    onQueryChange: (String) -> Unit,
     onLocationButtonClick: (String, FuelPriceRecord) -> Unit,
     onFuelTypeSelected: (FuelFilterItem) -> Unit,
     onFuelItemClick: (FuelPriceProvider, FuelPriceRecord, Boolean, List<PriceTrend>) -> Unit,
@@ -123,9 +132,6 @@ fun HomeScreenContent(
 
     val containerPadding = 8.dp
 
-    var query by remember {
-        mutableStateOf("")
-    }
     var lastIndex by remember { mutableIntStateOf(0) }
     var lastOffset by remember { mutableIntStateOf(0) }
 
@@ -182,9 +188,9 @@ fun HomeScreenContent(
                 FuelSearchBar(
                     modifier = Modifier
                         .weight(0.8f),
-                    value = query
+                    value = searchQuery
                 ) {
-                    query = it
+                    onQueryChange(it)
                 }
 
                 SortButton(modifier = Modifier.padding(start = 4.dp)) {
@@ -300,11 +306,3 @@ fun HomeScreenContent(
         }
     }
 }
-
-//@Preview(showBackground = true)
-//@Composable
-//private fun HomeScreenContentPrev() {
-//    PompaTheme {
-//        HomeScreenContent()
-//    }
-//}

@@ -20,8 +20,11 @@ import com.pompa.android.model.util.UIText
 import com.pompa.android.util.UserPreferences
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -30,6 +33,7 @@ import javax.inject.Inject
 
 private const val TAG = "HomeScreenViewModel"
 
+@OptIn(FlowPreview::class)
 @HiltViewModel
 class HomeScreenViewModel @Inject constructor(
     private val fuelRepo: FuelRepository,
@@ -62,14 +66,17 @@ class HomeScreenViewModel @Inject constructor(
 
     var date by mutableStateOf(formatDate())
 
+    var searchQuery = MutableStateFlow("")
+
     init {
         viewModelScope.launch {
             combine(
                 pompaFilterPrefs.filterPreferences,
-                pompaUserPrefs.userPreferences
-            ) { filterPrefs, userPrefs ->
-                filterPrefs to userPrefs
-            }.collectLatest { (filterPrefs, userPrefs) ->
+                pompaUserPrefs.userPreferences,
+                searchQuery.debounce(500)
+            ) { filterPrefs, userPrefs, query ->
+                Triple(filterPrefs, userPrefs, query)
+            }.collectLatest { (filterPrefs, userPrefs, query) ->
                 sortDirection = filterPrefs.sortDirection
                 fuelType = filterPrefs.fuelType
                 selectedFuelFilter = fuelFilters.first {
@@ -88,7 +95,9 @@ class HomeScreenViewModel @Inject constructor(
                     cityName = cityName,
                     provider = favoriteName,
                     sortDirection = sortDirection,
-                    fuelType = fuelType
+                    fuelType = fuelType,
+                    searchQuery = query
+
                 )
             }
         }
@@ -99,7 +108,8 @@ class HomeScreenViewModel @Inject constructor(
         cityName: String?,
         provider: String?,
         sortDirection: Int,
-        fuelType: Int
+        fuelType: Int,
+        searchQuery: String
     ) {
         isLoading.value = true
         providers = emptyList()
@@ -109,7 +119,8 @@ class HomeScreenViewModel @Inject constructor(
                 cityName = cityName,
                 provider = provider,
                 sortDirection = sortDirection,
-                fuelType = fuelType
+                fuelType = fuelType,
+                searchQuery = searchQuery
 
             ).collectResource(
                 onError = {

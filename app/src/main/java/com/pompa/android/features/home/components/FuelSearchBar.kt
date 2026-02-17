@@ -25,8 +25,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
@@ -48,6 +48,7 @@ fun FuelSearchBar(
 
     val focusRequester = remember { androidx.compose.ui.focus.FocusRequester() }
     var isFocused by remember { androidx.compose.runtime.mutableStateOf(false) }
+    val focusManager = LocalFocusManager.current
 
     Surface(
         modifier = modifier,
@@ -60,6 +61,9 @@ fun FuelSearchBar(
             value = value,
             onValueChange = {
                 onValueChanged(it)
+                if(it.isEmpty()) {
+                    focusManager.clearFocus()
+                }
             },
             maxLines = 1,
             textStyle = MaterialTheme.typography.bodySmall.copy(
@@ -119,7 +123,10 @@ fun FuelSearchBar(
                                 .padding(start = 8.dp)
                                 .safeClickable(
                                     indication = ClickIndication.None
-                                ) { onValueChanged("") }
+                                ) {
+                                    onValueChanged("")
+                                    focusManager.clearFocus()
+                                }
                         )
                     }
                 }
