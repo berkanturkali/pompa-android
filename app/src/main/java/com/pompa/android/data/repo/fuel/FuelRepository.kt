@@ -12,7 +12,6 @@ interface FuelRepository {
         provider: String?,
         sortDirection: Int,
         fuelType: Int,
-        searchQuery: String
     ): Flow<Resource<List<FuelPriceProvider?>>>
 
 }

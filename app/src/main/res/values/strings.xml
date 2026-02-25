@@ -12,7 +12,7 @@
     <string name="settings">Ayarlar</string>
     <string name="average">Ort:</string>
     <string name="see_all">Tümünü gör (%1$d)</string>
-    <string name="fuel_search_bar_hint">Marka ara...</string>
+    <string name="fuel_search_bar_hint">Marka ya da şehir ara…</string>
     <string-array name="fuel_filters">
         <item>Tümü</item>
         <item>Benzin</item>
@@ -43,4 +43,5 @@
     <string name="settings_favorite_provider_option">Favori İstasyon</string>
     <string name="preferences">Tercihler</string>
     <string name="pompa_version">Pompa Versiyon %1$s</string>
+    <string name="prices_may_vary_for_this_station">Bu istasyon için fiyatlar değişkenlik gösterebilir.</string>
 </resources>

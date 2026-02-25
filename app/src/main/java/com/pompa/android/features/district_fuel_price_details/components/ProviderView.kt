@@ -76,7 +76,7 @@ fun ProviderView(
         Card(
             shape = CircleShape,
             colors = CardDefaults.cardColors(
-                containerColor = Color.White
+                containerColor = Color.Transparent
             ),
             border = BorderStroke(
                 0.5.dp,

@@ -57,11 +57,19 @@ fun HomeScreen(
 
     val context = LocalContext.current
 
-    val searchQuery by viewModel.searchQuery.collectAsState()
+    val rawQuery by viewModel.searchQuery.collectAsState()
+
+    val debouncedQuery by viewModel.debouncedSearchQuery
+        .collectAsState(initial = "")
+
+    val filtered = remember(debouncedQuery, viewModel.results) {
+        viewModel.getFilteredResults(debouncedQuery)
+    }
+
 
     Box(modifier = modifier.fillMaxSize()) {
         HomeScreenContent(
-            providers = viewModel.providers,
+            providers = filtered,
             selectedProvider = viewModel.getSelectedProvider() ?: "",
             onFuelItemClick = onFuelItemClick,
             onSortButtonClick = onSortButtonClick,
@@ -73,7 +81,6 @@ fun HomeScreen(
                     provider = viewModel.favProviderName,
                     sortDirection = viewModel.sortDirection,
                     fuelType = viewModel.fuelType,
-                    searchQuery = searchQuery
                 )
             },
             onReselectionConsumed = onReselectionConsumed,
@@ -92,9 +99,9 @@ fun HomeScreen(
             },
             date = viewModel.date,
             onQueryChange = {
-                viewModel.searchQuery.value = it
+                viewModel.onSearchQueryChange(it)
             },
-            searchQuery = searchQuery
+            searchQuery = rawQuery
         )
 
         if (viewModel.isLoading.value) {
@@ -255,6 +262,7 @@ fun HomeScreenContent(
                                 averagePrice = provider.averagePrice?.toString(),
                                 isFavorite = isFavoriteProvider,
                                 showDivider = provider.ok && provider.data.isNotEmpty(),
+                                isManual = provider.providerIsManual
                             )
                         }
                         if (!provider.ok) {

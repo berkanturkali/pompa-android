@@ -2,6 +2,7 @@ package com.pompa.android.model.fuel
 
 import android.os.Parcelable
 import com.pompa.android.features.home.model.FuelPriceUiModel
+import com.squareup.moshi.Json
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 import kotlin.reflect.full.memberProperties
@@ -10,11 +11,21 @@ import kotlin.reflect.full.memberProperties
 data class FuelPriceProvider(
     val provider: String,
     val providerLogo: String,
+    val providerIsManual: Boolean,
     val averagePrice: Double?,
     val ok: Boolean,
+    val source: PriceSource?,
     val data: List<FuelPriceRecord?>,
     val error: String?,
 ) : Parcelable
+
+enum class PriceSource {
+    @Json(name = "provider")
+    PROVIDER,
+
+    @Json(name = "database")
+    DATABASE
+}
 
 @Parcelize
 data class FuelPriceRecord(

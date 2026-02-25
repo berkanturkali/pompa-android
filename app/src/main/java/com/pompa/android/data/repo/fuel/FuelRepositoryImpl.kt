@@ -18,7 +18,6 @@ class FuelRepositoryImpl @Inject constructor(
         provider: String?,
         sortDirection: Int,
         fuelType: Int,
-        searchQuery: String
     ): Flow<Resource<List<FuelPriceProvider?>>> {
         return ApiUtils.fetchData {
             service.fetchAllFuelPricesByCity(
@@ -27,7 +26,6 @@ class FuelRepositoryImpl @Inject constructor(
                 provider = provider,
                 sortDirection = sortDirection,
                 type = fuelType,
-                searchQuery = searchQuery
             )
         }
     }

@@ -22,9 +22,11 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -47,7 +49,8 @@ class HomeScreenViewModel @Inject constructor(
 
     var errorMessage by mutableStateOf<UIText?>(null)
 
-    var providers by mutableStateOf(emptyList<FuelPriceProvider>())
+    var results by mutableStateOf(emptyList<FuelPriceProvider>())
+        private set
 
     var sortDirection: Int = 0
 
@@ -64,19 +67,24 @@ class HomeScreenViewModel @Inject constructor(
         null
     )
 
-    var date by mutableStateOf(formatDate())
+    var date by mutableStateOf(getDate())
 
-    var searchQuery = MutableStateFlow("")
+    private val _searchQuery = MutableStateFlow("")
+    val searchQuery = _searchQuery.asStateFlow()
+
+    val debouncedSearchQuery =
+        _searchQuery
+            .debounce(300)
+            .distinctUntilChanged()
 
     init {
         viewModelScope.launch {
             combine(
                 pompaFilterPrefs.filterPreferences,
                 pompaUserPrefs.userPreferences,
-                searchQuery.debounce(500)
-            ) { filterPrefs, userPrefs, query ->
-                Triple(filterPrefs, userPrefs, query)
-            }.collectLatest { (filterPrefs, userPrefs, query) ->
+            ) { filterPrefs, userPrefs ->
+                Pair(filterPrefs, userPrefs)
+            }.collectLatest { (filterPrefs, userPrefs) ->
                 sortDirection = filterPrefs.sortDirection
                 fuelType = filterPrefs.fuelType
                 selectedFuelFilter = fuelFilters.first {
@@ -95,9 +103,7 @@ class HomeScreenViewModel @Inject constructor(
                     cityName = cityName,
                     provider = favoriteName,
                     sortDirection = sortDirection,
-                    fuelType = fuelType,
-                    searchQuery = query
-
+                    fuelType = fuelType
                 )
             }
         }
@@ -109,10 +115,10 @@ class HomeScreenViewModel @Inject constructor(
         provider: String?,
         sortDirection: Int,
         fuelType: Int,
-        searchQuery: String
     ) {
         isLoading.value = true
-        providers = emptyList()
+        results = emptyList()
+        getDate()
         viewModelScope.launch {
             fuelRepo.fetchAllFuelPricesByCity(
                 cityCode = cityCode,
@@ -120,15 +126,14 @@ class HomeScreenViewModel @Inject constructor(
                 provider = provider,
                 sortDirection = sortDirection,
                 fuelType = fuelType,
-                searchQuery = searchQuery
 
-            ).collectResource(
+                ).collectResource(
                 onError = {
                     errorMessage = it
                 },
                 loadingState = isLoading
             ) {
-                providers = it?.filterNotNull() ?: emptyList()
+                results = it?.filterNotNull() ?: emptyList()
             }
         }
     }
@@ -171,8 +176,31 @@ class HomeScreenViewModel @Inject constructor(
         }
     }
 
+    fun onSearchQueryChange(query: String) {
+        _searchQuery.value = query
+    }
 
-    fun formatDate(
+
+    fun getFilteredResults(query: String): List<FuelPriceProvider> {
+        val trimmed = query.trim()
+        if (trimmed.isEmpty()) return results
+
+        val lower = trimmed.lowercase()
+
+        return results
+            .map { provider ->
+                val filteredStations = provider.data.filter { station ->
+                    val district = (station?.districtName ?: "").lowercase()
+                    val name = (station?.brand ?: "").lowercase()
+                    district.contains(lower) || name.contains(lower)
+                }
+                provider.copy(data = filteredStations)
+            }
+            .filter { it.data.isNotEmpty() }
+    }
+
+
+    fun getDate(
         pattern: String = "dd/MM/yyyy",
         date: Date = Date()
     ): String {
