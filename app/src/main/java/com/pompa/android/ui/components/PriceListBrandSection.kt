@@ -59,7 +59,7 @@ fun PriceListBrandSection(
     isHeaderPinned: Boolean,
     showDivider: Boolean,
     isFavorite: Boolean,
-    isManual: Boolean,
+    showInfoMessage: Boolean,
     modifier: Modifier = Modifier,
 ) {
     val headerHorizontalPadding by animateDpAsState(
@@ -259,7 +259,7 @@ fun PriceListBrandSection(
 
                 }
             }
-            if (isManual) {
+            if (showInfoMessage) {
                 Text(
                     stringResource(R.string.prices_may_vary_for_this_station),
                     style = MaterialTheme.typography.labelSmall.copy(
@@ -294,7 +294,7 @@ private fun PriceListBrandSectionPrev() {
             isHeaderPinned = true,
             isFavorite = true,
             showDivider = true,
-            isManual = true
+            showInfoMessage = true
         )
     }
 }

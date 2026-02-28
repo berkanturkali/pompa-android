@@ -263,7 +263,7 @@ fun HomeScreenContent(
                                 averagePrice = provider.averagePrice?.toString(),
                                 isFavorite = isFavoriteProvider,
                                 showDivider = provider.ok && provider.data.isNotEmpty(),
-                                isManual = provider.providerIsManual || provider.source == PriceSource.DATABASE
+                                showInfoMessage = (provider.providerIsManual || provider.source == PriceSource.DATABASE) && provider.data.isNotEmpty()
                             )
                         }
                         if (!provider.ok) {
