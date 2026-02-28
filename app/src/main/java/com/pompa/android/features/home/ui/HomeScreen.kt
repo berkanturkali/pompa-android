@@ -36,6 +36,7 @@ import com.pompa.android.features.home.viewmodel.HomeScreenViewModel
 import com.pompa.android.model.FuelFilterItem
 import com.pompa.android.model.fuel.FuelPriceProvider
 import com.pompa.android.model.fuel.FuelPriceRecord
+import com.pompa.android.model.fuel.PriceSource
 import com.pompa.android.model.fuel.PriceTrend
 import com.pompa.android.ui.components.FuelItem
 import com.pompa.android.ui.components.PompaAppDialog
@@ -262,7 +263,7 @@ fun HomeScreenContent(
                                 averagePrice = provider.averagePrice?.toString(),
                                 isFavorite = isFavoriteProvider,
                                 showDivider = provider.ok && provider.data.isNotEmpty(),
-                                isManual = provider.providerIsManual
+                                isManual = provider.providerIsManual || provider.source == PriceSource.DATABASE
                             )
                         }
                         if (!provider.ok) {

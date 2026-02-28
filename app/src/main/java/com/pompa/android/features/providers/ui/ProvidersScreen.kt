@@ -38,6 +38,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -258,20 +259,29 @@ fun ProviderItem(
                         0.5.dp,
                         color = MaterialTheme.pompaColorPalette.borderColor
                     ),
-                    modifier = Modifier.size(52.dp)
+                    modifier = Modifier.size(42.dp)
                 ) {
-                    Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
                         if (painter.state !is AsyncImagePainter.State.Error) {
                             Image(
                                 painter = painter,
                                 contentDescription = null,
                                 contentScale = ContentScale.Fit,
-                                modifier = Modifier.padding(10.dp)
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .padding(3.dp)
+                                    .clip(CircleShape),
                             )
                         } else {
                             Icon(
                                 painter = painterResource(id = R.drawable.ic_water),
                                 contentDescription = null,
+                                modifier = Modifier
+                                    .size(20.dp),
+                                tint = MaterialTheme.pompaColorPalette.textColors.primary
                             )
                         }
                     }
