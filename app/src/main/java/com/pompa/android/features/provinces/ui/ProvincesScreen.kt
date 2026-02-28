@@ -53,7 +53,6 @@ import com.pompa.android.R
 import com.pompa.android.features.provinces.viewmodel.ProvincesScreenViewModel
 import com.pompa.android.model.provinces.Province
 import com.pompa.android.ui.components.PompaAppDialog
-import com.pompa.android.ui.components.PompaAppProgressIndicator
 import com.pompa.android.ui.providers.LocalPompaColors
 import com.pompa.android.ui.providers.pompaColorPalette
 import com.pompa.android.ui.theme.PompaColor
@@ -205,7 +204,9 @@ fun ProvinceItem(
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.pompaColorPalette.cardColors.primaryBackground
-        )
+        ),
+        border = BorderStroke(1.dp, MaterialTheme.pompaColorPalette.borderColor),
+        elevation = CardDefaults.cardElevation(2.dp)
     ) {
 
         Row(

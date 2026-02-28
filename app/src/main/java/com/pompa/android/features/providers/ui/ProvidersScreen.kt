@@ -233,10 +233,12 @@ fun ProviderItem(
             ) {
                 onItemClick()
             },
-        shape = RoundedCornerShape(12.dp),
+        shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.pompaColorPalette.cardColors.primaryBackground.copy(0.95f)
-        )
+        ),
+        border = BorderStroke(1.dp, MaterialTheme.pompaColorPalette.borderColor),
+        elevation = CardDefaults.cardElevation(2.dp)
     ) {
         Row(
             modifier = Modifier

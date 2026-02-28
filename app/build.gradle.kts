@@ -64,6 +64,7 @@ android {
             dimension = "env"
             applicationIdSuffix = ".local"
             versionNameSuffix = "-local"
+            resValue("string", "app_name", "Pompa Local")
 
             buildConfigField("String", "POMPA_BASE_URL", "\"$baseUrl\"")
             buildConfigField("String", "POMPA_EMULATOR_BASE_URL", "\"$emulatorBaseUrl\"")
@@ -74,6 +75,7 @@ android {
             dimension = "env"
             applicationIdSuffix = ".dev"
             versionNameSuffix = "-dev"
+            resValue("string", "app_name", "Pompa Dev")
             buildConfigField("String", "POMPA_BASE_URL", "\"$baseUrl\"")
             buildConfigField("String", "POMPA_EMULATOR_BASE_URL", "\"$emulatorBaseUrl\"")
             buildConfigField("Boolean", "IS_PROD", "false")
@@ -81,6 +83,7 @@ android {
 
         create("prod") {
             dimension = "env"
+            resValue("string", "app_name", "Pompa")
             buildConfigField("String", "POMPA_BASE_URL", "\"$baseUrl\"")
             buildConfigField("String", "POMPA_EMULATOR_BASE_URL", "\"$emulatorBaseUrl\"")
             buildConfigField("Boolean", "IS_PROD", "true")
