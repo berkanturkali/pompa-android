@@ -1,3 +1,12 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+
+val localProperties = gradleLocalProperties(rootDir, providers)
+
+fun getLocalProp(key: String): String {
+    return localProperties.getProperty(key)
+        ?: throw GradleException("Missing '$key' in local.properties")
+}
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -43,7 +52,43 @@ android {
         compose = true
         buildConfig = true
     }
+
+    flavorDimensions += "env"
+
+    val baseUrl = getLocalProp("POMPA_LOCAL_BASE_URL")
+    val emulatorBaseUrl = getLocalProp("POMPA_LOCAL_EMULATOR_BASE_URL")
+
+
+    productFlavors {
+        create("local") {
+            dimension = "env"
+            applicationIdSuffix = ".local"
+            versionNameSuffix = "-local"
+
+            buildConfigField("String", "POMPA_BASE_URL", "\"$baseUrl\"")
+            buildConfigField("String", "POMPA_EMULATOR_BASE_URL", "\"$emulatorBaseUrl\"")
+            buildConfigField("Boolean", "IS_PROD", "false")
+        }
+
+        create("dev") {
+            dimension = "env"
+            applicationIdSuffix = ".dev"
+            versionNameSuffix = "-dev"
+            buildConfigField("String", "POMPA_BASE_URL", "\"$baseUrl\"")
+            buildConfigField("String", "POMPA_EMULATOR_BASE_URL", "\"$emulatorBaseUrl\"")
+            buildConfigField("Boolean", "IS_PROD", "false")
+        }
+
+        create("prod") {
+            dimension = "env"
+            buildConfigField("String", "POMPA_BASE_URL", "\"$baseUrl\"")
+            buildConfigField("String", "POMPA_EMULATOR_BASE_URL", "\"$emulatorBaseUrl\"")
+            buildConfigField("Boolean", "IS_PROD", "true")
+        }
+    }
 }
+
+
 
 dependencies {
 

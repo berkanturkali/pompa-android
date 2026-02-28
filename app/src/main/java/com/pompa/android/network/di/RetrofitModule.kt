@@ -58,7 +58,7 @@ object RetrofitModule {
         moshi: Moshi,
     ): Retrofit {
         return Retrofit.Builder()
-            .baseUrl(if (DeviceManager.checkIfTheDeviceIsEmulator()) BuildConfig.EMULATOR_BASE_URL else BuildConfig.API_BASE_URL)
+            .baseUrl(if (DeviceManager.checkIfTheDeviceIsEmulator()) BuildConfig.POMPA_EMULATOR_BASE_URL else BuildConfig.POMPA_BASE_URL)
             .client(okHttpClient)
             .addConverterFactory(
                 MoshiConverterFactory.create(moshi).asLenient()
