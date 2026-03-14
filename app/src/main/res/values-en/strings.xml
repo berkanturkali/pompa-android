@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="notification_channel_name">Price alerts</string>
+    <string name="notification_channel_description">Notifications for price changes and app updates.</string>
+    <string name="notification_default_title">Pompa</string>
     <string name="select_province">Select Province</string>
     <string name="no_content">No Content</string>
     <string name="something_went_wrong">Something went wrong</string>

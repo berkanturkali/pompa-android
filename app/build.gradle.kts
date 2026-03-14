@@ -16,6 +16,8 @@ plugins {
     alias(libs.plugins.secrets)
     alias(libs.plugins.serialization)
     id("kotlin-parcelize")
+    alias(libs.plugins.google.services)
+    alias(libs.plugins.firebase.crashlytics)
 }
 
 android {
@@ -136,5 +138,11 @@ dependencies {
     implementation(libs.squareup.moshi)
     implementation(libs.squareup.retrofit.moshi.converter)
     ksp(libs.squareup.moshi.codegen)
+
+    //firebase
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.analytics)
+    implementation(libs.firebase.messaging)
+    implementation(libs.firebase.crashlytics)
 
 }

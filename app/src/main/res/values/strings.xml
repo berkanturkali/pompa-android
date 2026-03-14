@@ -1,5 +1,8 @@
 <resources>
     <string name="app_name" translatable="false">Pompa</string>
+    <string name="notification_channel_name">Fiyat Değişiklikleri</string>
+    <string name="notification_channel_description">Fiyat değişiklikleri bilgilendirmesi</string>
+    <string name="notification_default_title">Pompa</string>
     <string name="select_province">İl Seçiniz</string>
     <string name="no_content">İçerik Yok</string>
     <string name="something_went_wrong">Bir şeyler ters gitti.</string>
