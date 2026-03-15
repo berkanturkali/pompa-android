@@ -29,6 +29,9 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -65,7 +68,14 @@ fun FuelSearchBar(
                     focusManager.clearFocus()
                 }
             },
+            singleLine = true,
             maxLines = 1,
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+            keyboardActions = KeyboardActions(
+                onSearch = {
+                    focusManager.clearFocus()
+                }
+            ),
             textStyle = MaterialTheme.typography.bodySmall.copy(
                 fontWeight = FontWeight.Medium,
                 color = MaterialTheme.pompaColorPalette.searchBarColors.textColor
