@@ -273,22 +273,32 @@ fun HomeScreenContent(
                                 )
                             }
                         } else {
-                            if (provider.data.isEmpty()) {
+                            val visibleRecords = provider.data.filterNotNull().mapNotNull { record ->
+                                val fuelPrices = record.prices?.mapToUiItems(
+                                    unit = record.unit ?: "",
+                                    weightUnit = record.weightUnit ?: ""
+                                )?.take(3) ?: emptyList()
+
+                                if (fuelPrices.isEmpty()) {
+                                    null
+                                } else {
+                                    record to fuelPrices
+                                }
+                            }
+
+                            if (visibleRecords.isEmpty()) {
                                 item {
                                     ProviderEmptyView(provider = provider.provider)
                                 }
                             } else {
-                                items(provider.data.filterNotNull()) { record ->
+                                items(visibleRecords) { (record, fuelPrices) ->
                                     val actualFuelPriceListCount = record.prices?.notNullCount()
                                         ?: 0
                                     FuelItem(
                                         clickable = actualFuelPriceListCount > 3,
                                         districtName = record.districtName ?: "",
                                         actualFuelPriceListCount = actualFuelPriceListCount,
-                                        fuelPrices = record.prices?.mapToUiItems(
-                                            unit = record.unit ?: "",
-                                            weightUnit = record.weightUnit ?: ""
-                                        )?.take(3) ?: emptyList(),
+                                        fuelPrices = fuelPrices,
                                         modifier = Modifier
                                             .slideInByScrollDirection(isScrollingDown.value)
                                             .padding(containerPadding),
