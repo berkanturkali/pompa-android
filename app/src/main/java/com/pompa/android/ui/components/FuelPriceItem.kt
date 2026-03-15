@@ -34,10 +34,9 @@ fun FuelPriceItem(
     title: String,
     price: String,
     unit: String,
-    priceTrend: PriceTrendUiModel,
+    priceTrend: PriceTrendUiModel?,
     modifier: Modifier = Modifier
 ) {
-
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -99,7 +98,7 @@ fun FuelPriceItem(
                 horizontalArrangement = Arrangement.spacedBy(4.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                priceTrend.icon?.let { id ->
+                priceTrend?.icon?.let { id ->
                     Icon(
                         painter = painterResource(id),
                         contentDescription = null,
@@ -108,7 +107,7 @@ fun FuelPriceItem(
                     )
                 }
 
-                priceTrend.priceChange?.let { change ->
+                priceTrend?.priceChange?.let { change ->
                     Text(
                         text = buildAnnotatedString {
                             withStyle(
@@ -148,18 +147,27 @@ fun FuelPriceItem(
 @Composable
 private fun FuelPriceItemPrev() {
     PompaTheme {
-        FuelPriceItem(
-            title = "GASOLINE 95",
-            price = "42.10",
-            unit = "TL/LT",
-            priceTrend = PriceTrendUiModel(
-                fuelKey = "gasoline95",
-                previousPrice = "56.57",
-                priceChange = "1.62",
-                changeDirection = ChangeDirection.UP,
-                color = Color.Green,
-                icon = R.drawable.ic_upward
+        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            FuelPriceItem(
+                title = "GASOLINE 95",
+                price = "42.10",
+                unit = "TL/LT",
+                priceTrend = PriceTrendUiModel(
+                    fuelKey = "gasoline95",
+                    previousPrice = "56.57",
+                    priceChange = "1.62",
+                    changeDirection = ChangeDirection.UP,
+                    color = Color.Green,
+                    icon = R.drawable.ic_upward
+                )
+
             )
-        )
+            FuelPriceItem(
+                title = "GASOLINE 95",
+                price = "42.10",
+                unit = "TL/LT",
+                priceTrend = null
+            )
+        }
     }
 }

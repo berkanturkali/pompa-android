@@ -173,7 +173,7 @@ fun FuelItem(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(vertical = 6.dp),
-                            priceTrend = PriceTrendUiModel.mapToTrendUiModel(trend)
+                            priceTrend = if(fuelPriceTrends.isEmpty()) null else PriceTrendUiModel.mapToTrendUiModel(trend)
                         )
                         if (index != fuelPrices.lastIndex) {
                             HorizontalDivider(
