@@ -134,9 +134,7 @@ fun PriceListBrandSection(
             )
     ) {
 
-        Column(
-
-        ) {
+        Column {
 
             Row(
                 modifier = Modifier

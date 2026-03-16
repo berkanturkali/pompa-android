@@ -3,6 +3,7 @@ package com.pompa.android
 import android.app.Application
 import android.util.Log
 import com.google.firebase.messaging.FirebaseMessaging
+import com.google.android.gms.ads.MobileAds
 import com.pompa.android.notification.PompaNotificationManager
 import dagger.hilt.android.HiltAndroidApp
 
@@ -15,6 +16,7 @@ class PompaApplication: Application() {
 
     override fun onCreate() {
         super.onCreate()
+        MobileAds.initialize(this)
         PompaNotificationManager.createChannel(this)
         FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
             if (task.isSuccessful) {

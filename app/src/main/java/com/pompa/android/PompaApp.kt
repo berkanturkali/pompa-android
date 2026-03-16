@@ -41,7 +41,9 @@ import com.pompa.android.navigation.utils.decodeNavArg
 import com.pompa.android.navigation.utils.encodeNavArg
 import com.pompa.android.ui.components.PompaAppBottomBar
 import com.pompa.android.ui.components.PompaAppTopBar
+import com.pompa.android.ui.components.PompaBannerAd
 import com.pompa.android.ui.providers.pompaColorPalette
+import androidx.compose.foundation.layout.Column
 
 private const val TAG = "PompaApp"
 
@@ -106,21 +108,23 @@ fun PompaApp(
             }
         },
         bottomBar = {
-
             AnimatedVisibility(
-                modifier = Modifier.navigationBarsPadding(),
                 visible = viewModel.showBottomBar,
                 enter = slideInVertically(
                     initialOffsetY = { it }) + fadeIn(),
                 exit = slideOutVertically(
                     targetOffsetY = { it }) + fadeOut()
             ) {
-                PompaAppBottomBar(
-                    navController = navController,
-                    destinations = viewModel.topLevelDestinations,
-                    onTabReselected = { destination ->
-                        reselectedTab = destination
-                    })
+                Column {
+                    PompaBannerAd()
+                    PompaAppBottomBar(
+                        modifier = Modifier.navigationBarsPadding(),
+                        navController = navController,
+                        destinations = viewModel.topLevelDestinations,
+                        onTabReselected = { destination ->
+                            reselectedTab = destination
+                        })
+                }
             }
         }
     ) {

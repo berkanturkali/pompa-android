@@ -7,6 +7,10 @@ fun getLocalProp(key: String): String {
         ?: throw GradleException("Missing '$key' in local.properties")
 }
 
+fun getLocalPropOrDefault(key: String, defaultValue: String): String {
+    return localProperties.getProperty(key) ?: defaultValue
+}
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -37,6 +41,7 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = false
+            signingConfig = signingConfigs.getByName("debug")
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -59,6 +64,16 @@ android {
 
     val baseUrl = getLocalProp("POMPA_LOCAL_BASE_URL")
     val emulatorBaseUrl = getLocalProp("POMPA_LOCAL_EMULATOR_BASE_URL")
+    val testAdmobAppId = "ca-app-pub-3940256099942544~3347511713"
+    val testAdmobBannerUnitId = "ca-app-pub-3940256099942544/6300978111"
+    val prodAdmobAppId = getLocalPropOrDefault(
+        "ADMOB_APP_ID",
+        testAdmobAppId
+    )
+    val prodAdmobBannerUnitId = getLocalPropOrDefault(
+        "ADMOB_BANNER_UNIT_ID",
+        testAdmobBannerUnitId
+    )
 
 
     productFlavors {
@@ -70,7 +85,9 @@ android {
 
             buildConfigField("String", "POMPA_BASE_URL", "\"$baseUrl\"")
             buildConfigField("String", "POMPA_EMULATOR_BASE_URL", "\"$emulatorBaseUrl\"")
+            buildConfigField("String", "ADMOB_BANNER_UNIT_ID", "\"$testAdmobBannerUnitId\"")
             buildConfigField("Boolean", "IS_PROD", "false")
+            resValue("string", "admob_app_id", testAdmobAppId)
         }
 
         create("dev") {
@@ -80,7 +97,9 @@ android {
             resValue("string", "app_name", "Pompa Dev")
             buildConfigField("String", "POMPA_BASE_URL", "\"$baseUrl\"")
             buildConfigField("String", "POMPA_EMULATOR_BASE_URL", "\"$emulatorBaseUrl\"")
+            buildConfigField("String", "ADMOB_BANNER_UNIT_ID", "\"$testAdmobBannerUnitId\"")
             buildConfigField("Boolean", "IS_PROD", "false")
+            resValue("string", "admob_app_id", testAdmobAppId)
         }
 
         create("prod") {
@@ -88,7 +107,9 @@ android {
             resValue("string", "app_name", "Pompa")
             buildConfigField("String", "POMPA_BASE_URL", "\"$baseUrl\"")
             buildConfigField("String", "POMPA_EMULATOR_BASE_URL", "\"$emulatorBaseUrl\"")
+            buildConfigField("String", "ADMOB_BANNER_UNIT_ID", "\"$prodAdmobBannerUnitId\"")
             buildConfigField("Boolean", "IS_PROD", "true")
+            resValue("string", "admob_app_id", prodAdmobAppId)
         }
     }
 }
@@ -144,5 +165,6 @@ dependencies {
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.messaging)
     implementation(libs.firebase.crashlytics)
+    implementation(libs.google.play.services.ads)
 
 }
