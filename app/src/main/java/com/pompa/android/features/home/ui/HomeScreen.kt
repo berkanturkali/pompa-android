@@ -159,7 +159,7 @@ fun HomeScreenContent(
 
     val pullState = rememberPullToRefreshState()
 
-    val isHeaderPinned by remember {
+    val isHeaderPinned by remember(isTabletLayout, gridState, listState) {
         derivedStateOf {
             if (isTabletLayout) {
                 gridState.firstVisibleItemIndex > 0 || gridState.firstVisibleItemScrollOffset > 0
@@ -169,7 +169,7 @@ fun HomeScreenContent(
         }
     }
 
-    val isScrollingDown = remember {
+    val isScrollingDown = remember(isTabletLayout, gridState, listState) {
         derivedStateOf {
             val currIndex = if (isTabletLayout) {
                 gridState.firstVisibleItemIndex
@@ -193,9 +193,18 @@ fun HomeScreenContent(
         }
     }
 
-    val pinnedHeader by remember {
+    val pinnedHeader by remember(isTabletLayout, headerItems, gridState) {
         derivedStateOf {
-            headerItems.lastOrNull { it.itemIndex <= gridState.firstVisibleItemIndex }
+            if (!isTabletLayout) {
+                return@derivedStateOf null
+            }
+
+            val topVisibleItemIndex = gridState.layoutInfo.visibleItemsInfo
+                .minByOrNull { it.offset.y }
+                ?.index
+                ?: gridState.firstVisibleItemIndex
+
+            headerItems.lastOrNull { it.itemIndex <= topVisibleItemIndex }
         }
     }
 
