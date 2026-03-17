@@ -14,12 +14,18 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
@@ -44,6 +50,8 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -57,7 +65,9 @@ import com.pompa.android.ui.providers.LocalPompaColors
 import com.pompa.android.ui.providers.pompaColorPalette
 import com.pompa.android.ui.theme.PompaColor
 import com.pompa.android.ui.theme.PompaTheme
+import com.pompa.android.ui.utils.isTabletLayout
 import com.pompa.android.ui.utils.slideInByScrollDirection
+import androidx.compose.foundation.lazy.grid.items as gridItems
 
 @Composable
 fun ProvincesScreen(
@@ -102,8 +112,11 @@ fun ProvincesScreenContent(
     onErrorDialogDismiss: () -> Unit = {},
     onProvinceSelected: (Province) -> Unit
 ) {
+    val isTabletLayout = isTabletLayout()
+    val gridColumnCount = provinceGridColumnCount()
 
     val listState = rememberLazyListState()
+    val gridState = rememberLazyGridState()
 
     var lastIndex by remember { mutableIntStateOf(0) }
     var lastOffset by remember { mutableIntStateOf(0) }
@@ -113,8 +126,16 @@ fun ProvincesScreenContent(
 
     val isScrollingDown = remember {
         derivedStateOf {
-            val currIndex = listState.firstVisibleItemIndex
-            val currOffset = listState.firstVisibleItemScrollOffset
+            val currIndex = if (isTabletLayout) {
+                gridState.firstVisibleItemIndex
+            } else {
+                listState.firstVisibleItemIndex
+            }
+            val currOffset = if (isTabletLayout) {
+                gridState.firstVisibleItemScrollOffset
+            } else {
+                listState.firstVisibleItemScrollOffset
+            }
 
             val scrollingDown =
                 currIndex > lastIndex ||
@@ -139,18 +160,39 @@ fun ProvincesScreenContent(
         .alpha(opacityProgress.value)
 
     Box(modifier = modifier.fillMaxSize()) {
-
-        LazyColumn(
-            state = listState
-        ) {
-            items(provinces) { province ->
-                ProvinceItem(
-                    scrollingDown = isScrollingDown.value,
-                    modifier = animationModifier,
-                    province = province,
-                    showSelectedCheckMark = province.code == selectedProvinceCode
-                ) {
-                    onProvinceSelected(province)
+        if (isTabletLayout) {
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(gridColumnCount),
+                state = gridState,
+                modifier = Modifier.fillMaxSize(),
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+                contentPadding = PaddingValues(8.dp)
+            ) {
+                gridItems(provinces) { province ->
+                    ProvinceGridItem(
+                        scrollingDown = isScrollingDown.value,
+                        modifier = animationModifier,
+                        province = province,
+                        showSelectedCheckMark = province.code == selectedProvinceCode
+                    ) {
+                        onProvinceSelected(province)
+                    }
+                }
+            }
+        } else {
+            LazyColumn(
+                state = listState
+            ) {
+                items(provinces) { province ->
+                    ProvinceItem(
+                        scrollingDown = isScrollingDown.value,
+                        modifier = animationModifier,
+                        province = province,
+                        showSelectedCheckMark = province.code == selectedProvinceCode
+                    ) {
+                        onProvinceSelected(province)
+                    }
                 }
             }
         }
@@ -180,6 +222,13 @@ fun ProvincesScreenContent(
 
         }
     }
+}
+
+@Composable
+private fun provinceGridColumnCount(): Int {
+    val density = LocalDensity.current
+    val widthDp = with(density) { LocalWindowInfo.current.containerSize.width.toDp() }
+    return if (widthDp >= 1200.dp) 4 else 3
 }
 
 @Composable
@@ -261,6 +310,99 @@ fun ProvinceItem(
                 )
             }
         }
+    }
+}
+
+@Composable
+fun ProvinceGridItem(
+    scrollingDown: Boolean,
+    province: Province,
+    modifier: Modifier = Modifier,
+    showSelectedCheckMark: Boolean = false,
+    onItemClick: () -> Unit,
+) {
+    val interactionSource = remember { MutableInteractionSource() }
+
+    Card(
+        modifier = modifier
+            .slideInByScrollDirection(scrollingDown = scrollingDown)
+            .aspectRatio(1f)
+            .clickable(
+                interactionSource = interactionSource,
+                indication = null
+            ) {
+                onItemClick()
+            },
+        shape = RoundedCornerShape(20.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.pompaColorPalette.cardColors.primaryBackground
+        ),
+        border = BorderStroke(1.dp, MaterialTheme.pompaColorPalette.borderColor),
+        elevation = CardDefaults.cardElevation(2.dp)
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp)
+        ) {
+            Box(modifier = Modifier.align(Alignment.TopEnd)) {
+                if (showSelectedCheckMark) {
+                    Icon(
+                        modifier = Modifier.size(28.dp),
+                        painter = painterResource(R.drawable.ic_check),
+                        contentDescription = null,
+                        tint = Color(0xff4CAF50)
+                    )
+                }
+            }
+
+            Column(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .align(Alignment.Center),
+                verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Card(
+                    shape = CircleShape,
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.pompaColorPalette.cardColors.primaryBackground,
+                        contentColor = MaterialTheme.pompaColorPalette.buttonColors.filledPrimaryContent
+                    ),
+                    border = BorderStroke(1.dp, MaterialTheme.pompaColorPalette.borderColor)
+                ) {
+                    Box(
+                        contentAlignment = Alignment.Center,
+                        modifier = Modifier.padding(32.dp)
+                    ) {
+                        Text(
+                            text = province.code,
+                            style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold)
+                        )
+                    }
+                }
+
+                Text(
+                    text = province.name,
+                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
+                    color = MaterialTheme.pompaColorPalette.textColors.primary,
+                    modifier = Modifier.padding(top = 12.dp)
+                )
+            }
+        }
+    }
+}
+
+@Preview
+@Composable
+private fun ProvinceGridItemPrev() {
+    PompaTheme {
+        ProvinceGridItem(
+            scrollingDown = true,
+            province = Province(id = 1, name = "İstanbul", code = "34"),
+            showSelectedCheckMark = true,
+            onItemClick = {}
+        )
     }
 }
 
