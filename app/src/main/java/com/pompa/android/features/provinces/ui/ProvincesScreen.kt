@@ -228,7 +228,7 @@ fun ProvincesScreenContent(
 private fun provinceGridColumnCount(): Int {
     val density = LocalDensity.current
     val widthDp = with(density) { LocalWindowInfo.current.containerSize.width.toDp() }
-    return if (widthDp >= 1200.dp) 4 else 3
+    return if (widthDp >= 1200.dp) 5 else 3
 }
 
 @Composable
