@@ -28,6 +28,7 @@ moshi = "1.15.2"
 google-services = "4.4.4"
 firebase-bom = "34.10.0"
 play-services-ads = "24.7.0"
+core-splashscreen = "1.0.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -68,6 +69,7 @@ firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics
 firebase-messaging = { group = "com.google.firebase", name = "firebase-messaging" }
 firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics" }
 google-play-services-ads = { group = "com.google.android.gms", name = "play-services-ads", version.ref = "play-services-ads" }
+androidx-core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "core-splashscreen" }
 
 
 

@@ -1,6 +1,7 @@
 package com.pompa.android.notification
 
 import android.Manifest
+import android.graphics.BitmapFactory
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -51,7 +52,7 @@ object PompaNotificationManager {
         )
 
         val notification = NotificationCompat.Builder(context, CHANNEL_ID)
-            .setSmallIcon(R.drawable.ic_star)
+            .setSmallIcon(R.drawable.ic_notification)
             .setContentTitle(title)
             .setContentText(body)
             .setStyle(NotificationCompat.BigTextStyle().bigText(body))

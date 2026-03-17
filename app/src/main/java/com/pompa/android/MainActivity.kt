@@ -17,6 +17,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.compose.rememberNavController
 import com.pompa.android.ui.providers.pompaColorPalette
 import com.pompa.android.ui.theme.ChangeSystemBarsTheme
@@ -28,6 +29,7 @@ class MainActivity : ComponentActivity() {
 
     private val viewModel by viewModels<MainActivityViewModel>()
     override fun onCreate(savedInstanceState: Bundle?) {
+        installSplashScreen()
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {

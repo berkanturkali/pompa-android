@@ -17,13 +17,14 @@ data class PriceTrendUiModel(
 
     companion object {
         fun mapToTrendUiModel(priceTrend: PriceTrend?): PriceTrendUiModel {
+            val changeDirection = priceTrend.toChangeDirection()
             return PriceTrendUiModel(
                 fuelKey = priceTrend?.fuelKey,
                 previousPrice = priceTrend?.previousPrice?.toString(),
-                priceChange = priceTrend?.let { setPriceChange(priceTrend) },
-                changeDirection = ChangeDirection.valueOf(priceTrend?.changeDirection!!),
-                color = setColor(ChangeDirection.valueOf(priceTrend.changeDirection)),
-                icon = setIcon(ChangeDirection.valueOf(priceTrend.changeDirection))
+                priceChange = priceTrend?.let { setPriceChange(it, changeDirection) },
+                changeDirection = changeDirection,
+                color = setColor(changeDirection),
+                icon = setIcon(changeDirection)
             )
         }
 
@@ -59,12 +60,20 @@ data class PriceTrendUiModel(
             }
         }
 
-        private fun setPriceChange(priceTrend: PriceTrend): String? {
-            val changeDirection = ChangeDirection.valueOf(priceTrend.changeDirection!!)
+        private fun setPriceChange(
+            priceTrend: PriceTrend,
+            changeDirection: ChangeDirection
+        ): String? {
             return when (changeDirection) {
                 ChangeDirection.UP, ChangeDirection.DOWN -> priceTrend.priceChange?.toString()
                 else -> null
             }
+        }
+
+        private fun PriceTrend?.toChangeDirection(): ChangeDirection {
+            val rawValue = this?.changeDirection ?: return ChangeDirection.NO_DATA
+            return ChangeDirection.entries.firstOrNull { it.name == rawValue }
+                ?: ChangeDirection.NO_DATA
         }
     }
 }

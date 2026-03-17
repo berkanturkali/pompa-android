@@ -30,11 +30,10 @@ import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import coil.decode.SvgDecoder
 import coil.request.ImageRequest
-import com.pompa.android.BuildConfig
 import com.pompa.android.R
 import com.pompa.android.ui.providers.pompaColorPalette
 import com.pompa.android.ui.theme.PompaTheme
-import com.pompa.android.util.DeviceManager
+import com.pompa.android.util.resolveBackendAssetUrl
 
 @Composable
 fun ProviderView(
@@ -46,12 +45,7 @@ fun ProviderView(
 
     val context = LocalContext.current
 
-    val imageUrl = if (DeviceManager.checkIfTheDeviceIsEmulator()) {
-        logo
-            .replace(BuildConfig.IMAGE_BASE_URL, BuildConfig.EMULATOR_IMAGE_BASE_URL)
-    } else {
-        logo
-    }
+    val imageUrl = resolveBackendAssetUrl(logo)
 
     val imageLoader = remember {
         ImageLoader.Builder(context)
