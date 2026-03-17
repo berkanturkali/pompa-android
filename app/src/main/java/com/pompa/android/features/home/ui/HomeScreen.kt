@@ -10,6 +10,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
+import androidx.compose.foundation.lazy.grid.LazyGridState
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items as gridItems
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
@@ -45,6 +51,7 @@ import com.pompa.android.ui.components.PriceListBrandSection
 import com.pompa.android.ui.components.SortButton
 import com.pompa.android.ui.providers.pompaColorPalette
 import com.pompa.android.ui.utils.slideInByScrollDirection
+import com.pompa.android.ui.utils.isTabletLayout
 
 @Composable
 fun HomeScreen(
@@ -137,26 +144,43 @@ fun HomeScreenContent(
     onFuelTypeSelected: (FuelFilterItem) -> Unit,
     onFuelItemClick: (FuelPriceProvider, FuelPriceRecord, Boolean, List<PriceTrend>) -> Unit,
 ) {
+    val isTabletLayout = isTabletLayout()
 
     val containerPadding = 8.dp
+    val headerItems = remember(providers, selectedProvider) {
+        buildProviderHeaderItems(providers, selectedProvider)
+    }
 
     var lastIndex by remember { mutableIntStateOf(0) }
     var lastOffset by remember { mutableIntStateOf(0) }
 
+    val gridState = rememberLazyGridState()
     val listState = rememberLazyListState()
 
     val pullState = rememberPullToRefreshState()
 
     val isHeaderPinned by remember {
         derivedStateOf {
-            listState.firstVisibleItemIndex > 0 || listState.firstVisibleItemScrollOffset > 0
+            if (isTabletLayout) {
+                gridState.firstVisibleItemIndex > 0 || gridState.firstVisibleItemScrollOffset > 0
+            } else {
+                listState.firstVisibleItemIndex > 0 || listState.firstVisibleItemScrollOffset > 0
+            }
         }
     }
 
     val isScrollingDown = remember {
         derivedStateOf {
-            val currIndex = listState.firstVisibleItemIndex
-            val currOffset = listState.firstVisibleItemScrollOffset
+            val currIndex = if (isTabletLayout) {
+                gridState.firstVisibleItemIndex
+            } else {
+                listState.firstVisibleItemIndex
+            }
+            val currOffset = if (isTabletLayout) {
+                gridState.firstVisibleItemScrollOffset
+            } else {
+                listState.firstVisibleItemScrollOffset
+            }
 
             val scrollingDown =
                 currIndex > lastIndex ||
@@ -169,10 +193,20 @@ fun HomeScreenContent(
         }
     }
 
+    val pinnedHeader by remember {
+        derivedStateOf {
+            headerItems.lastOrNull { it.itemIndex <= gridState.firstVisibleItemIndex }
+        }
+    }
+
 
     LaunchedEffect(tabReselected) {
         if (tabReselected) {
-            listState.animateScrollToItem(0)
+            if (isTabletLayout) {
+                gridState.animateScrollToItem(0)
+            } else {
+                listState.animateScrollToItem(0)
+            }
             onReselectionConsumed()
         }
     }
@@ -241,87 +275,289 @@ fun HomeScreenContent(
                 onRefresh = {
                     onRefresh()
                 }) {
-                LazyColumn(
-                    modifier = Modifier.fillMaxSize(),
-                    state = listState,
-                    verticalArrangement = Arrangement.spacedBy(6.dp)
-                ) {
-
-                    providers.forEach { provider ->
-
-
-                        val isFavoriteProvider = provider.provider.equals(
-                            selectedProvider,
-                            ignoreCase = true
+                Box(modifier = Modifier.fillMaxSize()) {
+                    if (isTabletLayout) {
+                        TabletHomeGrid(
+                            providers = providers,
+                            selectedProvider = selectedProvider,
+                            gridState = gridState,
+                            isHeaderPinned = isHeaderPinned,
+                            isScrollingDown = isScrollingDown.value,
+                            containerPadding = containerPadding,
+                            onFuelItemClick = onFuelItemClick,
+                            onLocationButtonClick = onLocationButtonClick
                         )
-                        stickyHeader {
+                    } else {
+                        PhoneHomeGrid(
+                            providers = providers,
+                            selectedProvider = selectedProvider,
+                            listState = listState,
+                            isHeaderPinned = isHeaderPinned,
+                            isScrollingDown = isScrollingDown.value,
+                            containerPadding = containerPadding,
+                            onFuelItemClick = onFuelItemClick,
+                            onLocationButtonClick = onLocationButtonClick
+                        )
+                    }
 
-                            PriceListBrandSection(
-                                isHeaderPinned = isHeaderPinned,
-                                name = provider.provider,
-                                logo = provider.providerLogo,
-                                averagePrice = provider.averagePrice?.toString(),
-                                isFavorite = isFavoriteProvider,
-                                showDivider = provider.ok && provider.data.isNotEmpty(),
-                                showInfoMessage = (provider.providerIsManual || provider.source == PriceSource.DATABASE) && provider.data.isNotEmpty()
-                            )
-                        }
-                        if (!provider.ok) {
-                            item {
-                                ProviderErrorView(
-                                    provider = provider.provider
-                                )
-                            }
-                        } else {
-                            val visibleRecords = provider.data.filterNotNull().mapNotNull { record ->
-                                val fuelPrices = record.prices?.mapToUiItems(
-                                    unit = record.unit ?: "",
-                                    weightUnit = record.weightUnit ?: ""
-                                )?.take(3) ?: emptyList()
-
-                                if (fuelPrices.isEmpty()) {
-                                    null
-                                } else {
-                                    record to fuelPrices
-                                }
-                            }
-
-                            if (visibleRecords.isEmpty()) {
-                                item {
-                                    ProviderEmptyView(provider = provider.provider)
-                                }
-                            } else {
-                                items(visibleRecords) { (record, fuelPrices) ->
-                                    val actualFuelPriceListCount = record.prices?.notNullCount()
-                                        ?: 0
-                                    FuelItem(
-                                        clickable = actualFuelPriceListCount > 3,
-                                        districtName = record.districtName ?: "",
-                                        actualFuelPriceListCount = actualFuelPriceListCount,
-                                        fuelPrices = fuelPrices,
-                                        modifier = Modifier
-                                            .slideInByScrollDirection(isScrollingDown.value)
-                                            .padding(containerPadding),
-                                        onItemClick = {
-                                            onFuelItemClick(
-                                                provider,
-                                                record,
-                                                isFavoriteProvider,
-                                                record.priceTrends ?: emptyList()
-                                            )
-                                        },
-                                        onLocationButtonClick = {
-                                            onLocationButtonClick(provider.provider, record)
-                                        },
-                                        fuelPriceTrends = record.priceTrends ?: emptyList()
-
-                                    )
-                                }
-                            }
-                        }
+                    val currentPinnedHeader = pinnedHeader
+                    if (isTabletLayout && isHeaderPinned && currentPinnedHeader != null) {
+                        PriceListBrandSection(
+                            modifier = Modifier.align(Alignment.TopCenter),
+                            isHeaderPinned = true,
+                            name = currentPinnedHeader.name,
+                            logo = currentPinnedHeader.logo,
+                            averagePrice = currentPinnedHeader.averagePrice,
+                            isFavorite = currentPinnedHeader.isFavorite,
+                            showDivider = currentPinnedHeader.showDivider,
+                            showInfoMessage = currentPinnedHeader.showInfoMessage
+                        )
                     }
                 }
             }
         }
     }
+}
+
+@Composable
+private fun PhoneHomeGrid(
+    providers: List<FuelPriceProvider>,
+    selectedProvider: String,
+    listState: androidx.compose.foundation.lazy.LazyListState,
+    isHeaderPinned: Boolean,
+    isScrollingDown: Boolean,
+    containerPadding: androidx.compose.ui.unit.Dp,
+    onFuelItemClick: (FuelPriceProvider, FuelPriceRecord, Boolean, List<PriceTrend>) -> Unit,
+    onLocationButtonClick: (String, FuelPriceRecord) -> Unit,
+) {
+    LazyColumn(
+        modifier = Modifier.fillMaxSize(),
+        state = listState,
+        verticalArrangement = Arrangement.spacedBy(6.dp)
+    ) {
+        providers.forEach { provider ->
+            val isFavoriteProvider = provider.provider.equals(
+                selectedProvider,
+                ignoreCase = true
+            )
+
+            stickyHeader {
+                PriceListBrandSection(
+                    isHeaderPinned = isHeaderPinned,
+                    name = provider.provider,
+                    logo = provider.providerLogo,
+                    averagePrice = provider.averagePrice?.toString(),
+                    isFavorite = isFavoriteProvider,
+                    showDivider = provider.ok && provider.data.isNotEmpty(),
+                    showInfoMessage = (provider.providerIsManual || provider.source == PriceSource.DATABASE) && provider.data.isNotEmpty()
+                )
+            }
+
+            if (!provider.ok) {
+                item {
+                    ProviderErrorView(provider = provider.provider)
+                }
+            } else {
+                val visibleRecords = provider.data.filterNotNull().mapNotNull { record ->
+                    val fuelPrices = record.prices?.mapToUiItems(
+                        unit = record.unit ?: "",
+                        weightUnit = record.weightUnit ?: ""
+                    )?.take(3) ?: emptyList()
+
+                    if (fuelPrices.isEmpty()) null else record to fuelPrices
+                }
+
+                if (visibleRecords.isEmpty()) {
+                    item {
+                        ProviderEmptyView(provider = provider.provider)
+                    }
+                } else {
+                    items(visibleRecords) { (record, fuelPrices) ->
+                        val actualFuelPriceListCount = record.prices?.notNullCount() ?: 0
+                        FuelItem(
+                            clickable = actualFuelPriceListCount > 3,
+                            districtName = record.districtName ?: "",
+                            actualFuelPriceListCount = actualFuelPriceListCount,
+                            fuelPrices = fuelPrices,
+                            modifier = Modifier
+                                .slideInByScrollDirection(isScrollingDown)
+                                .padding(containerPadding),
+                            onItemClick = {
+                                onFuelItemClick(
+                                    provider,
+                                    record,
+                                    isFavoriteProvider,
+                                    record.priceTrends ?: emptyList()
+                                )
+                            },
+                            onLocationButtonClick = {
+                                onLocationButtonClick(provider.provider, record)
+                            },
+                            fuelPriceTrends = record.priceTrends ?: emptyList()
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun TabletHomeGrid(
+    providers: List<FuelPriceProvider>,
+    selectedProvider: String,
+    gridState: LazyGridState,
+    isHeaderPinned: Boolean,
+    isScrollingDown: Boolean,
+    containerPadding: androidx.compose.ui.unit.Dp,
+    onFuelItemClick: (FuelPriceProvider, FuelPriceRecord, Boolean, List<PriceTrend>) -> Unit,
+    onLocationButtonClick: (String, FuelPriceRecord) -> Unit,
+) {
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(3),
+        modifier = Modifier.fillMaxSize(),
+        state = gridState,
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        providerSections(
+            providers = providers,
+            selectedProvider = selectedProvider,
+            isHeaderPinned = isHeaderPinned,
+            isScrollingDown = isScrollingDown,
+            containerPadding = containerPadding,
+            fullSpan = 3,
+            onFuelItemClick = onFuelItemClick,
+            onLocationButtonClick = onLocationButtonClick
+        )
+    }
+}
+
+private fun androidx.compose.foundation.lazy.grid.LazyGridScope.providerSections(
+    providers: List<FuelPriceProvider>,
+    selectedProvider: String,
+    isHeaderPinned: Boolean,
+    isScrollingDown: Boolean,
+    containerPadding: androidx.compose.ui.unit.Dp,
+    fullSpan: Int,
+    onFuelItemClick: (FuelPriceProvider, FuelPriceRecord, Boolean, List<PriceTrend>) -> Unit,
+    onLocationButtonClick: (String, FuelPriceRecord) -> Unit,
+) {
+    providers.forEach { provider ->
+        val isFavoriteProvider = provider.provider.equals(
+            selectedProvider,
+            ignoreCase = true
+        )
+
+        item(span = { GridItemSpan(fullSpan) }) {
+            PriceListBrandSection(
+                isHeaderPinned = isHeaderPinned,
+                name = provider.provider,
+                logo = provider.providerLogo,
+                averagePrice = provider.averagePrice?.toString(),
+                isFavorite = isFavoriteProvider,
+                showDivider = provider.ok && provider.data.isNotEmpty(),
+                showInfoMessage = (provider.providerIsManual || provider.source == PriceSource.DATABASE) && provider.data.isNotEmpty()
+            )
+        }
+
+        if (!provider.ok) {
+            item(span = { GridItemSpan(fullSpan) }) {
+                ProviderErrorView(provider = provider.provider)
+            }
+        } else {
+            val visibleRecords = provider.data.filterNotNull().mapNotNull { record ->
+                val fuelPrices = record.prices?.mapToUiItems(
+                    unit = record.unit ?: "",
+                    weightUnit = record.weightUnit ?: ""
+                )?.take(3) ?: emptyList()
+
+                if (fuelPrices.isEmpty()) {
+                    null
+                } else {
+                    record to fuelPrices
+                }
+            }
+
+            if (visibleRecords.isEmpty()) {
+                item(span = { GridItemSpan(fullSpan) }) {
+                    ProviderEmptyView(provider = provider.provider)
+                }
+            } else {
+                gridItems(visibleRecords) { (record, fuelPrices) ->
+                    val actualFuelPriceListCount = record.prices?.notNullCount() ?: 0
+                    FuelItem(
+                        clickable = actualFuelPriceListCount > 3,
+                        districtName = record.districtName ?: "",
+                        actualFuelPriceListCount = actualFuelPriceListCount,
+                        fuelPrices = fuelPrices,
+                        modifier = Modifier
+                            .slideInByScrollDirection(isScrollingDown)
+                            .padding(containerPadding),
+                        onItemClick = {
+                            onFuelItemClick(
+                                provider,
+                                record,
+                                isFavoriteProvider,
+                                record.priceTrends ?: emptyList()
+                            )
+                        },
+                        onLocationButtonClick = {
+                            onLocationButtonClick(provider.provider, record)
+                        },
+                        fuelPriceTrends = record.priceTrends ?: emptyList()
+                    )
+                }
+            }
+        }
+    }
+}
+
+private data class ProviderHeaderItem(
+    val itemIndex: Int,
+    val name: String,
+    val logo: String,
+    val averagePrice: String?,
+    val isFavorite: Boolean,
+    val showDivider: Boolean,
+    val showInfoMessage: Boolean,
+)
+
+private fun buildProviderHeaderItems(
+    providers: List<FuelPriceProvider>,
+    selectedProvider: String,
+): List<ProviderHeaderItem> {
+    val headerItems = mutableListOf<ProviderHeaderItem>()
+    var currentIndex = 0
+
+    providers.forEach { provider ->
+        val visibleRecords = provider.data.filterNotNull().mapNotNull { record ->
+            val fuelPrices = record.prices?.mapToUiItems(
+                unit = record.unit ?: "",
+                weightUnit = record.weightUnit ?: ""
+            )?.take(3) ?: emptyList()
+
+            if (fuelPrices.isEmpty()) null else record to fuelPrices
+        }
+
+        headerItems += ProviderHeaderItem(
+            itemIndex = currentIndex,
+            name = provider.provider,
+            logo = provider.providerLogo,
+            averagePrice = provider.averagePrice?.toString(),
+            isFavorite = provider.provider.equals(selectedProvider, ignoreCase = true),
+            showDivider = provider.ok && provider.data.isNotEmpty(),
+            showInfoMessage = (provider.providerIsManual || provider.source == PriceSource.DATABASE) && provider.data.isNotEmpty()
+        )
+
+        currentIndex += 1
+
+        currentIndex += when {
+            !provider.ok -> 1
+            visibleRecords.isEmpty() -> 1
+            else -> visibleRecords.size
+        }
+    }
+
+    return headerItems
 }

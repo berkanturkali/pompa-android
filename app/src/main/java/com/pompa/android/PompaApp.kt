@@ -8,7 +8,10 @@ import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxHeight
+
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -40,10 +43,12 @@ import com.pompa.android.navigation.args.DistrictFuelDetailsArgs
 import com.pompa.android.navigation.utils.decodeNavArg
 import com.pompa.android.navigation.utils.encodeNavArg
 import com.pompa.android.ui.components.PompaAppBottomBar
+import com.pompa.android.ui.components.PompaAppNavigationRail
 import com.pompa.android.ui.components.PompaAppTopBar
 import com.pompa.android.ui.components.PompaBannerAd
 import com.pompa.android.ui.providers.pompaColorPalette
 import androidx.compose.foundation.layout.Column
+import com.pompa.android.ui.utils.isTabletLayout
 
 private const val TAG = "PompaApp"
 
@@ -56,6 +61,7 @@ fun PompaApp(
     navController: NavHostController,
     modifier: Modifier = Modifier,
 ) {
+    val isTabletLayout = isTabletLayout()
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
 
@@ -108,36 +114,54 @@ fun PompaApp(
             }
         },
         bottomBar = {
-            AnimatedVisibility(
-                visible = viewModel.showBottomBar,
-                enter = slideInVertically(
-                    initialOffsetY = { it }) + fadeIn(),
-                exit = slideOutVertically(
-                    targetOffsetY = { it }) + fadeOut()
-            ) {
-                Column {
-                    PompaBannerAd()
-                    PompaAppBottomBar(
-                        modifier = Modifier.navigationBarsPadding(),
-                        navController = navController,
-                        destinations = viewModel.topLevelDestinations,
-                        onTabReselected = { destination ->
-                            reselectedTab = destination
-                        })
+            if (!isTabletLayout) {
+                AnimatedVisibility(
+                    visible = viewModel.showBottomBar,
+                    enter = slideInVertically(
+                        initialOffsetY = { it }) + fadeIn(),
+                    exit = slideOutVertically(
+                        targetOffsetY = { it }) + fadeOut()
+                ) {
+                    Column {
+                        PompaBannerAd()
+                        PompaAppBottomBar(
+                            modifier = Modifier.navigationBarsPadding(),
+                            navController = navController,
+                            destinations = viewModel.topLevelDestinations,
+                            onTabReselected = { destination ->
+                                reselectedTab = destination
+                            })
+                    }
                 }
             }
         }
     ) {
-        Box(
+        Row(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(it)
         ) {
+            AnimatedVisibility(
+                visible = isTabletLayout && viewModel.showBottomBar,
+                enter = slideInHorizontally(
+                    initialOffsetX = { -it }) + fadeIn(),
+                exit = slideOutHorizontally(
+                    targetOffsetX = { -it }) + fadeOut()
+            ) {
+                PompaAppNavigationRail(
+                    modifier = Modifier.fillMaxHeight(),
+                    navController = navController,
+                    destinations = viewModel.topLevelDestinations,
+                    onTabReselected = { destination ->
+                        reselectedTab = destination
+                    }
+                )
+            }
             Box(
                 modifier = Modifier
-                    .fillMaxSize()
+                    .weight(1f)
+                    .fillMaxHeight()
             ) {
-
                 NavHost(
                     navController = navController,
                     startDestination = if (viewModel.checkProvinceAndFavoriteProviderAlreadySelected()) PompaRoutes.BottomNavRoutes.Home else PompaRoutes.ProvincesScreen
