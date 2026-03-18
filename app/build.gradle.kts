@@ -68,11 +68,11 @@ android {
     val testAdmobBannerUnitId = "ca-app-pub-3940256099942544/6300978111"
     val prodAdmobAppId = getLocalPropOrDefault(
         "ADMOB_APP_ID",
-        testAdmobAppId
+        ""
     )
     val prodAdmobBannerUnitId = getLocalPropOrDefault(
         "ADMOB_BANNER_UNIT_ID",
-        testAdmobBannerUnitId
+        ""
     )
 
 
