@@ -48,10 +48,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import coil.ImageLoader
+import coil.request.CachePolicy
 import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
-import coil.decode.SvgDecoder
 import coil.request.ImageRequest
 import com.pompa.android.R
 import com.pompa.android.features.providers.viewmodel.ProvidersScreenViewModel
@@ -62,6 +61,7 @@ import com.pompa.android.ui.providers.LocalPompaColors
 import com.pompa.android.ui.providers.pompaColorPalette
 import com.pompa.android.ui.theme.PompaColor
 import com.pompa.android.ui.theme.PompaTheme
+import com.pompa.android.util.PompaImageLoader
 import com.pompa.android.util.resolveBackendAssetUrl
 
 @Composable
@@ -202,20 +202,15 @@ fun ProviderItem(
 
     val imageUrl = resolveBackendAssetUrl(provider.logo)
 
-    val imageLoader = remember {
-        ImageLoader.Builder(context)
-            .components {
-                add(SvgDecoder.Factory())
-            }
-            .build()
-    }
-
     val painter = rememberAsyncImagePainter(
-        model = ImageRequest.Builder(LocalContext.current)
+        model = ImageRequest.Builder(context)
             .data(imageUrl)
             .crossfade(true)
+            .memoryCachePolicy(CachePolicy.ENABLED)
+            .diskCachePolicy(CachePolicy.ENABLED)
+            .networkCachePolicy(CachePolicy.ENABLED)
             .build(),
-        imageLoader = imageLoader
+        imageLoader = PompaImageLoader.get(context)
     )
     Card(
         modifier = modifier
