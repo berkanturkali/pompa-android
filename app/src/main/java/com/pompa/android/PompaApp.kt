@@ -8,10 +8,10 @@ import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxHeight
-
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -26,6 +26,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -47,8 +48,6 @@ import com.pompa.android.ui.components.PompaAppNavigationRail
 import com.pompa.android.ui.components.PompaAppTopBar
 import com.pompa.android.ui.components.PompaBannerAd
 import com.pompa.android.ui.providers.pompaColorPalette
-import androidx.compose.foundation.layout.Column
-import androidx.compose.ui.unit.dp
 import com.pompa.android.ui.utils.isTabletLayout
 
 private const val TAG = "PompaApp"
