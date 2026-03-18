@@ -48,6 +48,7 @@ import com.pompa.android.ui.components.PompaAppTopBar
 import com.pompa.android.ui.components.PompaBannerAd
 import com.pompa.android.ui.providers.pompaColorPalette
 import androidx.compose.foundation.layout.Column
+import androidx.compose.ui.unit.dp
 import com.pompa.android.ui.utils.isTabletLayout
 
 private const val TAG = "PompaApp"
@@ -123,7 +124,7 @@ fun PompaApp(
                         targetOffsetY = { it }) + fadeOut()
                 ) {
                     Column {
-                        PompaBannerAd()
+                        PompaBannerAd(50.dp)
                         PompaAppBottomBar(
                             modifier = Modifier.navigationBarsPadding(),
                             navController = navController,
@@ -132,6 +133,16 @@ fun PompaApp(
                                 reselectedTab = destination
                             })
                     }
+                }
+            } else {
+                AnimatedVisibility(
+                    visible = true,
+                    enter = slideInVertically(
+                        initialOffsetY = { it }) + fadeIn(),
+                    exit = slideOutVertically(
+                        targetOffsetY = { it }) + fadeOut()
+                ) {
+                    PompaBannerAd(150.dp)
                 }
             }
         }
