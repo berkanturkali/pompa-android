@@ -17,13 +17,13 @@ The app is built with Kotlin and Jetpack Compose, supports multiple environments
 
 ## Screenshots
 
-| Home | Provider Cards | Provinces |
-| --- | --- | --- |
-| ![Home screen](screenshots/Screenshot_1775268093.png) | ![Home screen with provider cards](screenshots/Screenshot_1775268101.png) | ![Province selection screen](screenshots/Screenshot_1775268110.png) |
+| Provinces                                                           | Providers                                                         | Home                                                  |
+|---------------------------------------------------------------------|-------------------------------------------------------------------|-------------------------------------------------------|
+| ![Province selection screen](screenshots/Screenshot_1775268093.png) | ![Provider listing screen](screenshots/Screenshot_1775268101.png) | ![Home screen](screenshots/Screenshot_1775268110.png) |
 
-| Providers | Details | Tablet |
-| --- | --- | --- |
-| ![Provider listing screen](screenshots/Screenshot_1775268117.png) | ![Fuel detail bottom sheet](screenshots/Screenshot_1775268122.png) | ![Tablet style layout](screenshots/Screenshot_1775268132.png) |
+| Sort                                                  | Details | Settings |
+|-------------------------------------------------------| --- | --- |
+| ![Sort screen](screenshots/Screenshot_1775268117.png) | ![Fuel detail bottom sheet](screenshots/Screenshot_1775268122.png) | ![Settings screen](screenshots/Screenshot_1775268132.png) |
 
 ## Tech Stack
 
@@ -147,4 +147,3 @@ The app also rewrites backend asset URLs to the active environment host when nee
 - Firebase Cloud Messaging is used for push notifications.
 - AdMob is initialized in the application layer.
 - Debug and non-production environments are set up to use test banner ads.
-
