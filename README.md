@@ -12,11 +12,8 @@ The app is built with Kotlin and Jetpack Compose, supports multiple environments
 - View district-level fuel details in a bottom sheet
 - Search and filter prices on the home screen
 - Sort price results
-- Pull to refresh on main listing screens
 - Responsive layouts for phone and tablet-style widths
-- Provider logo loading with image caching
 - Firebase Cloud Messaging integration
-- AdMob banner integration
 
 ## Screenshots
 
@@ -151,12 +148,3 @@ The app also rewrites backend asset URLs to the active environment host when nee
 - AdMob is initialized in the application layer.
 - Debug and non-production environments are set up to use test banner ads.
 
-## Status
-
-This project is actively evolving. Public cleanup, documentation, and setup polish are still ongoing.
-
-## License
-
-No license has been added yet.
-
-If you plan to make the repository public, add a license before publishing.
