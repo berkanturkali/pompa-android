@@ -1,6 +1,6 @@
 |  |  |
 | --- | --- |
-| ![Pompa app logo](app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.webp) | # Pompa |
+| <img src="app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.webp" width="72" alt="Pompa app logo" /> | # Pompa |
 
 Pompa is an Android app for browsing fuel prices in Turkey by province, provider, and district.
 
