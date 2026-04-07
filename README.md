@@ -64,9 +64,7 @@ Notable areas:
 
 The app currently uses three environment flavors:
 
-- `local`: local backend, test ads
-- `dev`: dev backend, test ads
-- `prod`: production backend, production ads
+- `local`, `dev` and `prod`
 
 ## Requirements
 
@@ -129,12 +127,9 @@ From the command line:
 
 ## Backend Notes
 
-Pompa expects a backend that serves:
+The backend service for Pompa is available here:
 
-- API responses under an `/api/v1/` base path
-- provider and brand images under an assets path
-
-The app also rewrites backend asset URLs to the active environment host when needed, which helps local and hosted environments behave consistently.
+- [pompa-be](https://github.com/berkanturkali/pompa-be)
 
 ## UI Notes
 
